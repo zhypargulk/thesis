@@ -1,0 +1,38 @@
+/* styles.css */
+.dashboard {
+    margin: 20px;
+  }
+  
+  .course-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 20px;
+  }
+
+  .green {
+    color: green;
+  }
+
+  .red {
+    color: red
+  }
+  
+  .course-card {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  .course-card img {
+    width: 100%;
+    border-radius: 5px;
+  }
+  
+  .course-card h3 {
+    margin-top: 10px;
+  }
+  
+  .course-card p {
+    margin: 5px 0;
+  }
+  

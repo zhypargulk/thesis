@@ -29,6 +29,7 @@ const LogIn = () => {
     <div className="login-container">
       <div className="form-container">
         <h2>Please login the User</h2>
+
         <InputText
           className="input-field"
           placeholder="Email"
@@ -39,6 +40,7 @@ const LogIn = () => {
           className="input-field"
           placeholder="Password"
           value={password}
+          type="password"
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button className="login-button" label="Sign in" onClick={signIn} />
