@@ -1,0 +1,31 @@
+/* MenubarCustom.css */
+.menubar-custom .p-menubar {
+    background-color: #64a5ea !important; /* Blue background color */
+    border-radius: 5px;
+  }
+  
+  .menubar-custom .p-menuitem {
+    font-weight: bold;
+    color: #fff !important; /* White text color */
+  }
+  
+  .menubar-custom .p-menuitem > .p-menuitem-link {
+    color: #fff !important; /* White text color */
+  }
+  
+  .menubar-custom .p-menuitem-root {
+    padding: 0 1rem;
+  }
+  
+  .menubar-custom .p-menuitem-icon {
+    margin-right: 0.5rem;
+  }
+  
+  .menubar-custom .p-submenu .p-menuitem {
+    padding: 0.5rem 1rem;
+  }
+  
+  .menubar-custom .p-submenu .p-menuitem-icon {
+    margin-right: 0.5rem;
+  }
+  
