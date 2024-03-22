@@ -18,7 +18,7 @@ const LogIn = () => {
       // Reset input fields after successful login
       setEmail("");
       setPassword("");
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       console.error("Error signing in:", error.message);
       // Handle error (display error message to the user, etc.)

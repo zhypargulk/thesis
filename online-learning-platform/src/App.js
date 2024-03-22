@@ -27,6 +27,9 @@ import Profile from "./components/Profile";
 import CourseDetails from "./components/CourseDetails";
 import OnlineIDE from "./components/OnlineIDE";
 import Home from "./components/Home";
+import CreateCourse from "./components/CreateCourse";
+import AllCourses from "./components/AllCourses";
+import CreateLesson from "./components/CreateLessons";
 
 const App = () => {
   const [courses, setCourses] = useState([]);
@@ -61,11 +64,17 @@ const App = () => {
         <Route path="/ide" element={<OnlineIDE />} />
         <Route path="/dashboard" element={<Dashboard courses={courses} />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/courses" element={<AllCourses />} />
+        <Route path="/create" element={<CreateCourse />} />
+        <Route path="/test" element={<CreateCourse />} />
+        <Route
+          path="/create-course/:courseId/:numberOfClasses"
+          element={<CreateLesson />}
+        />
         <Route
           path="/course/:id"
           element={<CourseDetails courses={courses} />}
         />
-        {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
     </Router>
   );

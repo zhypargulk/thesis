@@ -1,0 +1,4 @@
+.custom-panel .p-panel .p-panel-header {
+    background-color: blue !important; /* Change 'blue' to your desired color */
+    color: white !important; /* Change 'white' to your desired text color */
+  }

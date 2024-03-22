@@ -9,6 +9,12 @@
     color: #fff !important; /* White text color */
   }
   
+  .button-log-out {
+    background-color:#64a5ea;
+    border-color: #64a5ea; 
+    
+  }
+
   .menubar-custom .p-menuitem > .p-menuitem-link {
     color: #fff !important; /* White text color */
   }
