@@ -68,7 +68,7 @@ const Auth = () => {
       });
 
       clearForm();
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       console.error("Error registering user:", error.message);
     }
@@ -84,11 +84,10 @@ const Auth = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
-    await register(); // Call the register function
+    e.preventDefault();
+    await register();
   };
 
-  console.log(role.role);
   return (
     <div className="auth-container">
       {/* <div className="form-container"> */}

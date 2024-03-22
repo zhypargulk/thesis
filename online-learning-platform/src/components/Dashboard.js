@@ -104,7 +104,6 @@ const Dashboard = ({ courses }) => {
           </h1>
           <button
             onClick={() => {
-              console.log(movie.id);
               deleteMovie(movie.id);
             }}
           >
