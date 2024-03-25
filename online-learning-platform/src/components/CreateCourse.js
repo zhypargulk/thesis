@@ -100,6 +100,7 @@ const CreateCourse = () => {
               <input
                 className="flex"
                 type="file"
+                accept="image/*"
                 onChange={(event) => {
                   setImageCourse(event.target.files[0]);
                 }}
@@ -201,6 +202,7 @@ const CreateCourse = () => {
                   <input
                     className="flex"
                     type="file"
+                    accept="video/*,image/*"
                     onChange={(e) => {
                       const updatedLessons = [...lessons];
                       updatedLessons[index].videoURL = e.target.files[0];

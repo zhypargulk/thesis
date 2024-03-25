@@ -8,12 +8,14 @@ import {
   collection,
   updateDoc,
   arrayUnion,
+  getDoc,
+  where,
+  query
 } from "firebase/firestore";
 import { db, auth } from "../config/firebase";
 
 const CourseDetails = () => {
   const [enrolled, setEnrolled] = useState(false);
-  const [courses, setCourses] = useState([]);
   const [course, setCourse] = useState(null);
   const { courseId } = useParams();
 
@@ -21,17 +23,9 @@ const CourseDetails = () => {
     const fetchCourses = async () => {
       try {
         const courseCollectionRef = collection(db, "courses");
-        const querySnapshot = await getDocs(courseCollectionRef);
-        const fetchedCourses = [];
-        querySnapshot.forEach((doc) => {
-          const course = { ...doc.data(), docId: doc.id };
-          fetchedCourses.push(course);
-        });
-        setCourses(fetchedCourses);
-
-        const selectedCourse = fetchedCourses.find(
-          (course) => course.courseId === courseId
-        );
+        const queryCourse = query(courseCollectionRef, where(`courseId`, "==", courseId));
+        const docRef = (await getDocs(queryCourse)).docs[0];
+        const selectedCourse = {...docRef.data(), docId: docRef.id };
 
         if (selectedCourse) {
           setCourse(selectedCourse);
