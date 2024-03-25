@@ -5,32 +5,16 @@ import { Card } from "primereact/card";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputNumber } from "primereact/inputnumber";
 import { Button } from "primereact/button";
-import { FileUpload } from "primereact/fileupload";
 import MenubarCustom from "./Menubar";
 import { db, auth, storage } from "../config/firebase";
 import { v4 } from "uuid";
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  listAll,
-  list,
-} from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
-import "./CreateCourse.css";
 import { createCourse } from "../controller/Courses"; // Import CSS file
-
-import {
-  doc,
-  getDocs,
-  collection,
-  addDoc,
-  deleteDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { doc } from "firebase/firestore";
+import "./CreateCourse.css";
 
 const CreateCourse = () => {
-  // Course fields
   const [newCourseTitle, setNewCourseTitle] = useState("");
   const [newCourseDescription, setNewCourseDescription] = useState("");
   const [newTaskDescription, setNewTaskDescription] = useState("");
@@ -38,36 +22,37 @@ const CreateCourse = () => {
   const [newNumberOfClasses, setNewNumberOfClasses] = useState(0);
   const [arrayForClasses, setArrayForClasses] = useState([]);
   const [imageCourse, setImageCourse] = useState(null);
+  const [lessons, setLessons] = useState([]);
   const navigate = useNavigate();
-  const [imageUpload, setImageUpload] = useState(null);
-  const [imageUrls, setImageUrls] = useState([]);
-
-  const imagesListRef = ref(storage, "images/");
-  const userListRef = collection(db, "user");
-
-  // db
 
   useEffect(() => {
     const array = Array.from(
       { length: newNumberOfClasses },
       (_, index) => index
     );
+
+    setLessons(
+      Array.from({ length: newNumberOfClasses }, () => ({
+        title: "",
+        description: "",
+        imageUrl: null,
+      }))
+    );
     setArrayForClasses(array);
   }, [newNumberOfClasses]);
 
-  const uploadFile = () => {
-    if (imageUpload == null) return;
-    const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-    uploadBytes(imageRef, imageUpload).then((snapshot) => {
-      getDownloadURL(snapshot.ref).then((url) => {
-        setImageUrls((prev) => [...prev, url]);
-      });
-    });
-  };
-
   const handleCreateCourse = async () => {
     try {
-      const imageRef = ref(storage, `images/${imageCourse.name + v4()}`);
+      for (let i = 0; i < lessons.length; i++) {
+        const imageRef = ref(
+          storage,
+          `videos/${lessons[i].videoURL.name + v4()}`
+        );
+        await uploadBytes(imageRef, lessons[i]);
+
+        const videoURL = await getDownloadURL(imageRef);
+        lessons[i].videoURL = videoURL;
+      }
 
       const obj = {
         title: newCourseTitle,
@@ -77,15 +62,15 @@ const CreateCourse = () => {
         answer: newAnswer,
         courseId: v4(),
         user: doc(db, "user/" + auth?.currentUser?.uid),
+        students: [],
       };
-      createCourse(imageCourse, obj);
+      createCourse(imageCourse, obj, lessons);
       setNewCourseTitle("");
       setNewAnswer("");
       setNewTaskDescription("");
       setNewCourseDescription("");
       setNewNumberOfClasses(0);
-
-      navigate(`/create-course/${obj.courseId}/${obj.numberOfClasses}`);
+      navigate("/courses");
     } catch (err) {
       console.error(err);
     }
@@ -175,6 +160,59 @@ const CreateCourse = () => {
           </div>
         </Panel>
       </Card>
+      <div>
+        <h2>Create New Lessons</h2>
+        {arrayForClasses.map((lesson, index) => (
+          <Panel key={index} header={`Lesson Form ${index + 1}`}>
+            <Card className="mt-3">
+              <div key={index} className="lesson-form">
+                <div>
+                  <label htmlFor={`lessonTitle${index}`}>Lesson Title:</label>
+                  <InputText
+                    id={`lessonTitle${index}`}
+                    value={lesson.title}
+                    onChange={(event) => {
+                      const updatedLessons = [...lessons];
+                      updatedLessons[index].title = event.target.value;
+                      setLessons(updatedLessons);
+                    }}
+                  />
+                </div>
+                <div>
+                  <label htmlFor={`lessonDescription${index}`}>
+                    Lesson Description:
+                  </label>
+                  <InputTextarea
+                    id={`lessonDescription${index}`}
+                    value={lesson.description}
+                    onChange={(e) => {
+                      const updatedLessons = [...lessons];
+                      updatedLessons[index].description = e.target.value;
+                      setLessons(updatedLessons);
+                    }}
+                    rows={5}
+                    cols={30}
+                  />
+                </div>
+                <div className="p-field p-col-12 p-md-4">
+                  <label htmlFor="courseImage">
+                    Course Image: <sup>*</sup>
+                  </label>
+                  <input
+                    className="flex"
+                    type="file"
+                    onChange={(e) => {
+                      const updatedLessons = [...lessons];
+                      updatedLessons[index].videoURL = e.target.files[0];
+                      setLessons(updatedLessons);
+                    }}
+                  />
+                </div>
+              </div>
+            </Card>
+          </Panel>
+        ))}
+      </div>
       <div className="p-mt-2 m-3">
         <Button
           type="button"

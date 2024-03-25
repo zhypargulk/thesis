@@ -35,7 +35,6 @@ export default function MenubarCustom() {
   };
 
   const handleNavigation = (url) => {
-    console.log("Navigating to:", url);
     navigate(url);
   };
 
@@ -55,30 +54,13 @@ export default function MenubarCustom() {
       icon: "pi pi-search",
       items: [
         {
-          label: "Components",
-          icon: "pi pi-bolt",
+          label: "Find course",
+          icon: "pi pi-search",
+          command: () => navigate("/courses"),
         },
         {
           label: "Blocks",
           icon: "pi pi-server",
-        },
-        {
-          label: "UI Kit",
-          icon: "pi pi-pencil",
-        },
-        {
-          label: "Templates",
-          icon: "pi pi-palette",
-          items: [
-            {
-              label: "Apollo",
-              icon: "pi pi-palette",
-            },
-            {
-              label: "Ultima",
-              icon: "pi pi-palette",
-            },
-          ],
         },
       ],
     },
@@ -96,7 +78,6 @@ export default function MenubarCustom() {
   const logout = async () => {
     await signOut(auth);
 
-    // Clear user role from local storage and reset state
     localStorage.removeItem("userRole");
     navigate("/login");
   };
