@@ -2,17 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { useParams } from "react-router-dom";
-import {
-  doc,
-  getDocs,
-  collection,
-  updateDoc,
-  arrayUnion,
-  getDoc,
-  where,
-  query
-} from "firebase/firestore";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db, auth } from "../config/firebase";
+import { fetchCourseById } from "../controller/Courses";
 
 const CourseDetails = () => {
   const [enrolled, setEnrolled] = useState(false);
@@ -22,13 +14,11 @@ const CourseDetails = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const courseCollectionRef = collection(db, "courses");
-        const queryCourse = query(courseCollectionRef, where(`courseId`, "==", courseId));
-        const docRef = (await getDocs(queryCourse)).docs[0];
-        const selectedCourse = {...docRef.data(), docId: docRef.id };
+        const selectedCourse = await fetchCourseById(courseId);
 
         if (selectedCourse) {
           setCourse(selectedCourse);
+          console.log(course.lessons);
           if (auth.currentUser) {
             setEnrolled(selectedCourse.students.includes(auth.currentUser.uid));
           }
@@ -52,6 +42,12 @@ const CourseDetails = () => {
       const courseDocRef = doc(db, "courses", course.docId);
       await updateDoc(courseDocRef, {
         students: arrayUnion(uid),
+      });
+
+      // Update user's enrollments
+      const userDocRef = doc(db, "user", uid);
+      await updateDoc(userDocRef, {
+        enrollments: arrayUnion(courseDocRef),
       });
       setEnrolled(true);
     } catch (error) {

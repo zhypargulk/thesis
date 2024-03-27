@@ -8,7 +8,6 @@ import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { Dropdown } from "primereact/dropdown";
 import { useNavigate } from "react-router-dom";
 import { Password } from "primereact/password";
-import { Divider } from "primereact/divider";
 
 import "./Auth.css"; // Import CSS file
 

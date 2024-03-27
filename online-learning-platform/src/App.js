@@ -27,7 +27,6 @@ import Home from "./components/Home";
 import CreateCourse from "./components/CreateCourse";
 import CourseDashboard from "./components/CourseDashboard";
 import CourseDetails from "./components/CourseDetails";
-import Classes from "./components/Classes";
 import Lesson from "./components/Lesson";
 
 const App = () => {
@@ -66,9 +65,13 @@ const App = () => {
         <Route path="/test" element={<CreateCourse />} />
         <Route path="/courses/:courseId" element={<CourseDetails />} />
         {/* <Route path="/course/:courseId/lessons" element={<Classes />} /> */}
-        <Route
+        {/* <Route
           path="/course/:courseId/lessons/:lessonNumber"
           element={<Classes />}
+        /> */}
+        <Route
+          path="/course/:courseId/lessons/:lessonNumber"
+          element={<Lesson />}
         />
       </Routes>
     </Router>
