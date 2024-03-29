@@ -164,10 +164,14 @@ const CreateCourse = () => {
       <div>
         <h2>Create New Lessons</h2>
         {arrayForClasses.map((lesson, index) => (
-          <Panel key={index} header={`Lesson Form ${index + 1}`}>
+          <Panel
+            key={index}
+            header={`Lesson Form ${index + 1}`}
+            className="m-3"
+          >
             <Card className="mt-3">
-              <div key={index} className="lesson-form">
-                <div>
+              <div className="p-fluid p-formgrid p-grid">
+                <div className="p-field p-col-12 p-md-4 mt-4">
                   <label htmlFor={`lessonTitle${index}`}>Lesson Title:</label>
                   <InputText
                     id={`lessonTitle${index}`}
@@ -179,7 +183,8 @@ const CreateCourse = () => {
                     }}
                   />
                 </div>
-                <div>
+
+                <div className="p-field p-col-12 p-md-8 mt-4">
                   <label htmlFor={`lessonDescription${index}`}>
                     Lesson Description:
                   </label>
@@ -195,7 +200,8 @@ const CreateCourse = () => {
                     cols={30}
                   />
                 </div>
-                <div className="p-field p-col-12 p-md-4">
+
+                <div className="p-field p-col-12 p-md-8 mt-4">
                   <label htmlFor="courseImage">
                     Course Image: <sup>*</sup>
                   </label>

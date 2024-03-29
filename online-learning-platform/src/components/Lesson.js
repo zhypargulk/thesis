@@ -18,9 +18,6 @@ const Lesson = () => {
         const lessonData = await fetchLesson(courseData, lessonNumber);
         setLesson(lessonData);
         setLength(courseData.lessons.length);
-        // if (lessonNumber !== courseData.lessons.length) {
-        //   setShowButton(true);
-        // }
       } catch (err) {
         console.error(err);
       }
@@ -46,10 +43,9 @@ const Lesson = () => {
   };
 
   const onClickToProject = () => {
-    navigate("/");
+    navigate(`/course/${courseId}/task`);
   };
 
-  console.log(lessonNumber);
   return (
     <div>
       <h2>{lesson.title}</h2>
