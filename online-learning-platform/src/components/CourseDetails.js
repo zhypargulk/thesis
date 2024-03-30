@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { useParams } from "react-router-dom";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
-import { db, auth } from "../config/firebase";
-import { fetchCourseById } from "../controller/Courses";
+import { auth } from "../config/firebase";
+import {
+  fetchCourseById,
+  checkUserEnrollment,
+  enrollUserInCourse,
+} from "../controller/Courses";
+import MenubarCustom from "./Menubar";
 
 const CourseDetails = () => {
   const [enrolled, setEnrolled] = useState(false);
@@ -12,24 +16,29 @@ const CourseDetails = () => {
   const { courseId } = useParams();
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchCourseAndCheckEnrollment = async () => {
       try {
         const selectedCourse = await fetchCourseById(courseId);
-
         if (selectedCourse) {
           setCourse(selectedCourse);
-          console.log(course.lessons);
-          if (auth.currentUser) {
-            setEnrolled(selectedCourse.students.includes(auth.currentUser.uid));
+
+          const user = auth.currentUser;
+          if (user) {
+            const uid = user.uid;
+            const isEnrolled = await checkUserEnrollment(
+              uid,
+              selectedCourse.docId
+            );
+            setEnrolled(isEnrolled);
           }
         }
       } catch (error) {
-        console.error("Error fetching courses:", error);
+        console.error("Error fetching course details:", error);
       }
     };
 
-    fetchCourses();
-  }, [courseId, auth.currentUser]);
+    fetchCourseAndCheckEnrollment();
+  }, [courseId]);
 
   const handleEnroll = async () => {
     try {
@@ -39,17 +48,12 @@ const CourseDetails = () => {
       }
 
       const uid = auth.currentUser.uid;
-      const courseDocRef = doc(db, "courses", course.docId);
-      await updateDoc(courseDocRef, {
-        students: arrayUnion(uid),
-      });
-
-      // Update user's enrollments
-      const userDocRef = doc(db, "user", uid);
-      await updateDoc(userDocRef, {
-        enrollments: arrayUnion(courseDocRef),
-      });
-      setEnrolled(true);
+      const success = await enrollUserInCourse(uid, course.docId);
+      if (success) {
+        setEnrolled(true);
+      } else {
+        console.error("Failed to enroll user in course");
+      }
     } catch (error) {
       console.error("Error enrolling student:", error);
     }
@@ -57,6 +61,7 @@ const CourseDetails = () => {
 
   return (
     <div>
+      <MenubarCustom />
       <h2>Course Details</h2>
       <div className="p-grid p-fluid">
         <div className="p-col-12 p-md-6">
@@ -76,7 +81,6 @@ const CourseDetails = () => {
                 {enrolled ? (
                   <div>
                     <Button label="Enrolled" disabled />
-
                     <a
                       href={`/course/${course.courseId}/lessons/1`}
                       className="font-bold"

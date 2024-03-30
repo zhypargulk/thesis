@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { fetchCourseById, fetchLesson } from "../controller/Courses";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
+import MenubarCustom from "./Menubar";
 
 const Lesson = () => {
   const { courseId, lessonNumber } = useParams();
@@ -18,9 +19,6 @@ const Lesson = () => {
         const lessonData = await fetchLesson(courseData, lessonNumber);
         setLesson(lessonData);
         setLength(courseData.lessons.length);
-        // if (lessonNumber !== courseData.lessons.length) {
-        //   setShowButton(true);
-        // }
       } catch (err) {
         console.error(err);
       }
@@ -46,12 +44,12 @@ const Lesson = () => {
   };
 
   const onClickToProject = () => {
-    navigate("/");
+    navigate(`/course/${courseId}/task`);
   };
 
-  console.log(lessonNumber);
   return (
     <div>
+      <MenubarCustom />
       <h2>{lesson.title}</h2>
       <p>{lesson.description}</p>
       <video controls>

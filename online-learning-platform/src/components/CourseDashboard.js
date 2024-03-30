@@ -4,6 +4,7 @@ import { Card } from "primereact/card";
 
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
+import MenubarCustom from "./Menubar";
 
 const CourseDashboard = () => {
   const [courses, setCourses] = useState([]);
@@ -28,6 +29,7 @@ const CourseDashboard = () => {
 
   return (
     <div>
+      <MenubarCustom />
       <h2>Course Dashboard</h2>
       <div className="p-grid p-fluid">
         {courses.map((course) => (

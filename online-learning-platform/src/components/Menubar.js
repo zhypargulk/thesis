@@ -31,7 +31,7 @@ export default function MenubarCustom() {
   };
 
   const findCourse = () => {
-    handleNavigation("/dashboard");
+    handleNavigation("/courses");
   };
 
   const handleNavigation = (url) => {
@@ -49,21 +49,21 @@ export default function MenubarCustom() {
       icon: role === "Teacher" ? "pi pi-plus" : "pi pi-search",
       command: role === "Teacher" ? createCourse : findCourse,
     },
-    {
-      label: "Courses",
-      icon: "pi pi-search",
-      items: [
-        {
-          label: "Find course",
-          icon: "pi pi-search",
-          command: () => navigate("/courses"),
-        },
-        {
-          label: "Blocks",
-          icon: "pi pi-server",
-        },
-      ],
-    },
+    // {
+    //   label: "Courses",
+    //   icon: "pi pi-search",
+    //   items: [
+    //     {
+    //       label: "Find course",
+    //       icon: "pi pi-search",
+    //       command: () => navigate("/courses"),
+    //     },
+    //     {
+    //       label: "Blocks",
+    //       icon: "pi pi-bell",
+    //     },
+    //   ],
+    // },
     {
       label: "Contact",
       icon: "pi pi-envelope",
@@ -72,6 +72,16 @@ export default function MenubarCustom() {
       label: "Profile",
       icon: "pi pi-user",
       command: () => navigate("/profile"),
+    },
+    {
+      label: "Notifications",
+      icon: "pi pi-bell",
+      command: () => navigate("/notifications"),
+    },
+    {
+      label: "Groups",
+      icon: "pi pi-users",
+      command: () => navigate("/groups"),
     },
   ];
 
