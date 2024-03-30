@@ -64,6 +64,7 @@ const Auth = () => {
         name,
         email,
         role: role.role,
+        id: userCredential.user.uid,
       });
 
       clearForm();

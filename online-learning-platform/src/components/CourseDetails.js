@@ -8,6 +8,7 @@ import {
   checkUserEnrollment,
   enrollUserInCourse,
 } from "../controller/Courses";
+import MenubarCustom from "./Menubar";
 
 const CourseDetails = () => {
   const [enrolled, setEnrolled] = useState(false);
@@ -60,6 +61,7 @@ const CourseDetails = () => {
 
   return (
     <div>
+      <MenubarCustom />
       <h2>Course Details</h2>
       <div className="p-grid p-fluid">
         <div className="p-col-12 p-md-6">

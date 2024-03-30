@@ -14,7 +14,6 @@ import "./flag.css";
 
 import Auth from "./components/auth";
 import LogIn from "./components/LogIn";
-// import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
 import OnlineIDE from "./components/OnlineIDE";
 import Home from "./components/Home";
@@ -23,6 +22,9 @@ import CourseDashboard from "./components/CourseDashboard";
 import CourseDetails from "./components/CourseDetails";
 import Lesson from "./components/Lesson";
 import FinalProject from "./components/FinalProject";
+import FinalProjectGroups from "./components/FinalProjectGroups";
+import Notifications from "./components/Notifications";
+import Groups from "./components/Groups";
 
 const App = () => {
   return (
@@ -36,7 +38,13 @@ const App = () => {
         <Route path="/courses" element={<CourseDashboard />} />
         <Route path="/create" element={<CreateCourse />} />
         <Route path="/course/:courseId/task" element={<FinalProject />} />
+        <Route
+          path="/course/:courseId/task/groups"
+          element={<FinalProjectGroups />}
+        />
         <Route path="/courses/:courseId" element={<CourseDetails />} />
+        <Route path="/groups" element={<Groups />} />
+        <Route path="/notifications" element={<Notifications />} />
         <Route
           path="/course/:courseId/lessons/:lessonNumber"
           element={<Lesson />}

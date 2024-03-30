@@ -131,3 +131,9 @@ export const enrollUserInCourse = async (uid, courseDocId) => {
     return false;
   }
 };
+
+export const getDocID = async (courseId) => {
+  const courseData = await fetchCourseById(courseId);
+
+  return courseData.docId;
+};
