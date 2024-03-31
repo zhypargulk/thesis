@@ -27,30 +27,34 @@ import Notifications from "./components/Notifications";
 import GroupsComponent from "./components/GroupsComponent";
 import GroupBoard from "./components/GroupBoard";
 import ManageGroup from "./components/ManageGroup";
+import Test from "./components/Test";
+import Kanban from "./components/Kanban";
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route exact path="/register" element={<Auth />} />
+        <Route exact path="/test" element={<Test />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/" element={<Home />} />
         <Route path="/ide" element={<OnlineIDE />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/courses" element={<CourseDashboard />} />
         <Route path="/create" element={<CreateCourse />} />
-        <Route path="/course/:courseId/task" element={<FinalProject />} />
+        <Route path="/course/:docId/task" element={<FinalProject />} />
         <Route
-          path="/course/:courseId/task/groups"
+          path="/course/:docId/task/groups"
           element={<FinalProjectGroups />}
         />
-        <Route path="/courses/:courseId" element={<CourseDetails />} />
-        <Route path="/groups/:courseId" element={<ManageGroup />} />
+        <Route path="/courses/:docId" element={<CourseDetails />} />
+        <Route path="/groups/:groupId" element={<ManageGroup />} />
         <Route path="/groups" element={<GroupsComponent />} />
-        <Route path="/groups/:courseId/board" element={<GroupBoard />} />
+        <Route path="/kanban" element={<Kanban />} />
+        <Route path="/groups/:docId/board" element={<GroupBoard />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route
-          path="/course/:courseId/lessons/:lessonNumber"
+          path="/course/:docId/lessons/:lessonNumber"
           element={<Lesson />}
         />
       </Routes>

@@ -7,6 +7,7 @@ import {
   getDoc,
   getDocs,
   where,
+  setDoc,
   arrayUnion,
   query,
 } from "firebase/firestore";
@@ -46,57 +47,10 @@ export const createGroup = async (docId, selectedStudents) => {
   }
 };
 
-// export const createGroupWithModifications = async (docId, selectedStudents) => {
-//   try {
-//     const groupCollectionRef = collection(db, "groups"); // Reference to the "groups" collection
-
-//     const updatedSelectedStudents = selectedStudents.map((student) => ({
-//       ...student,
-//       acceptedInvitations: false, // Assuming initially all invitations are not accepted
-//     }));
-
-//     const myData = await fetchUserData();
-
-//     const newArray = [
-//       ...updatedSelectedStudents,
-//       { ...myData, acceptedInvitations: true }, // Add the current user with acceptedInvitations: true
-//     ];
-
-//     const groupData = {
-//       courseDocId: docId,
-//       students: newArray,
-//     };
-
-//     // Add a new document to the "groups" collection
-//     const groupRef = await addDoc(groupCollectionRef, groupData);
-
-//     // Update the user collection to include the groupDocID for each user
-//     const updateUserPromises = selectedStudents.map(async (student) => {
-//       const userDocRef = doc(db, "user", student.id);
-
-//       // Get the current groupDocID array or initialize an empty array
-//       const userDocSnapshot = await getDoc(userDocRef);
-//       const existingGroupDocIDs = userDocSnapshot.exists()
-//         ? userDocSnapshot.data().groupDocID || []
-//         : [];
-
-//       // Update the groupDocID array with the new groupRef.id
-//       const updatedGroupDocIDs = [...existingGroupDocIDs, groupRef.id];
-
-//       // Update the user document with the updated groupDocID array
-//       await updateDoc(userDocRef, { groupDocID: updatedGroupDocIDs });
-//     });
-
-//     // Wait for all user documents to be updated
-//     await Promise.all(updateUserPromises);
-//   } catch (error) {
-//     console.error("Error creating group: ", error);
-//   }
-// };
-
 export const createGroupWithModifications = async (docId, selectedStudents) => {
   try {
     const groupCollectionRef = collection(db, "groups");
+    const courseDocRef = doc(db, "courses", docId);
 
     const updatedSelectedStudents = selectedStudents.map((student) => ({
       ...student,
@@ -114,7 +68,17 @@ export const createGroupWithModifications = async (docId, selectedStudents) => {
       courseDocId: docId,
       students: newArray,
     };
+
     const groupRef = await addDoc(groupCollectionRef, groupData);
+    const courseDocSnapshot = await getDoc(courseDocRef);
+
+    if (courseDocSnapshot.exists()) {
+      await updateDoc(courseDocRef, {
+        groups: arrayUnion(groupRef.id),
+      });
+    } else {
+      await setDoc(courseDocRef, { groups: [groupRef.id] });
+    }
 
     const updateUserPromises = newArray.map(async (student) => {
       const userDocRef = doc(db, "user", student.id);
@@ -126,7 +90,7 @@ export const createGroupWithModifications = async (docId, selectedStudents) => {
         courseDocId: docId,
         groupId: groupRef.id,
         acceptedInvitation: student.acceptedInvitations,
-        tasks: [],
+        // tasks: [],
       });
 
       const existingGroupDocIDs = userDocSnapshot.exists()
@@ -151,27 +115,6 @@ export const createGroupWithModifications = async (docId, selectedStudents) => {
     console.error("Error creating group: ", error);
   }
 };
-
-// export const UpdateAcceptedInvitations = async (courseDocId, userInfo) => {
-//   try {
-//     const groupCollectionRef = collection(db, "groups");
-//     const querySnapshot = await getDocs(
-//       query(groupCollectionRef, where("courseDocId", "==", courseDocId))
-//     );
-
-//     querySnapshot.forEach(async (doc) => {
-//       // Update each document found in the query
-//       await updateDoc(doc.ref, {
-//         acceptedStudents: arrayUnion(userInfo),
-//         groups: [],
-//       });
-//     });
-
-//     console.log("Documents updated successfully!");
-//   } catch (error) {
-//     console.error("Error updating documents:", error);
-//   }
-// };
 
 export const UpdateAcceptedInvitations = async (id, courseDocId) => {
   try {
@@ -232,5 +175,151 @@ export const getCoursesWithAcceptedInvitations = async (uid) => {
   } catch (error) {
     console.error("Error retrieving courses with accepted invitations:", error);
     return [];
+  }
+};
+
+export const createGroupCourse = async (studentIds, docId, userId) => {
+  try {
+    const groupCollectionRef = collection(db, "groups");
+    const courseDocRef = doc(db, "courses", docId);
+    console.log(userId);
+    const userDocRef = doc(db, "user", userId);
+
+    const groupData = {
+      students: studentIds,
+      courseId: docId, // Using docId directly as courseId
+      tasks: [],
+    };
+
+    console.log(groupData);
+
+    const groupRef = await addDoc(groupCollectionRef, groupData);
+    const updatedGroupData = {
+      ...groupData,
+      groupDocId: groupRef.id,
+    };
+
+    await setDoc(doc(db, "groups", groupRef.id), updatedGroupData, {
+      merge: true,
+    });
+    console.log(groupRef);
+
+    await updateDoc(userDocRef, { groups: arrayUnion(groupRef.id) });
+    await updateDoc(courseDocRef, { groups: arrayUnion(groupRef.id) });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getGroupsByUserId = async (userId) => {
+  try {
+    const groupsCollectionRef = collection(db, "groups");
+    const q = query(
+      groupsCollectionRef,
+      where("students", "array-contains", userId)
+    );
+    const querySnapshot = await getDocs(q);
+
+    const groups = [];
+    querySnapshot.forEach((doc) => {
+      groups.push({ id: doc.id, ...doc.data() });
+    });
+
+    return groups;
+  } catch (error) {
+    console.error("Error fetching groups:", error);
+  }
+};
+
+export const getCoursesByUserId = async (studentId) => {
+  try {
+    const groupsQuery = query(
+      collection(db, "groups"),
+      where("students", "array-contains", studentId)
+    );
+    const groupsQuerySnapshot = await getDocs(groupsQuery);
+
+    const courseIds = [];
+
+    groupsQuerySnapshot.forEach((doc) => {
+      const { courseId } = doc.data();
+      courseIds.push(courseId);
+    });
+
+    return courseIds;
+  } catch (error) {
+    console.error("Error fetching course IDs:", error);
+  }
+};
+
+export const getGroupByUserIdAndCourseId = async (userId, courseId) => {
+  try {
+    // Query for groups where the provided userId is in the students array and courseId matches
+    const groupsQuery = query(
+      collection(db, "groups"),
+      where("students", "array-contains", userId),
+      where("courseId", "==", courseId)
+    );
+
+    const groupsQuerySnapshot = await getDocs(groupsQuery);
+
+    // Check if any matching group document exists
+    if (!groupsQuerySnapshot.empty) {
+      // Assuming there's only one matching group, return the first one found
+      const groupDoc = groupsQuerySnapshot.docs[0];
+      return { id: groupDoc.id, ...groupDoc.data() };
+    } else {
+      // No matching group found
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching group:", error);
+    throw error; // Rethrow the error for handling it outside the function if needed
+  }
+};
+
+export const getStudentsByGroupId = async (groupId) => {
+  try {
+    const groupDocRef = doc(db, "groups", groupId);
+    const groupDocSnapshot = await getDoc(groupDocRef);
+
+    if (groupDocSnapshot.exists()) {
+      const groupData = groupDocSnapshot.data();
+      const { students } = groupData;
+
+      const users = [];
+
+      for (const studentId of students) {
+        const userDocRef = doc(db, "user", studentId);
+        const userDocSnapshot = await getDoc(userDocRef);
+
+        if (userDocSnapshot.exists()) {
+          const userData = userDocSnapshot.data();
+          const { name } = userData;
+          users.push({ id: studentId, name });
+        }
+      }
+
+      return users;
+    } else {
+      console.error("Group document not found.");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching students by group ID:", error);
+    throw error;
+  }
+};
+
+export const addLeaderToGroup = async (groupId, userId) => {
+  try {
+    const groupDocRef = doc(db, "groups", groupId);
+    await updateDoc(groupDocRef, {
+      leaderGroup: userId,
+    });
+    console.log("Leader added to group:", userId);
+  } catch (error) {
+    console.error("Error adding leader to group:", error);
+    throw error;
   }
 };

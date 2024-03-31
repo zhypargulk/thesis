@@ -45,7 +45,7 @@ const CourseDashboard = () => {
 
               <Button
                 label={course.title}
-                onClick={() => onHandleButton(course.courseId)}
+                onClick={() => onHandleButton(course.docId)}
               />
               {/* {course.imageUrl && (
                 <img

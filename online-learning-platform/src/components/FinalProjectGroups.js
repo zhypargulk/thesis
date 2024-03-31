@@ -1,28 +1,30 @@
 import { useEffect, useState } from "react";
 import { getAllEnrolledStudents } from "../controller/Students";
 import { useParams } from "react-router-dom";
-import { getDocID } from "../controller/Courses";
+import {} from "../controller/Courses";
 import { MultiSelect } from "primereact/multiselect";
 import { Button } from "primereact/button";
 import emailjs from "@emailjs/browser";
+import { useAuth } from "../context/AuthContext";
 import {
-  createGroup,
+  createGroupCourse,
   createGroupWithModifications,
 } from "../controller/Groups";
 import MenubarCustom from "./Menubar";
 
 const FinalProjectGroups = () => {
   const [students, setStudents] = useState();
-  const [docID, setDocID] = useState();
-  const { courseId } = useParams();
+  const { docId } = useParams();
   const [selectedStudents, setSelectedStudents] = useState(null);
+  const [studentIds, setStudentIds] = useState([]);
   const [selectedStudentsEmail, setSelectedStudentsEmail] = useState([]);
+  const user = useAuth();
 
+  console.log(user);
   const fetchStudents = async () => {
     try {
-      const docId = await getDocID(courseId);
       const dataStudents = await getAllEnrolledStudents(docId);
-      setDocID(docId);
+
       setStudents(dataStudents);
     } catch (err) {
       console.error(err);
@@ -44,7 +46,8 @@ const FinalProjectGroups = () => {
 
       //   await emailjs.send(serviceid, templateId, templateParams, public_key);
       // createGroup(docID, selectedStudents);
-      createGroupWithModifications(docID, selectedStudents);
+      createGroupWithModifications(docId, selectedStudents);
+      createGroupCourse(studentIds, docId, user.uid);
       alert("Invitations sent successfully!");
     } catch (error) {
       console.error("Error sending invitations:", error);
@@ -79,6 +82,7 @@ const FinalProjectGroups = () => {
                 setSelectedStudentsEmail(
                   e.value.map((student) => student.email)
                 );
+                setStudentIds(e.value.map((student) => student.id));
               }}
               placeholder="Select Students"
               maxSelectedLabels={3}

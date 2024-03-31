@@ -71,18 +71,21 @@ export const fetchCourses = async () => {
   }
 };
 
-export const fetchCourseById = async (courseId) => {
+export const fetchCourseById = async (docId) => {
   try {
-    const courseCollectionRef = collection(db, "courses");
-    const queryCourse = query(
-      courseCollectionRef,
-      where(`courseId`, "==", courseId)
-    );
-    const docRef = (await getDocs(queryCourse)).docs[0];
-    const selectedCourse = { ...docRef.data(), docId: docRef.id };
-    return selectedCourse;
+    const courseDocRef = doc(db, "courses", docId);
+    const docSnap = await getDoc(courseDocRef);
+
+    if (docSnap.exists()) {
+      const selectedCourse = { ...docSnap.data(), docId: docSnap.id };
+      return selectedCourse;
+    } else {
+      console.log("No such document!");
+      return null;
+    }
   } catch (error) {
-    console.error("Error fetching courses:", error);
+    console.error("Error fetching course:", error);
+    throw error;
   }
 };
 
@@ -131,12 +134,6 @@ export const enrollUserInCourse = async (uid, courseDocId) => {
     console.error("Error enrolling user in course:", error);
     return false;
   }
-};
-
-export const getDocID = async (courseId) => {
-  const courseData = await fetchCourseById(courseId);
-
-  return courseData.docId;
 };
 
 export const getDocumentById = async (collectionPath, documentId) => {

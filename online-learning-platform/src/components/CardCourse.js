@@ -3,12 +3,12 @@ import { Card } from "primereact/card";
 import "./CardCourse.css"; // Import CSS file for styling
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-const CardCourse = ({ title, imageUrl, desc, id }) => {
+const CardCourse = ({ title, imageUrl, desc, id, groupId }) => {
   const navigate = useNavigate();
   const header = <img alt="Card" src={imageUrl} />;
 
   const onClickBoard = () => {
-    navigate(`/groups/${id}`);
+    navigate(`/groups/${groupId}`);
   };
   const footer = (
     <div className="flex flex-wrap justify-content-end gap-2">
