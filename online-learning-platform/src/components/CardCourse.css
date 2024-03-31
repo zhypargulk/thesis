@@ -1,0 +1,25 @@
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+  }
+  
+  .card:hover {
+    transform: translateY(-4px);
+  }
+  
+  .card-img-top {
+    width: 50px; /* Adjusted width */
+    height: 50px; /* Adjusted height */
+    object-fit: cover; /* Maintain aspect ratio */
+    border-bottom: 1px solid #ddd;
+  }
+  
+  
+  .card-title {
+    font-size: 1rem; /* Reduced font size */
+    margin: 8px 0; /* Adjusted margin */
+  }
+  

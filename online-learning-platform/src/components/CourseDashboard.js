@@ -5,6 +5,8 @@ import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import MenubarCustom from "./Menubar";
+import CardCourse from "./CardCourse";
+import AcceptGroups from "./AcceptGroups";
 
 const CourseDashboard = () => {
   const [courses, setCourses] = useState([]);
@@ -35,17 +37,23 @@ const CourseDashboard = () => {
         {courses.map((course) => (
           <div key={course.courseId} className="p-col-12 p-md-4 p-lg-3">
             <Card>
+              <CardCourse
+                title={course.title}
+                imageUrl={course.imageUrl}
+                desc={course.description}
+              />
+
               <Button
                 label={course.title}
                 onClick={() => onHandleButton(course.courseId)}
               />
-              {course.imageUrl && (
+              {/* {course.imageUrl && (
                 <img
                   src={course.imageUrl}
                   alt={course.title}
                   style={{ maxWidth: "100%", height: "auto" }}
                 />
-              )}
+              )} */}
             </Card>
           </div>
         ))}

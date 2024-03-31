@@ -24,7 +24,9 @@ import Lesson from "./components/Lesson";
 import FinalProject from "./components/FinalProject";
 import FinalProjectGroups from "./components/FinalProjectGroups";
 import Notifications from "./components/Notifications";
-import Groups from "./components/Groups";
+import GroupsComponent from "./components/GroupsComponent";
+import GroupBoard from "./components/GroupBoard";
+import ManageGroup from "./components/ManageGroup";
 
 const App = () => {
   return (
@@ -43,7 +45,9 @@ const App = () => {
           element={<FinalProjectGroups />}
         />
         <Route path="/courses/:courseId" element={<CourseDetails />} />
-        <Route path="/groups" element={<Groups />} />
+        <Route path="/groups/:courseId" element={<ManageGroup />} />
+        <Route path="/groups" element={<GroupsComponent />} />
+        <Route path="/groups/:courseId/board" element={<GroupBoard />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route
           path="/course/:courseId/lessons/:lessonNumber"

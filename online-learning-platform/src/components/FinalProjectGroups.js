@@ -43,7 +43,7 @@ const FinalProjectGroups = () => {
       };
 
       //   await emailjs.send(serviceid, templateId, templateParams, public_key);
-      //   createGroup(docID, selectedStudents);
+      // createGroup(docID, selectedStudents);
       createGroupWithModifications(docID, selectedStudents);
       alert("Invitations sent successfully!");
     } catch (error) {

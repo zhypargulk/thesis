@@ -16,16 +16,22 @@ const Lesson = () => {
     const fetchLessons = async () => {
       try {
         const courseData = await fetchCourseById(courseId);
-        const lessonData = await fetchLesson(courseData, lessonNumber);
-        setLesson(lessonData);
         setLength(courseData.lessons.length);
+
+        if (length === 1) {
+          // If there's only one lesson, set it directly
+          setLesson(courseData.lessons[0]);
+        } else {
+          const lessonData = await fetchLesson(courseData, lessonNumber);
+          setLesson(lessonData);
+        }
       } catch (err) {
         console.error(err);
       }
     };
 
     fetchLessons();
-  }, [courseId, lessonNumber]);
+  }, [courseId, lessonNumber, length]);
 
   useEffect(() => {
     if (Number(lessonNumber) !== length) {
@@ -33,7 +39,7 @@ const Lesson = () => {
     } else {
       setShowButton(false);
     }
-  }, [lessonNumber]);
+  }, [lessonNumber, length]);
 
   if (!lesson) {
     return <div>Loading lesson...</div>;

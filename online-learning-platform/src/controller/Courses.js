@@ -23,6 +23,7 @@ export const createCourse = async (imageCourse, object, lessons) => {
     const imageUrl = await getDownloadURL(imageRef);
     object.imageUrl = imageUrl;
     const courseDocRef = await addDoc(courseCollectionRef, object);
+    await updateDoc(courseDocRef, { docId: courseDocRef.id });
 
     // const lessonCollectionRef = collection(courseDocRef, "lessons");
     const lessonCollectionRef = collection(
@@ -136,4 +137,16 @@ export const getDocID = async (courseId) => {
   const courseData = await fetchCourseById(courseId);
 
   return courseData.docId;
+};
+
+export const getDocumentById = async (collectionPath, documentId) => {
+  try {
+    const documentRef = doc(db, collectionPath, documentId);
+    const documentSnapshot = await getDoc(documentRef);
+    const documentData = documentSnapshot.data();
+    return documentData;
+  } catch (error) {
+    console.error("Error getting document:", error);
+    throw error;
+  }
 };
