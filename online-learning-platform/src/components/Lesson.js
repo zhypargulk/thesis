@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { fetchCourseById, fetchLesson } from "../controller/Courses";
+import { fetchLesson, getDocumentById } from "../controller/Courses";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import MenubarCustom from "./Menubar";
 
 const Lesson = () => {
-  const { courseId, lessonNumber } = useParams();
+  const { docId, lessonNumber } = useParams();
   const [lesson, setLesson] = useState(null);
   const [showButton, setShowButton] = useState(false);
   const navigate = useNavigate();
@@ -15,17 +15,22 @@ const Lesson = () => {
   useEffect(() => {
     const fetchLessons = async () => {
       try {
-        const courseData = await fetchCourseById(courseId);
-        const lessonData = await fetchLesson(courseData, lessonNumber);
-        setLesson(lessonData);
+        const courseData = await getDocumentById("courses", docId);
         setLength(courseData.lessons.length);
+
+        if (length === 1) {
+          setLesson(courseData.lessons[0]);
+        } else {
+          const lessonData = await fetchLesson(courseData, lessonNumber);
+          setLesson(lessonData);
+        }
       } catch (err) {
         console.error(err);
       }
     };
 
     fetchLessons();
-  }, [courseId, lessonNumber]);
+  }, [docId, lessonNumber, length]);
 
   useEffect(() => {
     if (Number(lessonNumber) !== length) {
@@ -33,18 +38,18 @@ const Lesson = () => {
     } else {
       setShowButton(false);
     }
-  }, [lessonNumber]);
+  }, [lessonNumber, length]);
 
   if (!lesson) {
     return <div>Loading lesson...</div>;
   }
 
   const onClickHandler = () => {
-    navigate(`/course/${courseId}/lessons/${Number(lessonNumber) + 1}`);
+    navigate(`/course/${docId}/lessons/${Number(lessonNumber) + 1}`);
   };
 
   const onClickToProject = () => {
-    navigate(`/course/${courseId}/task`);
+    navigate(`/course/${docId}/task`);
   };
 
   return (

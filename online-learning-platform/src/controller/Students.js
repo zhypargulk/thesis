@@ -39,3 +39,25 @@ export const getAllEnrolledStudents = async (courseId) => {
     return [];
   }
 };
+
+export const getUserById = async (userId) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    const userSnapshot = await getDoc(userRef);
+
+    if (userSnapshot.exists()) {
+      const userData = userSnapshot.data();
+      return {
+        id: userId,
+        email: userData.email,
+        name: userData.name,
+        role: userData.role, // Add any additional fields you need
+      };
+    } else {
+      throw new Error("User document not found");
+    }
+  } catch (error) {
+    console.error("Error fetching user by ID:", error);
+    return null;
+  }
+};

@@ -4,21 +4,21 @@ import { Button } from "primereact/button";
 import { useParams } from "react-router-dom";
 import { auth } from "../config/firebase";
 import {
-  fetchCourseById,
   checkUserEnrollment,
   enrollUserInCourse,
+  getDocumentById,
 } from "../controller/Courses";
 import MenubarCustom from "./Menubar";
 
 const CourseDetails = () => {
   const [enrolled, setEnrolled] = useState(false);
   const [course, setCourse] = useState(null);
-  const { courseId } = useParams();
+  const { docId } = useParams();
 
   useEffect(() => {
     const fetchCourseAndCheckEnrollment = async () => {
       try {
-        const selectedCourse = await fetchCourseById(courseId);
+        const selectedCourse = await getDocumentById("courses", docId);
         if (selectedCourse) {
           setCourse(selectedCourse);
 
@@ -38,7 +38,7 @@ const CourseDetails = () => {
     };
 
     fetchCourseAndCheckEnrollment();
-  }, [courseId]);
+  }, [docId]);
 
   const handleEnroll = async () => {
     try {
@@ -82,7 +82,7 @@ const CourseDetails = () => {
                   <div>
                     <Button label="Enrolled" disabled />
                     <a
-                      href={`/course/${course.courseId}/lessons/1`}
+                      href={`/course/${course.docId}/lessons/1`}
                       className="font-bold"
                     >
                       Start taking the classes
