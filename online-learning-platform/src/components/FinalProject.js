@@ -6,6 +6,8 @@ import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import MenubarCustom from "./Menubar";
 import { getAllEnrolledStudents } from "../controller/Students";
+import { Panel } from "primereact/panel";
+import FinalProjectGroups from "./FinalProjectGroups";
 
 const FinalProject = () => {
   const { docId } = useParams();
@@ -34,12 +36,11 @@ const FinalProject = () => {
   return (
     <>
       <MenubarCustom />
-
-      <Card>
+      <Panel header="Final Project Description" className="mt-5">
         <p>{project}</p>
-      </Card>
+      </Panel>
       <Button
-        className="flex m-3"
+        className="flex m-3 w-9"
         label="Find a group to complete the project"
         onClick={findGroupMates}
       />

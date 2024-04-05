@@ -5,7 +5,7 @@ import { auth } from "../config/firebase";
 import { Button } from "primereact/button";
 import { signOut } from "firebase/auth";
 
-import "./MenubarCustom.css"; // Import CSS file
+import "./MenubarCustom.css";
 
 export default function MenubarCustom() {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getStudentsByGroupId, addLeaderToGroup } from "../controller/Groups";
 import { createTask, getAllTasks } from "../controller/Tasks";
 import { Dropdown } from "primereact/dropdown";
@@ -17,9 +17,9 @@ const ManageGroup = () => {
   const { groupId } = useParams();
   const user = useAuth();
   const [userId, setUserId] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Ensure user is not null before accessing its properties
     if (user) {
       setUserId(user.uid);
     }
@@ -58,7 +58,6 @@ const ManageGroup = () => {
         }
       }
       getTasks();
-      console.log("Tasks created successfully!");
     } catch (error) {
       console.error("Error creating tasks:", error);
     }
@@ -66,7 +65,10 @@ const ManageGroup = () => {
 
   const getTasks = async () => {
     const task = await getAllTasks(groupId);
-    console.log(task);
+  };
+
+  const onClickToBoardHandler = () => {
+    navigate("board");
   };
 
   return (
@@ -138,7 +140,7 @@ const ManageGroup = () => {
         />
         <Button
           label="Go to the board"
-          onClick={() => {}} // Implement navigation logic
+          onClick={onClickToBoardHandler}
           className="flex w-30rem h-3rem mt-3 ml-3"
         />
       </div>

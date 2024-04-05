@@ -4,6 +4,7 @@ import { fetchLesson, getDocumentById } from "../controller/Courses";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import MenubarCustom from "./Menubar";
+import { ScrollPanel } from "primereact/scrollpanel";
 
 const Lesson = () => {
   const { docId, lessonNumber } = useParams();
@@ -55,18 +56,37 @@ const Lesson = () => {
   return (
     <div>
       <MenubarCustom />
-      <h2>{lesson.title}</h2>
-      <p>{lesson.description}</p>
-      <video controls>
-        <source src={lesson.videoURL} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      <h2 className="text-orange-500 font-bold border border-black text-center text-5xl">
+        {lesson.title}
+      </h2>
+      <div className="flex justify-content-center">
+        <video
+          id="myVideo"
+          src={lesson.videoURL}
+          type="video/mp4"
+          style={{ width: "600px", height: "400px" }}
+          controls
+        >
+          Your browser does not support the video tag.
+        </video>
+      </div>
+
+      <div className=" flex justify-content-center mt-4 mb-5">
+        <ScrollPanel>
+          <p>{lesson.description}</p>
+        </ScrollPanel>
+      </div>
+
       {showButton ? (
-        <Button label="Next lesson" className="flex" onClick={onClickHandler} />
+        <Button
+          label="Next lesson"
+          className="flex w-full"
+          onClick={onClickHandler}
+        />
       ) : (
         <Button
           label="Go to Project"
-          className="flex"
+          className="flex w-full"
           onClick={onClickToProject}
         />
       )}

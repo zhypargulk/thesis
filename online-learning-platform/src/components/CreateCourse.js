@@ -48,7 +48,8 @@ const CreateCourse = () => {
           storage,
           `videos/${lessons[i].videoURL.name + v4()}`
         );
-        await uploadBytes(imageRef, lessons[i]);
+
+        await uploadBytes(imageRef, lessons[i].videoURL);
 
         const videoURL = await getDownloadURL(imageRef);
         lessons[i].videoURL = videoURL;
@@ -70,16 +71,31 @@ const CreateCourse = () => {
       setNewTaskDescription("");
       setNewCourseDescription("");
       setNewNumberOfClasses(0);
-      navigate("/courses");
+      navigate("/");
     } catch (err) {
       console.error(err);
     }
   };
 
+  const isFormValid = () => {
+    const mainFieldsFilled =
+      newCourseTitle &&
+      newCourseDescription &&
+      newTaskDescription &&
+      newAnswer &&
+      imageCourse;
+    const validNumberOfClasses = newNumberOfClasses > 0;
+    const lessonsValid = lessons.every(
+      (lesson) => lesson.title && lesson.description && lesson.videoURL
+    );
+
+    return mainFieldsFilled && validNumberOfClasses && lessonsValid;
+  };
+
   return (
     <div>
       <MenubarCustom />
-      <h2>Create New Course</h2>
+      <h2 className="mt-4 ml-4">Create New Course</h2>
       <Card>
         <Panel header="Course Information">
           <div className="p-fluid p-formgrid p-grid">
@@ -91,14 +107,15 @@ const CreateCourse = () => {
                 id="title"
                 value={newCourseTitle}
                 onChange={(e) => setNewCourseTitle(e.target.value)}
+                className="mt-4"
               />
             </div>
-            <div className="p-field p-col-12 p-md-4">
+            <div className="p-field p-col-12 p-md-4 mt-4">
               <label htmlFor="courseImage">
                 Course Image: <sup>*</sup>
               </label>
               <input
-                className="flex"
+                className="flex mt-4"
                 type="file"
                 accept="image/*"
                 onChange={(event) => {
@@ -116,11 +133,12 @@ const CreateCourse = () => {
                 onChange={(e) => setNewCourseDescription(e.target.value)}
                 rows={5}
                 cols={30}
+                className="mt-4"
               />
             </div>
             <div className="p-field p-col-12 p-md-4 mt-4">
               <label htmlFor="numberOfClasses">
-                Number of Classes: <sup>*</sup>
+                Number of lessons: <sup>*</sup>
               </label>
               <InputNumber
                 id="numberOfClasses"
@@ -129,12 +147,13 @@ const CreateCourse = () => {
                 showButtons
                 min={0}
                 max={20}
+                className="mt-4"
               />
               <small style={{ color: "blue" }} className="mb-4">
                 Maximum number of classes allowed is 20.
               </small>
             </div>
-            <div className="p-field p-col-12 p-md-8 mt-4">
+            <div className="p-field p-col-12 p-md-8 mt-5">
               <label htmlFor="description">
                 Final project task description: <sup>*</sup>
               </label>
@@ -144,6 +163,7 @@ const CreateCourse = () => {
                 onChange={(e) => setNewTaskDescription(e.target.value)}
                 rows={5}
                 cols={30}
+                className="mt-4"
               />
             </div>
             <div className="p-field p-col-12 p-md-8 mt-4">
@@ -156,13 +176,18 @@ const CreateCourse = () => {
                 onChange={(e) => setNewAnswer(e.target.value)}
                 rows={5}
                 cols={30}
+                className="mt-4"
               />
             </div>
           </div>
         </Panel>
       </Card>
       <div>
-        <h2>Create New Lessons</h2>
+        {newNumberOfClasses > 0 ? (
+          <h2 className="mt-5 ml-5">Create New Lessons</h2>
+        ) : (
+          ""
+        )}
         {arrayForClasses.map((lesson, index) => (
           <Panel
             key={index}
@@ -172,7 +197,9 @@ const CreateCourse = () => {
             <Card className="mt-3">
               <div className="p-fluid p-formgrid p-grid">
                 <div className="p-field p-col-12 p-md-4 mt-4">
-                  <label htmlFor={`lessonTitle${index}`}>Lesson Title:</label>
+                  <label htmlFor={`lessonTitle${index}`}>
+                    Lesson Title: <sup>*</sup>
+                  </label>
                   <InputText
                     id={`lessonTitle${index}`}
                     value={lesson.title}
@@ -181,12 +208,13 @@ const CreateCourse = () => {
                       updatedLessons[index].title = event.target.value;
                       setLessons(updatedLessons);
                     }}
+                    className="mt-4"
                   />
                 </div>
 
                 <div className="p-field p-col-12 p-md-8 mt-4">
                   <label htmlFor={`lessonDescription${index}`}>
-                    Lesson Description:
+                    Lesson Description: <sup>*</sup>
                   </label>
                   <InputTextarea
                     id={`lessonDescription${index}`}
@@ -198,15 +226,16 @@ const CreateCourse = () => {
                     }}
                     rows={5}
                     cols={30}
+                    className="mt-4"
                   />
                 </div>
 
                 <div className="p-field p-col-12 p-md-8 mt-4">
                   <label htmlFor="courseImage">
-                    Course Image: <sup>*</sup>
+                    Lesson video or image: <sup>*</sup>
                   </label>
                   <input
-                    className="flex"
+                    className="flex mt-4"
                     type="file"
                     accept="video/*,image/*"
                     onChange={(e) => {
@@ -226,6 +255,7 @@ const CreateCourse = () => {
           type="button"
           label="Create Course"
           onClick={handleCreateCourse}
+          disabled={!isFormValid()}
         />
       </div>
     </div>

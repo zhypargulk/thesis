@@ -1,15 +1,16 @@
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { auth } from "../config/firebase";
 import { updateProfile } from "firebase/auth"; // Import updateProfile
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { Dropdown } from "primereact/dropdown";
 import { useNavigate } from "react-router-dom";
 import { Password } from "primereact/password";
+import { Toast } from "primereact/toast";
 
-import "./Auth.css"; // Import CSS file
+import "./Auth.css";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -17,6 +18,16 @@ const Auth = () => {
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const navigate = useNavigate();
+  const toast = useRef(null);
+
+  const showError = (summary, detail) => {
+    toast.current.show({
+      severity: "error",
+      summary: summary,
+      detail: detail,
+      life: 3000,
+    });
+  };
 
   const roles = [
     {
@@ -70,7 +81,7 @@ const Auth = () => {
       clearForm();
       navigate("/");
     } catch (error) {
-      console.error("Error registering user:", error.message);
+      showError("Registration Failed", error.message);
     }
   };
 
@@ -89,8 +100,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="auth-container">
-      {/* <div className="form-container"> */}
+    <div className="auth-container mt-4">
       <form onSubmit={handleSubmit}>
         <fieldset>
           <h2>Register the User</h2>
@@ -156,7 +166,6 @@ const Auth = () => {
         </fieldset>
       </form>
     </div>
-    // </div>
   );
 };
 
