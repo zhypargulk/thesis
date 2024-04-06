@@ -73,8 +73,8 @@ const FinalProjectGroups = () => {
 
   return (
     <>
+      <MenubarCustom />
       <div className="card">
-        <MenubarCustom />
         <Toast ref={toast} />
 
         <h3 className="flex mt-4 ml-4 text-3xl">You can create a new group</h3>

@@ -20,8 +20,6 @@ const CardCourse = ({ title, imageUrl, desc, id, groupId }) => {
     navigate(id);
   };
 
-  console.log(id);
-
   const footer = (
     <div className="flex flex-wrap justify-content-end gap-2">
       <Button

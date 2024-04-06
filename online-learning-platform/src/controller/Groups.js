@@ -187,11 +187,9 @@ export const createGroupCourse = async (studentIds, docId, userId) => {
 
     const groupData = {
       students: studentIds,
-      courseId: docId, // Using docId directly as courseId
+      courseId: docId,
       tasks: [],
     };
-
-    console.log(groupData);
 
     const groupRef = await addDoc(groupCollectionRef, groupData);
     const updatedGroupData = {
@@ -202,7 +200,6 @@ export const createGroupCourse = async (studentIds, docId, userId) => {
     await setDoc(doc(db, "groups", groupRef.id), updatedGroupData, {
       merge: true,
     });
-    console.log(groupRef);
 
     await updateDoc(userDocRef, { groups: arrayUnion(groupRef.id) });
     await updateDoc(courseDocRef, { groups: arrayUnion(groupRef.id) });

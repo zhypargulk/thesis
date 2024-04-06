@@ -6,7 +6,8 @@ import {
 } from "../controller/Groups"; // Import the function
 import { useAuth } from "../context/AuthContext";
 import { getDocumentById } from "../controller/Courses";
-import CardCourse from "./CardCourse";
+import CardGroup from "./CardGroup";
+import MenubarCustom from "./Menubar";
 
 const GroupsComponent = () => {
   const [courses, setCourses] = useState([]);
@@ -15,7 +16,6 @@ const GroupsComponent = () => {
   const [userId, setUserId] = useState();
 
   useEffect(() => {
-    // Ensure user is not null before accessing its properties
     if (user) {
       setUserId(user.uid);
     }
@@ -49,25 +49,25 @@ const GroupsComponent = () => {
   }, [userId]);
 
   return (
-    <div>
-      <h2>Groups with accepted invitations:</h2>
-      <ul>
-        {courses.map((course, index) => {
-          console.log("Index:", index, "Course:", course);
-          return (
-            <div key={course.docId}>
-              <CardCourse
+    <>
+      <MenubarCustom />
+      <div>
+        <h2 className="m-5">Your Group Projects</h2>
+        <div className="grid m-3">
+          {courses.map((course, index) => (
+            <div key={course.docId} className="col-12 col-md-4 w-30rem m-3">
+              <CardGroup
+                key={course.docId}
                 title={course.title}
                 imageUrl={course.imageUrl}
                 id={course.docId}
-                groupId={groupes[index] ? groupes[index].groupDocId : null} // Pass the groupId as a prop
+                groupId={groupes[index] ? groupes[index].groupDocId : null}
               />
-              <li>{course.title}</li>
             </div>
-          );
-        })}
-      </ul>
-    </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 

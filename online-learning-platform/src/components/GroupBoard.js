@@ -16,7 +16,7 @@ const GroupBoard = () => {
     };
 
     fetchTasks();
-  }, [docId]); // Refetch tasks if docId changes
+  }, [docId]);
 
   return (
     <>

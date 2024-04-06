@@ -14,7 +14,6 @@ import {
 
 export const getAllTasks = async (groupId) => {
   try {
-    // Create a query to get all tasks belonging to the specified group ID
     const tasksRef = collection(db, "tasks");
     const tasksQuery = query(tasksRef, where("group_id", "==", groupId));
 
@@ -33,30 +32,34 @@ export const getAllTasks = async (groupId) => {
   }
 };
 
-export const createTask = async (userId, groupId, status, description) => {
+export const createTask = async (
+  userId,
+  groupId,
+  status,
+  description,
+  title
+) => {
   try {
     const taskRef = await addDoc(collection(db, "tasks"), {
       user_id: userId,
       group_id: groupId,
       status: status,
       description: description,
+      title: title,
     });
 
-    // Update the user document to include the newly created task
     const userDocRef = doc(db, "user", userId);
     console.log("user=", userDocRef.id);
     await updateDoc(userDocRef, {
-      tasks: arrayUnion(taskRef.id), // Append the task ID to the 'tasks' array
+      tasks: arrayUnion(taskRef.id),
     });
 
-    // Update the group document to include the newly created task
     const groupDocRef = doc(db, "groups", groupId);
     await updateDoc(groupDocRef, {
-      tasks: arrayUnion(taskRef.id), // Append the task ID to the 'tasks' array
+      tasks: arrayUnion(taskRef.id),
     });
 
-    console.log("Task created with ID:", taskRef.id);
-    return taskRef.id; // Return the ID of the newly created task document
+    return taskRef.id;
   } catch (error) {
     console.error("Error creating task:", error);
     return null;
