@@ -129,7 +129,7 @@ export const enrollUserInCourse = async (uid, courseDocId) => {
       enrollments: arrayUnion(courseDocId),
     });
 
-    return true; // Successfully enrolled
+    return true;
   } catch (error) {
     console.error("Error enrolling user in course:", error);
     return false;

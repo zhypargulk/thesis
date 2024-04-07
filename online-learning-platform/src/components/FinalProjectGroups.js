@@ -6,10 +6,7 @@ import { Button } from "primereact/button";
 import emailjs from "@emailjs/browser";
 import { useAuth } from "../context/AuthContext";
 import { Toast } from "primereact/toast";
-import {
-  createGroupCourse,
-  createGroupWithModifications,
-} from "../controller/Groups";
+import { createGroupWithModifications } from "../controller/Groups";
 import MenubarCustom from "./Menubar";
 import { useMountEffect } from "primereact/hooks";
 import { Message } from "primereact/message";
@@ -37,9 +34,12 @@ const FinalProjectGroups = () => {
 
   const fetchStudents = async () => {
     try {
-      const dataStudents = await getAllEnrolledStudents(docId);
+      if (user && user.uid) {
+        const dataStudents = await getAllEnrolledStudents(docId);
+        console.log(dataStudents);
 
-      setStudents(dataStudents);
+        setStudents(dataStudents.filter((st) => st.id !== user.uid));
+      }
     } catch (err) {
       console.error(err);
     }
@@ -47,9 +47,7 @@ const FinalProjectGroups = () => {
 
   useEffect(() => {
     fetchStudents();
-  }, []);
-
-  console.log(invitationsSent);
+  }, [user]);
 
   const serviceid = "service_66qy3k7";
   const templateId = "template_qe8xnq8";
@@ -61,9 +59,12 @@ const FinalProjectGroups = () => {
       };
 
       await emailjs.send(serviceid, templateId, templateParams, public_key);
-      // createGroup(docID, selectedStudents);
-      createGroupWithModifications(docId, selectedStudents);
-      createGroupCourse(studentIds, docId, user.uid);
+      createGroupWithModifications(
+        docId,
+        selectedStudents,
+        studentIds,
+        user.uid
+      );
       showSuccess();
     } catch (error) {
       console.error("Error sending invitations:", error);

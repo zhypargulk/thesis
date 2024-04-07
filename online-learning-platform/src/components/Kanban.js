@@ -17,12 +17,11 @@ const labelsMap = {
 const classes = {
   board: {
     display: "flex",
-    margin: "5rem 5rem 0",
     width: "60vw",
     fontFamily: 'Arial, "Helvetica Neue", sans-serif',
   },
   column: {
-    minWidth: 200,
+    minWidth: 100,
     width: "20vw",
     height: "80vh",
     margin: "0 auto",
@@ -118,38 +117,39 @@ class Kanban extends React.Component {
       newTasks[taskIndex].status
     );
     this.setState({ tasks: newTasks });
-    console.log(tasks);
   };
 
   render() {
     const { tasks } = this.state;
     return (
       <>
-        <MenuBarCustom />
-        <main>
-          <section style={classes.board}>
-            {labels.map((channel) => (
-              <KanbanColumn status={channel}>
-                <div style={classes.column}>
-                  <div style={classes.columnHead}>{labelsMap[channel]}</div>
-                  <div>
-                    {tasks
-                      .filter((item) => item.status === channel)
-                      .map((item) => (
-                        <KanbanItem
-                          id={item._id}
-                          onDrop={this.update}
-                          userName={item.userName}
-                        >
-                          <div>{item.title}</div>
-                        </KanbanItem>
-                      ))}
+        <div>
+          <h3 className="mt-4 ml-5 text-3xl">Progress board</h3>
+          <div className="ml-5 mr-4">
+            <section style={classes.board}>
+              {labels.map((channel) => (
+                <KanbanColumn status={channel}>
+                  <div style={classes.column}>
+                    <div style={classes.columnHead}>{labelsMap[channel]}</div>
+                    <div>
+                      {tasks
+                        .filter((item) => item.status === channel)
+                        .map((item) => (
+                          <KanbanItem
+                            id={item._id}
+                            onDrop={this.update}
+                            userName={item.userName}
+                          >
+                            <div>{item.title}</div>
+                          </KanbanItem>
+                        ))}
+                    </div>
                   </div>
-                </div>
-              </KanbanColumn>
-            ))}
-          </section>
-        </main>
+                </KanbanColumn>
+              ))}
+            </section>
+          </div>
+        </div>
       </>
     );
   }

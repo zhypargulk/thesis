@@ -9,7 +9,7 @@ import { Dropdown } from "primereact/dropdown";
 import { useNavigate } from "react-router-dom";
 import { Password } from "primereact/password";
 import { Toast } from "primereact/toast";
-
+import { getNoAvatarImage } from "../controller/User";
 import "./Auth.css";
 
 const Auth = () => {
@@ -76,6 +76,7 @@ const Auth = () => {
         email,
         role: role.role,
         id: userCredential.user.uid,
+        imageUrl: getNoAvatarImage(),
       });
 
       clearForm();

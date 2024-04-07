@@ -68,7 +68,7 @@ const ManageGroup = () => {
 
   const fetchCourse = async () => {
     const groupData = await getDocumentById("groups", groupId);
-    const courseData = await getDocumentById("courses", groupData.courseId);
+    const courseData = await getDocumentById("courses", groupData.courseDocId);
     setCourse(courseData);
     if (!groupData.leaderGroup) {
       setIsLeaderExist(false);

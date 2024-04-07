@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  getCoursesWithAcceptedInvitations,
   getCoursesByUserId,
   getGroupByUserIdAndCourseId,
 } from "../controller/Groups"; // Import the function
@@ -21,17 +20,19 @@ const GroupsComponent = () => {
     }
   }, [user]);
 
+  console.log(courses);
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        if (userId) {
+        if (user && user.uid) {
           const courseDocIds = await getCoursesByUserId(userId);
+
           const courses = [];
           const groups = [];
           for (let i = 0; i < courseDocIds.length; i++) {
             const course = await getDocumentById("courses", courseDocIds[i]);
             const group = await getGroupByUserIdAndCourseId(
-              userId,
+              user.uid,
               course.docId
             );
             courses.push(course);
@@ -48,6 +49,8 @@ const GroupsComponent = () => {
     fetchCourses();
   }, [userId]);
 
+  console.log(groupes);
+
   return (
     <>
       <MenubarCustom />
@@ -61,7 +64,7 @@ const GroupsComponent = () => {
                 title={course.title}
                 imageUrl={course.imageUrl}
                 id={course.docId}
-                groupId={groupes[index] ? groupes[index].groupDocId : null}
+                groupId={groupes[index] ? groupes[index].groupId : null}
               />
             </div>
           ))}
