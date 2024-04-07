@@ -4,6 +4,7 @@ import HTML5Backend from "react-dnd-html5-backend";
 import update from "immutability-helper";
 import { getAllTasksBoard, updateTaskStatus } from "../controller/Tasks";
 import MenuBarCustom from "../components/Menubar";
+import { getDocumentById } from "../controller/Courses";
 
 const labels = ["new", "going", "done"];
 const labelsMap = {
@@ -16,12 +17,11 @@ const labelsMap = {
 const classes = {
   board: {
     display: "flex",
-    margin: "5rem 5rem 0",
     width: "60vw",
     fontFamily: 'Arial, "Helvetica Neue", sans-serif',
   },
   column: {
-    minWidth: 200,
+    minWidth: 100,
     width: "20vw",
     height: "80vh",
     margin: "0 auto",
@@ -37,13 +37,29 @@ const classes = {
     color: "white",
   },
   item: {
-    padding: 10,
-    margin: 10,
+    padding: "10px",
+    margin: "10px 0",
     fontSize: "1rem",
     cursor: "pointer",
     backgroundColor: "white",
     borderColor: "#64a5ea",
     borderStyle: "solid",
+    borderWidth: "1px",
+    borderRadius: "5px",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    transition: "box-shadow 0.3s ease-in-out",
+  },
+
+  itemHover: {
+    boxShadow: "0 5px 15px rgba(0,0,0,0.2)",
+  },
+
+  userName: {
+    display: "block",
+    marginTop: "8px",
+    fontSize: "0.85rem",
+    color: "#333",
+    fontWeight: "bold",
   },
 };
 
@@ -57,8 +73,24 @@ class Kanban extends React.Component {
 
   async fetchTasks() {
     const { id: groupId } = this.props;
-    const fetchedTasks = await getAllTasksBoard(groupId);
-    this.setState({ tasks: fetchedTasks });
+    let fetchedTasks = await getAllTasksBoard(groupId);
+
+    const tasksWithUserNames = await Promise.all(
+      fetchedTasks.map(async (task) => {
+        try {
+          const userData = await getDocumentById("user", task.user_id);
+          return {
+            ...task,
+            userName: userData ? userData.name : "Unknown",
+          };
+        } catch (error) {
+          console.error("Error fetching user name:", error);
+          return { ...task, userName: "Unknown" };
+        }
+      })
+    );
+
+    this.setState({ tasks: tasksWithUserNames });
   }
 
   componentDidMount() {
@@ -79,7 +111,7 @@ class Kanban extends React.Component {
     const newTasks = update(tasks, {
       [taskIndex]: { $set: task },
     });
-    console.log("newTask", newTasks);
+
     const updatedTasksStatus = updateTaskStatus(
       newTasks[taskIndex]._id,
       newTasks[taskIndex].status
@@ -91,27 +123,33 @@ class Kanban extends React.Component {
     const { tasks } = this.state;
     return (
       <>
-        <MenuBarCustom />
-        <main>
-          <section style={classes.board}>
-            {labels.map((channel) => (
-              <KanbanColumn status={channel}>
-                <div style={classes.column}>
-                  <div style={classes.columnHead}>{labelsMap[channel]}</div>
-                  <div>
-                    {tasks
-                      .filter((item) => item.status === channel)
-                      .map((item) => (
-                        <KanbanItem id={item._id} onDrop={this.update}>
-                          <div style={classes.item}>{item.description}</div>
-                        </KanbanItem>
-                      ))}
+        <div>
+          <h3 className="mt-4 ml-5 text-3xl">Progress board</h3>
+          <div className="ml-5 mr-4">
+            <section style={classes.board}>
+              {labels.map((channel) => (
+                <KanbanColumn status={channel}>
+                  <div style={classes.column}>
+                    <div style={classes.columnHead}>{labelsMap[channel]}</div>
+                    <div>
+                      {tasks
+                        .filter((item) => item.status === channel)
+                        .map((item) => (
+                          <KanbanItem
+                            id={item._id}
+                            onDrop={this.update}
+                            userName={item.userName}
+                          >
+                            <div>{item.title}</div>
+                          </KanbanItem>
+                        ))}
+                    </div>
                   </div>
-                </div>
-              </KanbanColumn>
-            ))}
-          </section>
-        </main>
+                </KanbanColumn>
+              ))}
+            </section>
+          </div>
+        </div>
       </>
     );
   }
@@ -158,8 +196,27 @@ const boxSource = {
 };
 
 class KanbanItem extends React.Component {
+  // Adding state to handle hover effect
+  state = {
+    isHovered: false,
+  };
+
+  toggleHover = () => {
+    this.setState((prevState) => ({ isHovered: !prevState.isHovered }));
+  };
+
   render() {
-    return this.props.connectDragSource(<div>{this.props.children}</div>);
+    const { isHovered } = this.state;
+    return this.props.connectDragSource(
+      <div
+        style={{ ...classes.item, ...(isHovered ? classes.itemHover : {}) }}
+        onMouseEnter={this.toggleHover}
+        onMouseLeave={this.toggleHover}
+      >
+        <div>{this.props.children}</div>
+        <span style={classes.userName}>{this.props.userName}</span>
+      </div>
+    );
   }
 }
 

@@ -1,16 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getAllEnrolledStudents } from "../controller/Students";
 import { useParams } from "react-router-dom";
-import {} from "../controller/Courses";
 import { MultiSelect } from "primereact/multiselect";
 import { Button } from "primereact/button";
 import emailjs from "@emailjs/browser";
 import { useAuth } from "../context/AuthContext";
-import {
-  createGroupCourse,
-  createGroupWithModifications,
-} from "../controller/Groups";
+import { Toast } from "primereact/toast";
+import { createGroupWithModifications } from "../controller/Groups";
 import MenubarCustom from "./Menubar";
+import { useMountEffect } from "primereact/hooks";
+import { Message } from "primereact/message";
 
 const FinalProjectGroups = () => {
   const [students, setStudents] = useState();
@@ -19,13 +18,28 @@ const FinalProjectGroups = () => {
   const [studentIds, setStudentIds] = useState([]);
   const [selectedStudentsEmail, setSelectedStudentsEmail] = useState([]);
   const user = useAuth();
+  const toast = useRef(null);
+  const [invitationsSent, setInvitationsSent] = useState(false);
 
-  console.log(user);
+  const showSuccess = () => {
+    toast.current.show({
+      severity: "success",
+      summary: "Invitations were sent",
+      detail: "Each user gets an email about it!",
+      life: 3000,
+    });
+
+    setInvitationsSent(true);
+  };
+
   const fetchStudents = async () => {
     try {
-      const dataStudents = await getAllEnrolledStudents(docId);
+      if (user && user.uid) {
+        const dataStudents = await getAllEnrolledStudents(docId);
+        console.log(dataStudents);
 
-      setStudents(dataStudents);
+        setStudents(dataStudents.filter((st) => st.id !== user.uid));
+      }
     } catch (err) {
       console.error(err);
     }
@@ -33,7 +47,7 @@ const FinalProjectGroups = () => {
 
   useEffect(() => {
     fetchStudents();
-  }, []);
+  }, [user]);
 
   const serviceid = "service_66qy3k7";
   const templateId = "template_qe8xnq8";
@@ -44,11 +58,14 @@ const FinalProjectGroups = () => {
         to_email: selectedStudentsEmail.join(","),
       };
 
-      //   await emailjs.send(serviceid, templateId, templateParams, public_key);
-      // createGroup(docID, selectedStudents);
-      createGroupWithModifications(docId, selectedStudents);
-      createGroupCourse(studentIds, docId, user.uid);
-      alert("Invitations sent successfully!");
+      await emailjs.send(serviceid, templateId, templateParams, public_key);
+      createGroupWithModifications(
+        docId,
+        selectedStudents,
+        studentIds,
+        user.uid
+      );
+      showSuccess();
     } catch (error) {
       console.error("Error sending invitations:", error);
       alert("Error sending invitations");
@@ -59,14 +76,10 @@ const FinalProjectGroups = () => {
     <>
       <MenubarCustom />
       <div className="card">
-        <h2 className="flex mt-4 ml-4 text-3xl">
-          You can join to the existing groups or create a new one
-        </h2>
+        <Toast ref={toast} />
+
+        <h3 className="flex mt-4 ml-4 text-3xl">You can create a new group</h3>
         <div className="flex flex-column">
-          {/* <div>
-            <h3 className="flex ml-5 mt-5">Join to the group</h3>
-            <h4 className="flex ml-5 mt-2">Choose a group to join</h4>
-          </div> */}
           <div>
             <h3 className="flex ml-5 mt-5">Create a new group </h3>
             <h4 className="flex ml-5 mt-2">
@@ -78,7 +91,6 @@ const FinalProjectGroups = () => {
               optionLabel="name"
               onChange={(e) => {
                 setSelectedStudents(e.value);
-                // implement it
                 setSelectedStudentsEmail(
                   e.value.map((student) => student.email)
                 );
@@ -96,6 +108,14 @@ const FinalProjectGroups = () => {
           </div>
         </div>
       </div>
+      {invitationsSent && (
+        <div className="flex justify-content-start mt-3 ml-4">
+          <Message
+            severity="info"
+            text="Group was created go to Group section"
+          />
+        </div>
+      )}
     </>
   );
 };

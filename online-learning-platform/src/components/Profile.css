@@ -1,0 +1,107 @@
+/* Google Fonts - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+.parent-container {
+    display: flex;
+    justify-content: center; /* Centers items on the horizontal line */
+    align-items: center; /* Centers items on the vertical line */
+    height: 100vh; /* Take at least the full height of the viewport */
+  }
+
+.card{
+  border-radius: 25px;
+  background-color: #FFF;
+  width: 50%;
+}
+.image-content,
+.card-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 14px;
+}
+.image-content{
+  position: relative;
+  row-gap: 5px;
+  padding: 25px 0;
+}
+.overlay{
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #4070F4;
+  border-radius: 25px 25px 0 25px;
+}
+.overlay::before,
+.overlay::after{
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: -40px;
+  height: 40px;
+  width: 40px;
+  background-color: #4070F4;
+}
+.overlay::after{
+  border-radius: 0 25px 0 0;
+  background-color: #FFF;
+}
+.card-image{
+  position: relative;
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  background: #FFF;
+  padding: 3px;
+}
+.card-image .card-img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #4070F4;
+}
+.name{
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+}
+.description{
+  font-size: 14px;
+  color: #707070;
+  text-align: center;
+}
+.button{
+  border: none;
+  font-size: 16px;
+  color: #FFF;
+  padding: 8px 16px;
+  background-color: #4070F4;
+  border-radius: 6px;
+  margin: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.button:hover{
+  background: #265DF2;
+}
+
+.image-edit-container {
+    text-align: center; /* Initially center everything, might adjust based on layout */
+    width: 150px; /* Match the width of your image for alignment */
+    margin: auto; /* Center the container itself */
+  }
+  
+  /* Remove margin-left from .p-button-rounded if it's not desired globally */
+  
+  /* Adjust the button specific styling for left alignment */
+  .button-under-left {
+    display: flex; /* Use flex to allow content alignment */
+    justify-content: flex-start; /* Align children (button) to the start (left) */
+    width: 100%; /* Ensure container fills its parent's width for proper alignment */
+    margin-top: 8px; /* Space between the image and the button */
+  }
+  
+  

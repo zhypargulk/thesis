@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchUserData } from "../controller/User";
 import { getDocumentById } from "../controller/Courses";
-import { UpdateAcceptedInvitations } from "../controller/Groups";
 import { Button } from "primereact/button";
 import { useAuth } from "../context/AuthContext";
 import MenubarCustom from "./Menubar";
@@ -38,9 +37,7 @@ const Notificatioins = () => {
     }
   };
 
-  const acceptInvitations = async (docId) => {
-    const myInfos = await UpdateAcceptedInvitations(user.uid, docId);
-  };
+  const acceptInvitations = async (docId) => {};
 
   console.log(coursesWithInvitations);
   useEffect(() => {

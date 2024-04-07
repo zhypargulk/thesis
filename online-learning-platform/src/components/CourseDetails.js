@@ -9,6 +9,8 @@ import {
   getDocumentById,
 } from "../controller/Courses";
 import MenubarCustom from "./Menubar";
+import { Image } from "primereact/image";
+import { ScrollPanel } from "primereact/scrollpanel";
 
 const CourseDetails = () => {
   const [enrolled, setEnrolled] = useState(false);
@@ -68,28 +70,45 @@ const CourseDetails = () => {
           <Card>
             {course && (
               <>
-                <h3>{course.title}</h3>
+                <h1 className="text-orange-500 font-bold border border-black text-center text-5xl">
+                  {course.title}
+                </h1>
                 {course.imageUrl && (
-                  <img
-                    src={course.imageUrl}
-                    alt={course.title}
-                    style={{ maxWidth: "100%", height: "auto" }}
-                  />
+                  <div className="flex justify-content-center">
+                    <Image
+                      src={course.imageUrl}
+                      alt={course.title}
+                      width="550"
+                      preview
+                    />
+                  </div>
                 )}
-                <p>Description: {course.description}</p>
+                <div className=" flex justify-content-center mt-4 mb-5">
+                  <ScrollPanel style={{ width: "80%", height: "200px" }}>
+                    <p>Description: {course.description}</p>
+                  </ScrollPanel>
+                </div>
 
                 {enrolled ? (
-                  <div>
-                    <Button label="Enrolled" disabled />
-                    <a
-                      href={`/course/${course.docId}/lessons/1`}
-                      className="font-bold"
-                    >
-                      Start taking the classes
-                    </a>
+                  <div className="flex justify-content-center">
+                    <div className="flex flex-column">
+                      <Button label="Enrolled" disabled className="w-30rem" />
+                      <a
+                        href={`/course/${course.docId}/lessons/1`}
+                        className="font-bold flex justify-content-center mt-1"
+                      >
+                        Start taking the classes
+                      </a>
+                    </div>
                   </div>
                 ) : (
-                  <Button label="Enroll" onClick={handleEnroll} />
+                  <div className="flex justify-content-center">
+                    <Button
+                      label="Enroll"
+                      onClick={handleEnroll}
+                      className="w-30rem"
+                    />
+                  </div>
                 )}
               </>
             )}

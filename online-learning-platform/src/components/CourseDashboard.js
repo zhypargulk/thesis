@@ -25,36 +25,19 @@ const CourseDashboard = () => {
     fetchData();
   }, []);
 
-  const onHandleButton = (id) => {
-    navigate(id);
-  };
-
   return (
     <div>
       <MenubarCustom />
       <h2>Course Dashboard</h2>
       <div className="p-grid p-fluid">
         {courses.map((course) => (
-          <div key={course.courseId} className="p-col-12 p-md-4 p-lg-3">
-            <Card>
-              <CardCourse
-                title={course.title}
-                imageUrl={course.imageUrl}
-                desc={course.description}
-              />
-
-              <Button
-                label={course.title}
-                onClick={() => onHandleButton(course.docId)}
-              />
-              {/* {course.imageUrl && (
-                <img
-                  src={course.imageUrl}
-                  alt={course.title}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                />
-              )} */}
-            </Card>
+          <div key={course.courseId} className="p-col-12 p-md-6 p-lg-6">
+            <CardCourse
+              title={course.title}
+              imageUrl={course.imageUrl}
+              desc={course.description}
+              id={course.docId}
+            />
           </div>
         ))}
       </div>

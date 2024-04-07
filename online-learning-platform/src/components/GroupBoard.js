@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Kanban from "./Kanban";
 import { getAllTasks } from "../controller/Tasks"; // Adjust the import path as necessary
+import MenubarCustom from "./Menubar";
+import ChatGroup from "./ChatGroup";
 
 const GroupBoard = () => {
   const { docId } = useParams();
@@ -16,11 +18,15 @@ const GroupBoard = () => {
     };
 
     fetchTasks();
-  }, [docId]); // Refetch tasks if docId changes
+  }, [docId]);
 
   return (
     <>
-      <Kanban id={docId}></Kanban>
+      <MenubarCustom />
+      <div className="flex flex-row">
+        <Kanban id={docId}></Kanban>
+        <ChatGroup />
+      </div>
     </>
   );
 };

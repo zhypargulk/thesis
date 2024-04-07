@@ -1,0 +1,108 @@
+.App {
+    width: 728px;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .chat-header {
+    padding: 20px;
+    background: #282c34;
+    color: white;
+    text-align: center;
+  }
+  
+  .chat-section {
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    background-color: rgb(40, 37, 53);
+  }
+  
+  .chat-main {
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+  
+  .chat-main::-webkit-scrollbar {
+    width: 0.25rem;
+  }
+  
+  .chat-main::-webkit-scrollbar-thumb {
+    background: #6649b8;
+  }
+  
+  .message-form {
+    margin-top: auto;
+    display: flex;
+    background: rgb(208, 206, 220);
+  }
+
+  
+  .submit-button, .action-button {
+    width: 20%;
+    background-color: rgb(56, 56, 143);
+    color: white;
+    border: none;
+    text-align: center;
+    font-size: 1.5rem;
+    height: 50px;
+  }
+  
+  .message-input {
+    flex: 1;
+    line-height: 1.5;
+    font-size: 1.5rem;
+    background: rgb(58, 58, 58);
+    color: white;
+    outline: none;
+    border: none;
+    padding: 0 10px;
+    height: 100%;
+  }
+  
+  .message {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px;
+  }
+  
+  .message-content {
+    text-align: right;
+    max-width: 80%; 
+    margin-right: 10px; 
+  }
+  
+  .message-text, .user-name {
+    background: #0b93f6;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    margin-bottom: 4px; 
+  }
+  
+  .user-name {
+    background: transparent; 
+    color: #aaa; 
+    font-size: 0.75rem; 
+    padding: 0; 
+    margin-bottom: 0; 
+    max-width: 100%;
+  }
+  
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    order: 2; 
+  }
+  
+  .sent-message .message-text {
+    background: #0b93f6;
+  }
+  
+  .received-message .message-content, .received-message .message-text {
+    background: #e5e5ea;
+    color: black;
+  }
+  
