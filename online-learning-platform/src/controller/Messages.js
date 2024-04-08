@@ -1,0 +1,20 @@
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import { db } from "../config/firebase"; // Adjust the import path according to your project structure
+
+export const getMessages = async (groupId) => {
+  const messagesRef = collection(db, "messages");
+  const q = query(messagesRef, where("groupId", "==", groupId));
+
+  try {
+    const querySnapshot = await getDocs(q);
+    const messages = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    console.log(messages);
+    return messages;
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    return [];
+  }
+};
