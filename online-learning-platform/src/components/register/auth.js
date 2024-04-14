@@ -2,15 +2,16 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState, useRef } from "react";
-import { auth } from "../config/firebase";
+import { auth } from "../../config/firebase";
 import { updateProfile } from "firebase/auth"; // Import updateProfile
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { Dropdown } from "primereact/dropdown";
 import { useNavigate } from "react-router-dom";
 import { Password } from "primereact/password";
 import { Toast } from "primereact/toast";
-import { getNoAvatarImage } from "../controller/User";
+import { getNoAvatarImage } from "../../controller/User";
 import "./Auth.css";
+import MenubarCustom from "../Menubar";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -101,72 +102,77 @@ const Auth = () => {
   };
 
   return (
-    <div className="auth-container mt-4">
-      <form onSubmit={handleSubmit}>
-        <fieldset>
-          <h2>Register the User</h2>
-          <div className="Field">
-            <label>
-              First and last name <sup>*</sup>
-            </label>
-            <InputText
-              className="input-field"
-              placeholder="Your full name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+    <>
+      <MenubarCustom />
+      <Toast ref={toast} />
+
+      <div className="page-container mt-4">
+        <form onSubmit={handleSubmit}>
+          <fieldset>
+            <h2>Register the User</h2>
+            <div className="Field">
+              <label>
+                First and last name <sup>*</sup>
+              </label>
+              <InputText
+                className="input-field"
+                placeholder="Your full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div className="Field">
+              <label>
+                Email address<sup>*</sup>
+              </label>
+              <InputText
+                className="input-field"
+                placeholder="Your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="Field">
+              <label>
+                Password<sup>*</sup>
+              </label>
+              <Password
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                feedback={true}
+                toggleMask
+                className="input-field"
+              />
+              {password.length < 8 && password.length > 1 ? (
+                <p className="FieldError">
+                  Password should have at least 8 characters
+                </p>
+              ) : null}
+            </div>
+            <div className="Field">
+              <label>
+                Role<sup>*</sup>
+              </label>
+              <Dropdown
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                options={roles}
+                optionLabel="role"
+                placeholder="Select a role"
+                className="input-field bg-white"
+                panelStyle={{ backgroundColor: "white" }}
+              />
+            </div>
+            <Button
+              className="register-button"
+              label="Create account"
+              type="submit"
+              disabled={!getIsFormValid()}
             />
-          </div>
-          <div className="Field">
-            <label>
-              Email address<sup>*</sup>
-            </label>
-            <InputText
-              className="input-field"
-              placeholder="Your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="Field">
-            <label>
-              Password<sup>*</sup>
-            </label>
-            <Password
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              feedback={true}
-              toggleMask
-              className="input-field"
-            />
-            {password.length < 8 && password.length > 1 ? (
-              <p className="FieldError">
-                Password should have at least 8 characters
-              </p>
-            ) : null}
-          </div>
-          <div className="Field">
-            <label>
-              Role<sup>*</sup>
-            </label>
-            <Dropdown
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              options={roles}
-              optionLabel="role"
-              placeholder="Select a role"
-              className="input-field bg-white"
-              panelStyle={{ backgroundColor: "white" }}
-            />
-          </div>
-          <Button
-            className="register-button"
-            label="Create account"
-            type="submit"
-            disabled={!getIsFormValid()}
-          />
-        </fieldset>
-      </form>
-    </div>
+          </fieldset>
+        </form>
+      </div>
+    </>
   );
 };
 

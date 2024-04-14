@@ -12,11 +12,11 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "./index.css";
 import "./flag.css";
 
-import Auth from "./components/auth";
-import LogIn from "./components/LogIn";
+import Auth from "./components/register/auth";
+import LogIn from "./components/login/LogIn";
 import Profile from "./components/Profile";
 import OnlineIDE from "./components/OnlineIDE";
-import Home from "./components/Home";
+import Home from "./components/home/Home";
 import CreateCourse from "./components/CreateCourse";
 import CourseDashboard from "./components/CourseDashboard";
 import CourseDetails from "./components/CourseDetails";

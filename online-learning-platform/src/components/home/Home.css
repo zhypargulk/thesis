@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+.text-home {
+    font-family: "Inter";
+    font-weight: 700;
+    font-size: 52px;
+    font-style: normal;
+}

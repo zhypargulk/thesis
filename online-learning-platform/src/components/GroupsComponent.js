@@ -20,7 +20,6 @@ const GroupsComponent = () => {
     }
   }, [user]);
 
-  console.log(courses);
   useEffect(() => {
     const fetchCourses = async () => {
       try {

@@ -1,0 +1,42 @@
+.page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;  
+    background-color: #004D40; 
+  }
+  
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;  
+    max-width: 800px;
+    height: 600px; 
+    padding: 20px;
+    background-color: white; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);  
+    border-radius: 10px; 
+  }
+  
+  .flex-column {
+    display: flex;
+    flex-direction: column;
+    width: 100%; 
+    align-items: center; 
+  }
+
+  .text-link {
+    background-color: transparent !important;
+    border: none !important;
+    color: blue !important;
+    text-decoration: underline;
+    padding: 0;
+    box-shadow: none !important;
+}
+
+.text-link:enabled:hover{
+    background-color: transparent !important;
+    color: blue;
+}

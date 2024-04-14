@@ -1,44 +1,80 @@
-/* MenubarCustom.css */
+
 .menubar-custom .p-menubar {
-  background-color: #64a5ea !important; /* Blue background color */
+  background-color: #ffff; 
   border-radius: 5px;
-  position: fixed; /* Makes the menubar stick to the top of the viewport */
-  top: 0; /* Aligns the menubar at the top of the viewport */
-  width: 100%; /* Ensures the menubar stretches across the full viewport width */
-  z-index: 1000; /* Ensures the menubar stays above other content */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  margin: 0; 
+  padding: 0;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  margin-bottom: 0;
+  
 }
 
-/* Adjust body padding to prevent content from being hidden behind the fixed menubar */
+.menubar-custom .p-menubar .p-menubar-root-list {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0 auto;
+}
+
+.menubar-custom .p-menubar-start,
+.menubar-custom .p-menubar-end {
+  flex: 0 1 auto;
+}
+
 body {
-  padding-top: 60px; /* Adjust based on the actual height of your menubar */
+  padding-top: 60px;
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+
+.menubar-custom .p-menuitem-link {
+  color: rgb(255, 255, 255) !important; 
+}
+
+.menubar-custom .p-menuitem-link,
+.menubar-custom .p-menuitem-icon {
+    color: #004D40 !important; 
+    font-weight: bold;
 }
 
 .menubar-custom .p-menuitem {
   font-weight: bold;
-  color: #fff !important; /* White text color */
 }
 
-.button-log-out {
-  background-color:#64a5ea;
-  border-color: #64a5ea; 
+.menubar-custom .p-menubar .p-menuitem-link.hover-label:hover {
+  font-weight: bold;
 }
 
-.menubar-custom .p-menuitem > .p-menuitem-link {
-  color: #fff !important; /* White text color */
+.menubar-custom .p-menubar .p-menuitem-link.hover-label:hover .p-menuitem-icon {
+  font-weight: normal;
 }
 
-.menubar-custom .p-menuitem-root {
-  padding: 0 1rem;
+.menubar-custom .p-menubar .p-menuitem-link:hover p {
+    text-decoration: underline;
+    background-color: #ffffff !important;
+    color: #000 !important;
 }
 
-.menubar-custom .p-menuitem-icon {
-  margin-right: 0.5rem;
-}
-
-.menubar-custom .p-submenu .p-menuitem {
-  padding: 0.5rem 1rem;
-}
-
-.menubar-custom .p-submenu .p-menuitem-icon {
-  margin-right: 0.5rem;
+.menubar-custom .p-menubar {
+  border-bottom: 3px solid #004D40; 
 }
