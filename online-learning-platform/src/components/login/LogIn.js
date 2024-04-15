@@ -66,13 +66,13 @@ const LogIn = () => {
       <>
         <MenubarCustom />
         <Toast ref={toast} />
-        <div className="page-container">
-          <div className="card">
+        <div className="page-container-login">
+          <div className="card-login">
             <h2 className="mt-0">
               Welcome Back! <FontAwesomeIcon icon={faLaptopCode} />
             </h2>
 
-            <div className="flex-column">
+            <div className="flex-column-login">
               <InputText
                 className={`w-30rem ${invalidInputClass} text-lg`}
                 placeholder="Email"
@@ -82,7 +82,7 @@ const LogIn = () => {
               {emailError && <Message severity="error" text={emailError} />}
             </div>
 
-            <div className="flex-column">
+            <div className="flex-column-login">
               <InputText
                 className={`w-30rem ${invalidInputClass} text-lg mt-3`}
                 placeholder="Password"

@@ -65,7 +65,7 @@ export default function Home() {
             />
           ) : (
             <Button
-              className=" w-full mt-5 mr-3"
+              className=" w-full mt-5 mr-3 font-semibold"
               label="Explore courses"
               onClick={() => navigate("/courses")}
             />

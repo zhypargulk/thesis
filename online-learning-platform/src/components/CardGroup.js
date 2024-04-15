@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "primereact/card";
-import "./CardCourse.css";
+import "./courses/CardCourse.css";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import { getStudentsByGroupId } from "../controller/Groups";

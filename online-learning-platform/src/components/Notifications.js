@@ -4,7 +4,7 @@ import { getDocumentById } from "../controller/Courses";
 import { Button } from "primereact/button";
 import { useAuth } from "../context/AuthContext";
 import MenubarCustom from "./Menubar";
-import CardCourse from "./CardCourse";
+import CardCourse from "./courses/CardCourse";
 import AcceptGroups from "./AcceptGroups";
 
 const Notificatioins = () => {

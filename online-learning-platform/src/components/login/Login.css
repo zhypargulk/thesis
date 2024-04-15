@@ -1,4 +1,4 @@
-.page-container {
+.page-container-login {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -6,7 +6,7 @@
     background-color: #004D40; 
   }
   
-  .card {
+  .card-login {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -20,7 +20,7 @@
     border-radius: 10px; 
   }
   
-  .flex-column {
+  .flex-column-login {
     display: flex;
     flex-direction: column;
     width: 100%; 

@@ -1,12 +1,14 @@
-.page-container {
+.page-container-rg {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 60px);
   padding: 20px;
+  background-color: #004D40; 
+
 }
 
-form {
+.page-container-rg form {
   width: 100%;
   max-width: 700px;
   height: 800px;
@@ -16,13 +18,11 @@ form {
   align-items: center;
   background-color: #fff;
   justify-content: center;
-
 }
 
 form fieldset {
   border: 0 !important;
 }
-
 
 .input-field {
   margin-bottom: 2rem; 
@@ -39,8 +39,8 @@ form fieldset {
   background-color: #007bff;
   color: #fff;
   border: none;
-  padding: 1rem 2rem; /* Increase padding */
-  font-size: 1.2rem; /* Increase font size */
+  padding: 1rem 2rem; 
+  font-size: 1.2rem;
   cursor: pointer;
   border-radius: 5px;
 }
@@ -50,17 +50,16 @@ form fieldset {
 }
 
 .register-button:disabled {
-  background-color: #ccc; /* Change background color when disabled */
-  color: #666; /* Change text color when disabled */
-  cursor: not-allowed; /* Change cursor when disabled */
+  background-color: #ccc; 
+  color: #666; 
+  cursor: not-allowed; 
 }
 
 .input-field {
-  background-color: white; /* Set background color to white or any color you prefer */
-  opacity: 1; /* Ensure full opacity */
-  border: 1px solid black; /* Add a 1px solid black border */
+  background-color: white; 
+  opacity: 1; 
+  border: 1px solid black; 
 }
-
 
 label {
   margin-bottom: 8px;

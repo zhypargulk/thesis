@@ -106,7 +106,7 @@ const Auth = () => {
       <MenubarCustom />
       <Toast ref={toast} />
 
-      <div className="page-container mt-4">
+      <div className="page-container-rg mt-4">
         <form onSubmit={handleSubmit}>
           <fieldset>
             <h2>Register the User</h2>
