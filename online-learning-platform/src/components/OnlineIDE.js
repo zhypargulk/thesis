@@ -37,19 +37,9 @@ function OnlineIDE() {
     //   })
     //   .catch((err) => console.log(err));
   };
-  const API = axios.create({
-    baseURL: "https://emkc.org/api/v2/piston",
-  });
-  const executeCode = async (language, sourceCode) => {
-    const response = await API.post("/execute", {
-      language: language,
-      version: LANGUAGE_VERSIONS[language],
-      files: [
-        {
-          content: sourceCode,
-        },
-      ],
-    });
+  const API = axios.create({ baseURL:"http://127.0.0.1:5000"});
+   const executeCode = async (language, sourceCode) => {
+    const response = await API.post("/execute", {language: language, sourceCode:sourceCode});
     return response.data;
   };
 
@@ -100,10 +90,10 @@ function OnlineIDE() {
           />
           <Button
             onClick={() =>
-              executeCodeWithRateLimit(
+              executeCode(
                 "java",
                 'public class Main {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Hello, world!");\n\t}\n}'
-              )
+              ) 
             }
             className="border-2 p-2 bg-green-600"
             label="Submit Code"
