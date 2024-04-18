@@ -2,10 +2,14 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState, useRef } from "react";
-import { auth } from "../config/firebase";
+import { auth } from "../../config/firebase";
 import { useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
 import { Message } from "primereact/message";
+import "./Login.css";
+import MenubarCustom from "../Menubar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLaptopCode } from "@fortawesome/free-solid-svg-icons";
 
 const LogIn = () => {
   const [email, setEmail] = useState("");
@@ -59,54 +63,53 @@ const LogIn = () => {
 
   return (
     <>
-      <div className="flex align-items-center flex-column gap-4 min-height-200 mt-8">
-        <div className="flex flex-column w-10 lg:w-8">
-          <div className=" p-4">
-            <Toast ref={toast} />
+      <>
+        <MenubarCustom />
+        <Toast ref={toast} />
+        <div className="page-container-login">
+          <div className="card-login">
+            <h2 className="mt-0">
+              Welcome Back! <FontAwesomeIcon icon={faLaptopCode} />
+            </h2>
 
-            <h2>Login</h2>
-            <div className="flex align-items-center gap-2 mb-3">
-              <div className="flex-grow-1">
-                <InputText
-                  className={`w-30rem ${invalidInputClass} text-lg`}
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                {emailError && <Message severity="error" text={emailError} />}
-              </div>
+            <div className="flex-column-login">
+              <InputText
+                className={`w-30rem ${invalidInputClass} text-lg`}
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {emailError && <Message severity="error" text={emailError} />}
             </div>
 
-            <div className="flex align-items-center gap-2 mb-3">
-              <div className="flex-grow-1">
-                <InputText
-                  className={`w-30rem ${invalidInputClass} text-lg mt-3`}
-                  placeholder="Password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                {passwordError && (
-                  <Message severity="error" text={passwordError} />
-                )}
-              </div>
+            <div className="flex-column-login">
+              <InputText
+                className={`w-30rem ${invalidInputClass} text-lg mt-3`}
+                placeholder="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {passwordError && (
+                <Message severity="error" text={passwordError} />
+              )}
             </div>
+
             <Button
               className="w-30rem p-3 text-lg mt-4"
               label="Sign in"
               onClick={signIn}
             />
-          </div>
-          <div className="flex justify-content-start">
             <Button
-              className=" p-button-text mt-3 "
+              className="w-30rem p-button-text mt-3 text-link"
               label="Create a new account"
               onClick={onClickCreateNewAccount}
               link
+              text
             />
           </div>
         </div>
-      </div>
+      </>
     </>
   );
 };

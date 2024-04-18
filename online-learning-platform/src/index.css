@@ -5,9 +5,21 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #e2e2e2f5
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.p-button {
+  background-color: #004D40  !important; 
+  border-color: #004D40  !important;
+  color: white !important; 
+}
+
+.p-button:enabled:hover {
+  background-color: rgb(51, 165, 76)  !important; 
+  border-color: #004D40  !important;
 }

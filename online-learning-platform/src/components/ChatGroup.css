@@ -1,4 +1,4 @@
-.App {
+.Chat {
     width: 728px;
     height: 80vh;
     display: flex;
@@ -63,46 +63,43 @@
   
   .message {
     display: flex;
-    justify-content: flex-end;
+    align-items: flex-end;
     margin: 10px;
   }
   
-  .message-content {
-    text-align: right;
-    max-width: 80%; 
-    margin-right: 10px; 
+  .sent-message {
+    flex-direction: row-reverse;
   }
   
-  .message-text, .user-name {
-    background: #0b93f6;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
-    margin-bottom: 4px; 
-  }
-  
-  .user-name {
-    background: transparent; 
-    color: #aaa; 
-    font-size: 0.75rem; 
-    padding: 0; 
-    margin-bottom: 0; 
-    max-width: 100%;
+  .received-message {
+    flex-direction: row;
   }
   
   .user-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    order: 2; 
+    margin: 0 8px;
+  }
+  
+  .message-text {
+    padding: 10px 20px;
+    border-radius: 25px;
+    color: white;
   }
   
   .sent-message .message-text {
-    background: #0b93f6;
+    background: #0b93f6; 
   }
   
-  .received-message .message-content, .received-message .message-text {
+  .received-message .message-text {
     background: #e5e5ea;
     color: black;
+  }
+  
+  .user-name {
+    font-size: 0.75rem;
+    color: #aaa;
+    margin-top: 4px;
   }
   
