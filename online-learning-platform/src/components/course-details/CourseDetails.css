@@ -1,0 +1,15 @@
+.full-height-card {
+    height: 100vh; 
+    width: 85%;  
+    margin: auto; 
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    justify-content: center;
+  }
+
+  
+  .card-content {
+    overflow: auto; 
+  }
+  

@@ -36,7 +36,7 @@ const CardCourse = ({ title, imageUrl, desc, id, groupId }) => {
         subTitle={<span className="black-text">Course Description</span>}
         footer={footer}
         header={header}
-        className="md:w-30rem bg-card"
+        className="md:w-30rem  green-border-card"
       >
         <p className="m-0 black-text">{truncateDesc(desc)}</p>
         {desc.length > 100 && (

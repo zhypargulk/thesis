@@ -36,40 +36,42 @@ export default function Home() {
   return (
     <>
       <MenubarCustom />
-      <div className="flex mt-5">
-        <img
-          src={home_img}
-          alt="Descriptive Alt Text"
-          className="w-6 h-6 ml-3 mt-5"
-        />
-        <div className="flex flex-column justify-content-center ml-5 w-6">
-          <h3 className=" text-home">
-            <span className="text-teal-800 text-home"> Welcome!</span> It is an
-            online learning platform for{" "}
-            <span className="text-teal-800 text-home">students</span>.
-          </h3>
-          <div
-            style={{
-              fontFamily: "Arial, sans-serif",
-              textAlign: "center",
-              padding: "50px",
-            }}
-          >
-            <Writer text={text} speed={30} />
+      <div className="">
+        <div className="flex mt-5">
+          <img
+            src={home_img}
+            alt="Descriptive Alt Text"
+            className="w-6 h-6 ml-3 mt-5"
+          />
+          <div className="flex flex-column justify-content-center ml-5 w-6">
+            <h3 className=" text-home">
+              <span className="text-teal-800 text-home"> Welcome!</span> It is
+              an online learning platform for{" "}
+              <span className="text-teal-800 text-home">students</span>.
+            </h3>
+            <div
+              style={{
+                fontFamily: "Arial, sans-serif",
+                textAlign: "center",
+                padding: "50px",
+              }}
+            >
+              <Writer text={text} speed={30} />
+            </div>
+            {!authExist ? (
+              <Button
+                className=" w-full mt-5 "
+                label="Register/Login"
+                onClick={() => navigate("/login")}
+              />
+            ) : (
+              <Button
+                className=" w-full mt-5 mr-3 font-semibold"
+                label="Explore courses"
+                onClick={() => navigate("/courses")}
+              />
+            )}
           </div>
-          {!authExist ? (
-            <Button
-              className=" w-full mt-5 "
-              label="Register/Login"
-              onClick={() => navigate("/login")}
-            />
-          ) : (
-            <Button
-              className=" w-full mt-5 mr-3 font-semibold"
-              label="Explore courses"
-              onClick={() => navigate("/courses")}
-            />
-          )}
         </div>
       </div>
     </>

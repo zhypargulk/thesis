@@ -38,21 +38,25 @@ export default function MenubarCustom() {
     {
       label: (
         <p
-          className={`text-900 hover-label  ${
+          className={`text-white hover-label  ${
             activeItem === "/" ? "underline" : ""
           }`}
         >
           Home
         </p>
       ),
-      icon: "pi pi-home",
+      icon: (
+        <p>
+          <i className="pi pi-home mr-2"></i>
+        </p>
+      ),
       command: () => handleNavigation("/"),
     },
     {
       label:
         role === "Teacher" ? (
           <p
-            className={`text-900 hover-label ${
+            className={`text-white hover-label ${
               activeItem === "/create" ? "underline" : ""
             }`}
           >
@@ -60,68 +64,93 @@ export default function MenubarCustom() {
           </p>
         ) : (
           <p
-            className={`text-900 hover-label ${
+            className={`text-white hover-label ${
               activeItem.includes("/courses") ? "underline" : ""
             }`}
           >
             Find a course
           </p>
         ),
-      icon: role === "Teacher" ? "pi pi-plus" : "pi pi-search",
+      icon:
+        role === "Teacher" ? (
+          <p>
+            <i className="pi pi-plus mr-2"></i>
+          </p>
+        ) : (
+          <p>
+            <i className="pi pi-search mr-2"></i>
+          </p>
+        ),
       command: () =>
         handleNavigation(role === "Teacher" ? "/create" : "/courses"),
     },
     {
       label: (
         <p
-          className={`text-900 hover-label ${
+          className={`text-white hover-label ${
             activeItem === "/profile" ? "underline" : ""
           }`}
         >
           Profile
         </p>
       ),
-      icon: "pi pi-user",
+      icon: (
+        <p>
+          <i className="pi pi-user mr-2"></i>
+        </p>
+      ),
       command: () => handleNavigation("/profile"),
     },
     {
       label: (
         <p
-          className={`text-900 hover-label ${
+          className={`text-white hover-label ${
             activeItem === "/notifications" ? "underline" : ""
           }`}
         >
           Notifications
         </p>
       ),
-      icon: "pi pi-bell",
+      icon: (
+        <p>
+          <i className="pi pi-bell mr-2"></i>
+        </p>
+      ),
       command: () => handleNavigation("/notifications"),
     },
     {
       label: (
         <p
-          className={`text-900 hover-label ${
+          className={`text-white hover-label ${
             activeItem.includes("/groups") ? "underline" : ""
           }`}
         >
           Groups
         </p>
       ),
-      icon: "pi pi-users",
+      icon: (
+        <p>
+          <i className="pi pi-users mr-2"></i>
+        </p>
+      ),
       command: () => handleNavigation("/groups"),
     },
   ];
 
   const logoOnly = [
     {
-      label: <p className="text-2xl text-primary-900">collabLearn</p>,
-      icon: "pi pi-users",
+      label: <p className="text-2xl text-white">collabLearn</p>,
+      icon: (
+        <p>
+          <i className="pi pi-users mr-2"></i>
+        </p>
+      ),
     },
   ];
 
   const start = (
     <div className="brand-container">
-      <span className="brand-text text-teal-800">collabLearn</span>
+      <span className="brand-text text-white">collabLearn</span>
     </div>
   );
 
@@ -148,14 +177,12 @@ export default function MenubarCustom() {
   );
 
   return (
-    <header className=" menubar-custom">
-      <div className="">
-        {authExist ? (
-          <Menubar model={items} start={start} end={end} />
-        ) : (
-          <Menubar model={logoOnly} />
-        )}
-      </div>
+    <header className="menubar-custom">
+      {authExist ? (
+        <Menubar model={items} start={start} end={end} />
+      ) : (
+        <Menubar model={logoOnly} />
+      )}
     </header>
   );
 }

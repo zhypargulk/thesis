@@ -1,20 +1,18 @@
-
+/* Ensuring the styles are applied after all PrimeReact and other stylesheets */
 .menubar-custom .p-menubar {
-  background-color: #ffff; 
-  border-radius: 5px;
+  background-color: #004D40 !important; /* Dark teal background with !important to ensure application */
+  color: #ffffff !important; /* Ensuring text color is white */
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   width: 100%;
-  margin: 0; 
+  margin: 0;
   padding: 0;
   height: auto;
   display: flex;
   justify-content: center;
   z-index: 1000;
-  margin-bottom: 0;
-  
 }
 
 .menubar-custom .p-menubar .p-menubar-root-list {
@@ -44,37 +42,37 @@ body {
   font-family: 'Poppins', sans-serif;
   font-size: 25px;
   font-weight: bold;
+  color: #ffffff !important; /* Ensuring brand text is white */
 }
-
 
 .menubar-custom .p-menuitem-link {
-  color: rgb(255, 255, 255) !important; 
+  color: #ffffff !important; /* Ensuring link text is white */
 }
 
-.menubar-custom .p-menuitem-link,
 .menubar-custom .p-menuitem-icon {
-    color: #004D40 !important; 
-    font-weight: bold;
+  color: #ffffff !important; /* Ensuring icon color is white */
+  font-weight: bold;
 }
 
 .menubar-custom .p-menuitem {
   font-weight: bold;
 }
 
-.menubar-custom .p-menubar .p-menuitem-link.hover-label:hover {
-  font-weight: bold;
-}
-
-.menubar-custom .p-menubar .p-menuitem-link.hover-label:hover .p-menuitem-icon {
-  font-weight: normal;
+.menubar-custom .p-menubar .p-menuitem-link:hover {
+  background-color: transparent !important;  
 }
 
 .menubar-custom .p-menubar .p-menuitem-link:hover p {
-    text-decoration: underline;
-    background-color: #ffffff !important;
-    color: #000 !important;
+  text-decoration: underline;
+  color: #000 !important; /* Ensuring hover text is black */
 }
 
-.menubar-custom .p-menubar {
-  border-bottom: 3px solid #004D40; 
+/* Ensure styles for mobile screens */
+@media (max-width: 768px) {
+  .menubar-custom .p-menubar,
+  .menubar-custom .p-menuitem-link,
+  .menubar-custom .p-menuitem-icon {
+    background-color: #004D40 !important; /* Dark teal background */
+    color: #ffffff !important; /* White text and icons */
+  }
 }

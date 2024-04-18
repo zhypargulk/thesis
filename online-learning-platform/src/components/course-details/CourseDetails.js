@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { useParams } from "react-router-dom";
@@ -11,6 +11,7 @@ import {
 import MenubarCustom from "../Menubar";
 import { Image } from "primereact/image";
 import { ScrollPanel } from "primereact/scrollpanel";
+import "./CourseDetails.css"; // Make sure this import is correct
 
 const CourseDetails = () => {
   const [enrolled, setEnrolled] = useState(false);
@@ -64,57 +65,51 @@ const CourseDetails = () => {
   return (
     <>
       <MenubarCustom />
-      <div className="flex align-items-center justify-content-center mt-4 head-text">
-        <span className="text-teal-800 text-6xl">Course Dashboard</span>
-      </div>
+
       <div className="p-grid p-fluid">
         <div className="p-col-12 p-md-6">
-          <Card>
-            {course && (
-              <>
-                <h1 className="text-orange-500 font-bold border border-black text-center text-5xl">
-                  {course.title}
-                </h1>
-                {course.imageUrl && (
-                  <div className="flex justify-content-center">
-                    <Image
-                      src={course.imageUrl}
-                      alt={course.title}
-                      width="550"
-                      preview
-                    />
-                  </div>
-                )}
-                <div className=" flex justify-content-center mt-4 mb-5">
-                  <ScrollPanel style={{ width: "80%", height: "200px" }}>
-                    <p>Description: {course.description}</p>
-                  </ScrollPanel>
+          {course && (
+            <div className="full-height-card">
+              <div className="flex align-items-center justify-content-center mt-4 head-text">
+                <span className="text-teal-800 text-6xl">{course.title}</span>
+              </div>
+              {course.imageUrl && (
+                <div className="flex justify-content-center">
+                  <Image
+                    src={course.imageUrl}
+                    alt={course.title}
+                    width="550"
+                    preview
+                  />
                 </div>
+              )}
+              <ScrollPanel>
+                <p>Description: {course.description}</p>
+              </ScrollPanel>
 
-                {enrolled ? (
-                  <div className="flex justify-content-center">
-                    <div className="flex flex-column">
-                      <Button label="Enrolled" disabled className="w-30rem" />
-                      <a
-                        href={`/course/${course.docId}/lessons/1`}
-                        className="font-bold flex justify-content-center mt-1"
-                      >
-                        Start taking the classes
-                      </a>
-                    </div>
+              {enrolled ? (
+                <div className="flex justify-content-center">
+                  <div className="flex flex-column">
+                    <Button label="Enrolled" disabled className="w-30rem" />
+                    <a
+                      href={`/course/${course.docId}/lessons/1`}
+                      className="font-bold flex justify-content-center mt-1"
+                    >
+                      Start taking the classes
+                    </a>
                   </div>
-                ) : (
-                  <div className="flex justify-content-center">
-                    <Button
-                      label="Enroll"
-                      onClick={handleEnroll}
-                      className="w-30rem"
-                    />
-                  </div>
-                )}
-              </>
-            )}
-          </Card>
+                </div>
+              ) : (
+                <div className="flex justify-content-center">
+                  <Button
+                    label="Enroll"
+                    onClick={handleEnroll}
+                    className="w-30rem"
+                  />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </>
