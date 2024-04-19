@@ -3,3 +3,13 @@
     height: 900px;
     width: 100%;
 }
+
+.course-color {
+  font-size: 48px; /* Large font size for emphasis */
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Modern, readable font */
+  color: white;
+}
+
+.link-custom {
+    font-size: 30px;
+}

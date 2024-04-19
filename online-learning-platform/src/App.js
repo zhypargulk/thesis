@@ -20,9 +20,8 @@ import Home from "./components/home/Home";
 import CreateCourse from "./components/CreateCourse";
 import CourseDashboard from "./components/courses/CourseDashboard";
 import CourseDetails from "./components/course-details/CourseDetails";
-import Lesson from "./components/Lesson";
-import FinalProject from "./components/FinalProject";
-import FinalProjectGroups from "./components/FinalProjectGroups";
+import Lesson from "./components/lesson/Lesson";
+import FinalProject from "./components/project/FinalProject";
 import Notifications from "./components/Notifications";
 import GroupsComponent from "./components/GroupsComponent";
 import GroupBoard from "./components/GroupBoard";
@@ -43,10 +42,6 @@ const App = () => {
         <Route path="/courses" element={<CourseDashboard />} />
         <Route path="/create" element={<CreateCourse />} />
         <Route path="/course/:docId/task" element={<FinalProject />} />
-        <Route
-          path="/course/:docId/task/groups"
-          element={<FinalProjectGroups />}
-        />
         <Route path="/courses/:docId" element={<CourseDetails />} />
         <Route path="/groups/:groupId" element={<ManageGroup />} />
         <Route path="/groups" element={<GroupsComponent />} />
