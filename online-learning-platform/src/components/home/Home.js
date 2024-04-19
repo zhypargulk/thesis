@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import MenubarCustom from "../Menubar";
-import home_img from "./images/home-img.jpg";
+import home_img from "./images/home.png";
 import "./Home.css";
 import Writer from "./Writer.js";
 import { useNavigate } from "react-router-dom";
@@ -41,19 +41,22 @@ export default function Home() {
           <img
             src={home_img}
             alt="Descriptive Alt Text"
-            className="w-6 h-6 ml-3 mt-5"
+            className="w-6 h-6 ml-3 mr-3 mt-5"
           />
-          <div className="flex flex-column justify-content-center ml-5 w-6">
+          <div className="flex flex-column justify-content-center mr-4 w-6">
             <h3 className=" text-home">
-              <span className="text-teal-800 text-home"> Welcome!</span> It is
-              an online learning platform for{" "}
-              <span className="text-teal-800 text-home">students</span>.
+              <span className="text-white text-home"> Welcome!</span>{" "}
+              <span className="span-text">
+                It is an online learning platform for{" "}
+              </span>
+              <span className="text-white text-home">students</span>.
             </h3>
             <div
               style={{
                 fontFamily: "Arial, sans-serif",
                 textAlign: "center",
                 padding: "50px",
+                color: "white",
               }}
             >
               <Writer text={text} speed={30} />

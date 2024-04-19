@@ -1,7 +1,8 @@
-/* Ensuring the styles are applied after all PrimeReact and other stylesheets */
+
 .menubar-custom .p-menubar {
-  background-color: #004D40 !important; /* Dark teal background with !important to ensure application */
-  color: #ffffff !important; /* Ensuring text color is white */
+  /* background-color: #004D40 !important;  */
+  background: #000 ;/*linear-gradient(to bottom, #fc9bcf, #5ca4ec);*/
+  color: #ffffff !important; 
   position: fixed;
   top: 0;
   left: 0;

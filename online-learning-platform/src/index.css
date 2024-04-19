@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #e2e2e2f5
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(79,4,106,1) 100%);
 }
 
 code {
@@ -14,12 +14,27 @@ code {
 }
 
 .p-button {
-  background-color: #004D40  !important; 
-  border-color: #004D40  !important;
+  background: #AC6CFF !important;
+  border-color: #ffffff !important;
   color: white !important; 
 }
 
 .p-button:enabled:hover {
-  background-color: rgb(51, 165, 76)  !important; 
-  border-color: #004D40  !important;
+  background:#d2b5f8 !important;
+  border-color: 3px solid #01a0f5 !important;
+}
+
+
+body .p-accordion .p-accordion-header {
+  background-color: #004D40 !important;
+  color: white !important;
+}
+
+body .p-accordion .p-accordion-header:hover {
+  background-color: rgb(51, 165, 76) !important;
+}
+
+body .p-accordion .p-accordion-header.p-highlight {
+  background-color: #00695C !important;
+  color: white !important;
 }

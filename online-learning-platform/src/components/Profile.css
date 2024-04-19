@@ -89,19 +89,16 @@
 }
 
 .image-edit-container {
-    text-align: center; /* Initially center everything, might adjust based on layout */
-    width: 150px; /* Match the width of your image for alignment */
-    margin: auto; /* Center the container itself */
+    text-align: center; 
+    width: 150px;
+    margin: auto; 
   }
-  
-  /* Remove margin-left from .p-button-rounded if it's not desired globally */
-  
-  /* Adjust the button specific styling for left alignment */
+
   .button-under-left {
-    display: flex; /* Use flex to allow content alignment */
-    justify-content: flex-start; /* Align children (button) to the start (left) */
-    width: 100%; /* Ensure container fills its parent's width for proper alignment */
-    margin-top: 8px; /* Space between the image and the button */
+    display: flex; 
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 8px;
   }
   
   
