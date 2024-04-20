@@ -11,7 +11,7 @@ import { Password } from "primereact/password";
 import { Toast } from "primereact/toast";
 import { getNoAvatarImage } from "../../controller/User";
 import "./Auth.css";
-import MenubarCustom from "../Menubar";
+import MenubarCustom from "../menu/Menubar";
 
 const Auth = () => {
   const [email, setEmail] = useState("");

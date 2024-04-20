@@ -1,0 +1,24 @@
+.task-card {
+    margin: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+.task-title {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.task-code {
+    background-color: #eee;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: 'Courier New', Courier, monospace; /* Ensures code is displayed with a monospaced font */
+    overflow-x: auto; /* Adds a horizontal scrollbar if the code overflows */
+}

@@ -5,10 +5,12 @@ import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import { getStudentsByGroupId } from "../../controller/Groups";
 import "./CardGroup.css";
+import { getDocumentById } from "../../controller/Courses";
 
 const CardGroup = ({ title, imageUrl, groupId }) => {
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
+  const [group, setGroup] = useState([]);
 
   const header = <img alt="Card" src={imageUrl} />;
   const onClickBoard = () => {
@@ -16,8 +18,16 @@ const CardGroup = ({ title, imageUrl, groupId }) => {
   };
 
   const fetchStudents = async () => {
-    const students = await getStudentsByGroupId(groupId);
-    setStudents(students.map((item) => item.name));
+    try {
+      if (groupId) {
+        const students = await getStudentsByGroupId(groupId);
+        const groupData = await getDocumentById("groups", groupId);
+        setGroup(groupData);
+        setStudents(students.map((item) => item.name));
+      }
+    } catch (error) {
+      console.error("Failed to fetch students or group:", error);
+    }
   };
 
   const footer = (
@@ -37,22 +47,24 @@ const CardGroup = ({ title, imageUrl, groupId }) => {
 
   return (
     <div className=" flex justify-content-center">
-      <Card
-        title={`${title} group project`}
-        subTitle={
-          <span>
-            <b>All members of group: </b>
-            {students.join(", ")}
-            <br />
-            <b>Leader:</b>
-          </span>
-        }
-        footer={footer}
-        header={header}
-        className=""
-      >
-        <p className="m-0"></p>
-      </Card>
+      {group && (
+        <Card
+          title={`${title} group project`}
+          subTitle={
+            <span>
+              <b>All members of group: </b>
+              {students.join(", ")}
+              <br />
+              <b>Leader:</b>
+            </span>
+          }
+          footer={footer}
+          header={header}
+          className=""
+        >
+          <p className="m-0"></p>
+        </Card>
+      )}
     </div>
   );
 };

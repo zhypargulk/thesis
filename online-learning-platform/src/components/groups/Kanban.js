@@ -243,11 +243,22 @@ class KanbanItem extends React.Component {
     try {
       const task = await getDocumentById("tasks", id);
       if (task && task.code) {
-        this.setState({ codeSubmitted: true });
-        this.setState({ codeText: task.code });
+        this.setState({
+          codeSubmitted: true,
+          codeText: task.code,
+        });
+      } else {
+        this.setState({
+          codeSubmitted: false,
+          codeText: "",
+        });
       }
     } catch (error) {
       console.error("Error fetching task:", error);
+      this.setState({
+        codeSubmitted: false,
+        codeText: "",
+      });
     }
   };
 
@@ -270,15 +281,16 @@ class KanbanItem extends React.Component {
     const { title, userName, description, status } = this.props;
     const dialogFooter = (
       <div>
-        {codeSubmitted ? (
-          <span style={{ color: "green" }}>Code submitted successfully!</span>
-        ) : (
+        {status === "done" && !codeSubmitted && (
           <Button
             label="Submit Code"
             icon="pi pi-upload"
             onClick={this.uploadCode}
             className="p-button-text"
           />
+        )}
+        {codeSubmitted && (
+          <span style={{ color: "green" }}>Code submitted successfully!</span>
         )}
         <Button
           label="Close"

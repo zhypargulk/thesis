@@ -3,7 +3,7 @@ import { getDocumentById } from "../../controller/Courses";
 import { useState, useEffect, useRef } from "react"; // Combined useState and useEffect
 
 import { useNavigate } from "react-router-dom";
-import MenubarCustom from "../Menubar";
+import MenubarCustom from "../menu/Menubar";
 import { getAllEnrolledStudents } from "../../controller/Students";
 import { Panel } from "primereact/panel";
 import img from "./images/raketa.png";

@@ -12,7 +12,7 @@ import { Card } from "primereact/card";
 import { InputTextarea } from "primereact/inputtextarea";
 import { useAuth } from "../../context/AuthContext";
 import img from "../project/images/raketa.png";
-import MenubarCustom from "../Menubar";
+import MenubarCustom from "../menu/Menubar";
 import { getDocumentById } from "../../controller/Courses";
 import { Image } from "primereact/image";
 import { Toast } from "primereact/toast";
@@ -126,14 +126,15 @@ const ManageGroup = () => {
 
   const handleCreateTasks = async () => {
     try {
-      if (userId) {
+      if (userId && course) {
         for (const task of tasks) {
           await createTask(
             userId,
             groupId,
             "new",
             task.description,
-            task.title
+            task.title,
+            course.courseId
           );
         }
       }

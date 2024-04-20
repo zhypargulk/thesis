@@ -37,7 +37,8 @@ export const createTask = async (
   groupId,
   status,
   description,
-  title
+  title,
+  courseId
 ) => {
   try {
     const taskRef = await addDoc(collection(db, "tasks"), {
@@ -46,6 +47,7 @@ export const createTask = async (
       status: status,
       description: description,
       title: title,
+      courseId: courseId,
     });
 
     const userDocRef = doc(db, "user", userId);

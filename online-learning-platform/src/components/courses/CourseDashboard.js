@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchCourses } from "../../controller/Courses";
 import { InputText } from "primereact/inputtext";
 import { useNavigate } from "react-router-dom";
-import MenubarCustom from "../Menubar";
+import MenubarCustom from "../menu/Menubar";
 import img from "./images/earth.png";
 import moon from "./images/Planet=Moon.png";
 import CardCourse from "./CardCourse";

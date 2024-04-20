@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Kanban from "./Kanban";
 import { getAllTasks } from "../../controller/Tasks";
-import MenubarCustom from "../Menubar";
+import MenubarCustom from "../menu/Menubar";
 import ChatGroup from "./ChatGroup";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ const GroupBoard = () => {
   const { docId } = useParams();
   const [tasks, setTasks] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchTasks = async () => {
       if (docId) {
@@ -36,7 +37,7 @@ const GroupBoard = () => {
           onClick={() => navigate(`/groups/${docId}`)}
         />
         <Button
-          label="Submit your project"
+          label="Check your project status"
           className="mt-2 w-4 ml-auto mr-5"
           onClick={() => navigate(`/groups/${docId}/ide`)}
         />

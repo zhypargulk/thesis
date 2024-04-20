@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import MenubarCustom from "../Menubar";
+import MenubarCustom from "../menu/Menubar";
 import home_img from "./images/home.png";
 import "./Home.css";
 import Writer from "./Writer.js";

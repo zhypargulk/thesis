@@ -10,7 +10,7 @@ import {
   enrollUserInCourse,
   getDocumentById,
 } from "../../controller/Courses";
-import MenubarCustom from "../Menubar";
+import MenubarCustom from "../menu/Menubar";
 import "./CourseDetails.css";
 
 const CourseDetails = () => {

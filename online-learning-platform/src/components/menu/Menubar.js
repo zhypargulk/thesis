@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Menubar } from "primereact/menubar";
 import { Button } from "primereact/button";
 import { useNavigate, useLocation } from "react-router-dom";
-import { auth } from "../config/firebase"; // Ensure your Firebase config is correctly set up
+import { auth } from "../../config/firebase"; // Ensure your Firebase config is correctly set up
 import { signOut } from "firebase/auth";
 import "./MenubarCustom.css";
 

@@ -14,10 +14,10 @@ import "./flag.css";
 
 import Auth from "./components/register/auth";
 import LogIn from "./components/login/LogIn";
-import Profile from "./components/Profile";
+import Profile from "./components/profile/Profile";
 import OnlineIDE from "./components/ide/OnlineIDE";
 import Home from "./components/home/Home";
-import CreateCourse from "./components/CreateCourse";
+import CreateCourse from "./components/courses/CreateCourse";
 import CourseDashboard from "./components/courses/CourseDashboard";
 import CourseDetails from "./components/course-details/CourseDetails";
 import Lesson from "./components/lesson/Lesson";

@@ -6,7 +6,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { getDocumentById } from "../../controller/Courses";
 import CardGroup from "./CardGroup";
-import MenubarCustom from "../Menubar";
+import MenubarCustom from "../menu/Menubar";
 
 const GroupsComponent = () => {
   const [courses, setCourses] = useState([]);

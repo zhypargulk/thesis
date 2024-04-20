@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { Dropdown } from "primereact/dropdown";
@@ -8,7 +8,14 @@ import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
 import { cpp } from "@codemirror/lang-cpp";
 import axios from "axios";
-import MenubarCustom from "../Menubar";
+import MenubarCustom from "../menu/Menubar";
+import { getAllTasks } from "../../controller/Tasks";
+import { updateGroupAnswer } from "../../controller/Groups";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { Message } from "primereact/message";
+import "./OnlineIDE.css";
+import { getDocumentById } from "../../controller/Courses";
 
 const languages = [
   {
@@ -43,6 +50,45 @@ function OnlineIDE() {
   const [output, setOutput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [lastLanguage, setLastLanguage] = useState(selectedLanguage.value);
+  const [isCorrect, setIsCorrect] = useState(undefined);
+  const [allCode, setAllCode] = useState();
+  const [tasks, setTasks] = useState([]);
+  const [answer, setAnswer] = useState();
+  const [checkAnswer, setCheckAnswer] = useState();
+  const { docId } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      if (docId) {
+        const fetchedTasks = await getAllTasks(docId);
+        const getAnswer = await getDocumentById(
+          "courses",
+          fetchedTasks[0].courseId
+        );
+
+        const group = await getDocumentById("groups", docId);
+        setIsCorrect(group.success);
+        setTasks(fetchedTasks);
+        setAnswer(getAnswer.answer);
+        const codes = fetchedTasks
+          .filter((task) => task.code)
+          .map((task) => task.code);
+        const allCodeString = codes.join("\n");
+        setAllCode(allCodeString);
+      }
+    };
+
+    fetchTasks();
+  }, []);
+
+  useEffect(() => {
+    if (output == answer) {
+      setIsCorrect(true);
+    } else {
+      setIsCorrect(false);
+    }
+  }, [output]);
 
   const API = axios.create({ baseURL: "http://127.0.0.1:5000" });
 
@@ -56,9 +102,29 @@ function OnlineIDE() {
       setOutput(
         response.data.data !== "" ? response.data.data : response.data.error
       );
+
+      if (String(response.data.data).trim() == String(answer).trim()) {
+        setCheckAnswer({
+          status: "success",
+          message: "Code execution successful!",
+        });
+        updateGroupAnswer(docId, true);
+        setIsCorrect(true);
+      } else {
+        setCheckAnswer({
+          status: "error",
+          message: `Error! Code execution failed! The answer is "${answer}"`,
+        });
+        setIsCorrect(false);
+        updateGroupAnswer(docId, false);
+      }
     } catch (error) {
-      console.error("Error executing code:", error);
+      updateGroupAnswer(docId, false);
       setOutput(`Error: ${error.message}`);
+      setCheckAnswer({
+        status: "error",
+        message: `Execution Error: ${error.message}`,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -68,7 +134,6 @@ function OnlineIDE() {
     const selected = languages.find((lang) => lang.value === e.value);
     if (selected.value !== lastLanguage) {
       setSelectedLanguage(selected);
-      setCode(selected.initialCode);
       setLastLanguage(selected.value);
     }
   };
@@ -76,38 +141,87 @@ function OnlineIDE() {
   return (
     <>
       <MenubarCustom />
-      <Dropdown
-        value={selectedLanguage.value}
-        options={languages}
-        onChange={handleLanguageChange}
-        optionLabel="label"
-        placeholder="Select a language"
-        className="w-full mt-3"
-      />
-      <CodeMirror
-        value={code}
-        extensions={[selectedLanguage.mode]}
-        height="600px"
-        theme={vscodeDark}
-        onChange={(newValue) => setCode(newValue)}
-      />
-      <Button
-        label="Submit Code"
-        loading={isLoading}
-        onClick={() => executeCode(selectedLanguage.value, code)}
-        className="p-button-success mt-2"
-      />
-      <div
-        className="output-field p-inputtext mt-2"
-        style={{
-          width: "100%",
-          minHeight: "100px",
-          backgroundColor: "#fff",
-          border: "1px solid #ccc",
-          padding: "10px",
-        }}
-      >
-        {output}
+      <div className="flex">
+        <div className="flex-grow-1">
+          <Dropdown
+            value={selectedLanguage.value}
+            options={languages}
+            onChange={handleLanguageChange}
+            optionLabel="label"
+            placeholder="Select a language"
+            className="w-full mt-3"
+          />
+          <CodeMirror
+            value={allCode}
+            extensions={[selectedLanguage.mode]}
+            height="600px"
+            theme={vscodeDark}
+            onChange={(newValue) => {
+              setAllCode(newValue);
+            }}
+          />
+          <Button
+            label="Run Code"
+            loading={isLoading}
+            onClick={() => executeCode(selectedLanguage.value, allCode)}
+            className="p-button-success mt-2 h-3"
+          />
+
+          {isCorrect != undefined && (
+            <Message
+              severity={isCorrect ? "success" : "error"}
+              text={
+                isCorrect
+                  ? "Previous code check was successful!"
+                  : `Previous code check failed.The correct answer is ${answer}`
+              }
+              className="mt-2 ml-5"
+            />
+          )}
+
+          <div
+            className="output-field p-inputtext mt-2"
+            style={{
+              width: "100%",
+              minHeight: "100px",
+              backgroundColor: "#fff",
+              border: "1px solid #ccc",
+              padding: "10px",
+            }}
+          >
+            {output}
+          </div>
+          <Button
+            label="Back to the board"
+            loading={isLoading}
+            onClick={() => navigate(`/groups/${docId}/board`)}
+            className="p-button-success mt-2 h-3"
+          />
+        </div>
+        <div
+          className="flex flex-column"
+          style={{
+            minWidth: "250px",
+            maxWidth: "450px",
+            padding: "20px",
+            backgroundColor: "#473EAC",
+          }}
+        >
+          <h2 className="task-title text-white">
+            Get all completed tasks code
+          </h2>
+          <p className="task-title text-white">
+            Run code to check if the project was done successfully
+          </p>
+          <div>
+            {tasks.map((task, index) => (
+              <div key={index} className="task-card">
+                <div className="task-title">{task.title}</div>
+                <pre className="task-code">{task.code}</pre>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </>
   );

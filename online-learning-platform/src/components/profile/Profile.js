@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
-import { storage, auth, db } from "../config/firebase";
+import { storage, auth, db } from "../../config/firebase";
 import { v4 } from "uuid";
 import {
   doc,
@@ -11,9 +11,9 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { Button } from "primereact/button";
-import MenubarCustom from "./Menubar";
-import { updateProfileData, userPasswordReset } from "../controller/User";
-import { useAuth } from "../context/AuthContext";
+import MenubarCustom from "../menu/Menubar";
+import { updateProfileData, userPasswordReset } from "../../controller/User";
+import { useAuth } from "../../context/AuthContext";
 import { Image } from "primereact/image";
 import { InputText } from "primereact/inputtext";
 import "./Profile.css";

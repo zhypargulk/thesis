@@ -5,12 +5,12 @@ import { Card } from "primereact/card";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputNumber } from "primereact/inputnumber";
 import { Button } from "primereact/button";
-import MenubarCustom from "./Menubar";
-import { db, auth, storage } from "../config/firebase";
+import MenubarCustom from "../menu/Menubar";
+import { db, auth, storage } from "../../config/firebase";
 import { v4 } from "uuid";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
-import { createCourse } from "../controller/Courses"; // Import CSS file
+import { createCourse } from "../../controller/Courses"; // Import CSS file
 import { doc } from "firebase/firestore";
 import "./CreateCourse.css";
 

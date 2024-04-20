@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { fetchLesson, getDocumentById } from "../../controller/Courses";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import MenubarCustom from "../Menubar";
+import MenubarCustom from "../menu/Menubar";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";

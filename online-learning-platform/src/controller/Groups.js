@@ -181,3 +181,14 @@ export const addLeaderToGroup = async (groupId, userId) => {
     throw error;
   }
 };
+
+export const updateGroupAnswer = async (groupId, newStatus) => {
+  try {
+    const groupDocRef = doc(db, "groups", groupId);
+    await updateDoc(groupDocRef, {
+      success: newStatus,
+    });
+  } catch (error) {
+    console.error("Error updating task status:", error);
+  }
+};
