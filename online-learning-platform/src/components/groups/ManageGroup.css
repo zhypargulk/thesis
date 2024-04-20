@@ -1,0 +1,45 @@
+.height-card {
+    height: 30vh;
+}
+
+.project-title {
+    font-size: 30px;
+    color: #ffffff;
+    background-color: #2B2038;
+    font-family: 'Circular', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    padding: 40px;
+    border-radius: 20px;
+    border: 3px solid #ffffff;
+    display: inline-block;
+  }
+
+  .containers {
+     display: flex; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+  
+  .bg-panel1 {
+    font-size: 20px;
+    color: #000;
+    background-color: #ffffff;
+    font-family: 'Circular', 'Helvetica Neue', sans-serif;
+    /* text-align: center; */
+    /* padding: 40px; */
+    border-radius: 20px;
+    border: 3px solid #ffffff;
+ 
+    width: 80%;
+}
+
+.project-question {
+      font-size: 30px;
+      color: #ffffff;
+      font-family: 'Circular', 'Helvetica Neue', sans-serif;
+      text-align: center;
+      padding: 40px;
+      border-radius: 20px;
+      display: inline-block;
+}

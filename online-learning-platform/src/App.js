@@ -15,7 +15,7 @@ import "./flag.css";
 import Auth from "./components/register/auth";
 import LogIn from "./components/login/LogIn";
 import Profile from "./components/Profile";
-import OnlineIDE from "./components/OnlineIDE";
+import OnlineIDE from "./components/ide/OnlineIDE";
 import Home from "./components/home/Home";
 import CreateCourse from "./components/CreateCourse";
 import CourseDashboard from "./components/courses/CourseDashboard";
@@ -23,11 +23,11 @@ import CourseDetails from "./components/course-details/CourseDetails";
 import Lesson from "./components/lesson/Lesson";
 import FinalProject from "./components/project/FinalProject";
 import Notifications from "./components/Notifications";
-import GroupsComponent from "./components/GroupsComponent";
-import GroupBoard from "./components/GroupBoard";
-import ManageGroup from "./components/ManageGroup";
+import GroupsComponent from "./components/groups/GroupsComponent";
+import GroupBoard from "./components/groups/GroupBoard";
+import ManageGroup from "./components/groups/ManageGroup";
 import Test from "./components/Test";
-import Kanban from "./components/Kanban";
+import Kanban from "./components/groups/Kanban";
 
 const App = () => {
   return (
@@ -47,6 +47,7 @@ const App = () => {
         <Route path="/groups" element={<GroupsComponent />} />
         <Route path="/kanban" element={<Kanban />} />
         <Route path="/groups/:docId/board" element={<GroupBoard />} />
+        <Route path="/groups/:docId/ide" element={<OnlineIDE />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route
           path="/course/:docId/lessons/:lessonNumber"

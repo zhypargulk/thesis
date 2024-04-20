@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import {
   getCoursesByUserId,
   getGroupByUserIdAndCourseId,
-} from "../controller/Groups"; // Import the function
-import { useAuth } from "../context/AuthContext";
-import { getDocumentById } from "../controller/Courses";
+} from "../../controller/Groups"; // Import the function
+import { useAuth } from "../../context/AuthContext";
+import { getDocumentById } from "../../controller/Courses";
 import CardGroup from "./CardGroup";
-import MenubarCustom from "./Menubar";
+import MenubarCustom from "../Menubar";
 
 const GroupsComponent = () => {
   const [courses, setCourses] = useState([]);

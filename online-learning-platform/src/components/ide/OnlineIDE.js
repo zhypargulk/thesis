@@ -8,7 +8,7 @@ import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
 import { cpp } from "@codemirror/lang-cpp";
 import axios from "axios";
-import MenubarCustom from "./Menubar";
+import MenubarCustom from "../Menubar";
 
 const languages = [
   {

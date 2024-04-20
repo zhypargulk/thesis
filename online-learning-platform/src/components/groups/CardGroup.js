@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "primereact/card";
-import "./courses/CardCourse.css";
+import "../courses/CardCourse.css";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import { getStudentsByGroupId } from "../controller/Groups";
+import { getStudentsByGroupId } from "../../controller/Groups";
 import "./CardGroup.css";
 
 const CardGroup = ({ title, imageUrl, groupId }) => {

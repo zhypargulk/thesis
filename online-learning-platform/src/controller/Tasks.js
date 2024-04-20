@@ -85,11 +85,22 @@ export const getAllTasksBoard = async (groupId) => {
     const taskSnapshot = await getDocs(tasksQuery);
     const tasks = [];
     taskSnapshot.forEach((doc) => {
-      tasks.push({ _id: doc.id, ...doc.data() }); // Ensure this structure matches your existing tasks
+      tasks.push({ _id: doc.id, ...doc.data() });
     });
     return tasks;
   } catch (error) {
     console.error("Error fetching tasks:", error);
     return [];
+  }
+};
+
+export const uploadTheTask = async (taskId, code) => {
+  try {
+    const taskDocRef = doc(db, "tasks", taskId);
+    await updateDoc(taskDocRef, {
+      code: code,
+    });
+  } catch (error) {
+    console.error("Error updating task status:", error);
   }
 };

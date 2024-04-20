@@ -2,9 +2,16 @@ import React from "react";
 import { DragDropContext, DropTarget, DragSource } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import update from "immutability-helper";
-import { getAllTasksBoard, updateTaskStatus } from "../controller/Tasks";
-import MenuBarCustom from "../components/Menubar";
-import { getDocumentById } from "../controller/Courses";
+import {
+  getAllTasksBoard,
+  updateTaskStatus,
+  uploadTheTask,
+} from "../../controller/Tasks";
+import { InputTextarea } from "primereact/inputtextarea";
+import { getDocumentById } from "../../controller/Courses";
+import { Dialog } from "primereact/dialog";
+import { Button } from "primereact/button";
+import "./Kanban.css";
 
 const labels = ["new", "going", "done"];
 const labelsMap = {
@@ -25,15 +32,15 @@ const classes = {
     width: "20vw",
     height: "80vh",
     margin: "0 auto",
-    backgroundColor: "#ffff",
-    borderColor: "#64a5ea",
+    backgroundColor: "#E5E4E2",
+    borderColor: "#AC6CFF",
     borderStyle: "solid",
   },
   columnHead: {
     textAlign: "center",
     padding: 10,
     fontSize: "2rem",
-    backgroundColor: "#64a5ea",
+    backgroundColor: "#AC6CFF",
     color: "white",
   },
   item: {
@@ -41,8 +48,8 @@ const classes = {
     margin: "10px 0",
     fontSize: "1rem",
     cursor: "pointer",
-    backgroundColor: "white",
-    borderColor: "#64a5ea",
+    backgroundColor: "#FBEBD7",
+    borderColor: "#AC6CFF",
     borderStyle: "solid",
     borderWidth: "1px",
     borderRadius: "5px",
@@ -75,6 +82,7 @@ class Kanban extends React.Component {
     const { id: groupId } = this.props;
     let fetchedTasks = await getAllTasksBoard(groupId);
 
+    console.log(fetchedTasks);
     const tasksWithUserNames = await Promise.all(
       fetchedTasks.map(async (task) => {
         try {
@@ -121,10 +129,13 @@ class Kanban extends React.Component {
 
   render() {
     const { tasks } = this.state;
+    const { id: groupId } = this.props;
+
     return (
       <>
         <div>
-          <h3 className="mt-4 ml-5 text-3xl">Progress board</h3>
+          <h3 className="mt-4 ml-5 text-3xl text-white">Progress board</h3>
+
           <div className="ml-5 mr-4">
             <section style={classes.board}>
               {labels.map((channel) => (
@@ -139,6 +150,9 @@ class Kanban extends React.Component {
                             id={item._id}
                             onDrop={this.update}
                             userName={item.userName}
+                            title={item.title}
+                            description={item.description}
+                            status={item.status}
                           >
                             <div>{item.title}</div>
                           </KanbanItem>
@@ -185,28 +199,96 @@ const boxSource = {
       name: props.id,
     };
   },
-
   endDrag(props, monitor) {
     const item = monitor.getItem();
     const dropResult = monitor.getDropResult();
     if (dropResult) {
-      props.onDrop(monitor.getItem().name, dropResult.name);
+      props.onDrop(item.name, dropResult.name);
     }
   },
 };
 
 class KanbanItem extends React.Component {
-  // Adding state to handle hover effect
   state = {
     isHovered: false,
+    showDialog: false,
+    codeText: "",
+    codeSubmitted: false,
   };
+
+  componentDidMount() {
+    this.check();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.id !== prevProps.id) {
+      this.check();
+    }
+  }
 
   toggleHover = () => {
     this.setState((prevState) => ({ isHovered: !prevState.isHovered }));
   };
 
+  toggleDialog = () => {
+    this.setState((prevState) => ({ showDialog: !prevState.showDialog }));
+  };
+
+  handleCodeChange = (e) => {
+    this.setState({ codeText: e.target.value });
+  };
+
+  check = async () => {
+    const { id } = this.props;
+    try {
+      const task = await getDocumentById("tasks", id);
+      if (task && task.code) {
+        this.setState({ codeSubmitted: true });
+        this.setState({ codeText: task.code });
+      }
+    } catch (error) {
+      console.error("Error fetching task:", error);
+    }
+  };
+
+  uploadCode = async () => {
+    const { id } = this.props;
+    const { codeText } = this.state;
+
+    try {
+      const response = await uploadTheTask(id, codeText);
+      this.setState({ codeSubmitted: true });
+      this.setState({ codeText: response.code });
+      this.toggleDialog();
+    } catch (error) {
+      console.error("Failed to upload code:", error);
+    }
+  };
+
   render() {
-    const { isHovered } = this.state;
+    const { isHovered, showDialog, codeText, codeSubmitted } = this.state;
+    const { title, userName, description, status } = this.props;
+    const dialogFooter = (
+      <div>
+        {codeSubmitted ? (
+          <span style={{ color: "green" }}>Code submitted successfully!</span>
+        ) : (
+          <Button
+            label="Submit Code"
+            icon="pi pi-upload"
+            onClick={this.uploadCode}
+            className="p-button-text"
+          />
+        )}
+        <Button
+          label="Close"
+          icon="pi pi-times"
+          onClick={this.toggleDialog}
+          className="p-button-text"
+        />
+      </div>
+    );
+
     return this.props.connectDragSource(
       <div
         style={{ ...classes.item, ...(isHovered ? classes.itemHover : {}) }}
@@ -214,7 +296,48 @@ class KanbanItem extends React.Component {
         onMouseLeave={this.toggleHover}
       >
         <div>{this.props.children}</div>
-        <span style={classes.userName}>{this.props.userName}</span>
+        <span style={classes.userName}>{userName}</span>
+        {status !== "done" ? (
+          <Button
+            label="Details"
+            icon="pi pi-info-circle"
+            onClick={this.toggleDialog}
+            className="p-button-text text-button"
+          />
+        ) : (
+          <Button
+            label={codeSubmitted ? "Code submitted!" : "Submit Code"}
+            icon={codeSubmitted ? "pi pi-check" : "pi pi-upload"}
+            onClick={this.toggleDialog}
+            className="p-button-text text-button"
+          />
+        )}
+        <Dialog
+          header={status !== "done" ? "Task Details" : "Submit Code"}
+          visible={showDialog}
+          style={{ width: "50vw" }}
+          footer={
+            !codeSubmitted ? (
+              dialogFooter
+            ) : (
+              <Button className="" onClick={this.uploadCode}>
+                Resubmit the code
+              </Button>
+            )
+          }
+          onHide={this.toggleDialog}
+        >
+          {status !== "done" ? (
+            <p>{description}</p>
+          ) : (
+            <InputTextarea
+              value={codeText}
+              onChange={this.handleCodeChange}
+              rows={5}
+              cols={30}
+            />
+          )}
+        </Dialog>
       </div>
     );
   }

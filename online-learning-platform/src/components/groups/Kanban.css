@@ -1,0 +1,9 @@
+.text-button {
+    background: transparent !important;
+    border: none;
+    color: #873EAC !important;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+  }
+  

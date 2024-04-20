@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { auth, db } from "../config/firebase";
+import { auth, db } from "../../config/firebase";
 import {
   query,
   collection,
@@ -13,8 +13,8 @@ import {
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import "./ChatGroup.css";
 import { useParams } from "react-router-dom";
-import { getDocumentById } from "../controller/Courses";
-import { getMessages } from "../controller/Messages";
+import { getDocumentById } from "../../controller/Courses";
+import { getMessages } from "../../controller/Messages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "primereact/button";
@@ -66,14 +66,14 @@ const ChatGroup = () => {
   return (
     <div className="Chat">
       <div>
-        <h1>Chat for the Group</h1>
+        <h1 className="text-white">Chat for the Group</h1>
       </div>
       <div className="chat-section">
         <div className="chat-main">
           {messages.map((msg) => (
             <ChatMessage key={msg.id} message={msg} />
           ))}
-          <div ref={endOfMessagesRef} /> {/* Empty div for scrolling to */}
+          <div ref={endOfMessagesRef} />
         </div>
 
         <form onSubmit={sendMessage} className="message-form">
