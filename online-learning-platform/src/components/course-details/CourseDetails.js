@@ -72,7 +72,7 @@ const CourseDetails = () => {
           {course && (
             <div className="course-sidebar">
               <h1 className="h1-custom">About course</h1>
-              <p class="course-description">{course.description}</p>
+              <p className="course-description">{course.description}</p>
               <h1 className="h1-custom">Course content</h1>
               <Accordion multiple>
                 {course.lessons.map((lesson, index) => (

@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  getStudentsByGroupId,
   addLeaderToGroup,
+  getCourseByRef,
+  fetchStudentsInGroup,
+  getLeaderByRef,
 } from "../../controller/Groups";
 import { createTask, getAllTasks } from "../../controller/Tasks";
 import { Dropdown } from "primereact/dropdown";
@@ -19,20 +21,63 @@ import { Toast } from "primereact/toast";
 import { ProgressSpinner } from "primereact/progressspinner";
 
 import "./ManageGroup.css";
+import { confirmPasswordReset } from "firebase/auth";
 
 const ManageGroup = () => {
   const [students, setStudents] = useState([]);
+  const [data, setData] = useState([]);
   const [course, setCourse] = useState();
   const [selectedLeader, setSelectedLeader] = useState(null);
   const [tasks, setTasks] = useState([]);
   const { groupId } = useParams();
   const user = useAuth();
-  const [userId, setUserId] = useState();
   const navigate = useNavigate();
   const [isLeaderExist, setIsLeaderExist] = useState(false);
   const [leader, setLeader] = useState();
   const [disableAction, setDisableAction] = useState(true);
   const toast = useRef(null);
+  const [userId, setUserId] = useState();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      setUserId(user.uid);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        if (user && user.uid) {
+          const groupData = await getDocumentById("groups", groupId);
+          const courseData = await getCourseByRef(groupData.courseDocRef);
+          const fetchstudents = await fetchStudentsInGroup(groupId);
+
+          setTasks([
+            {
+              studentId: null,
+              description: "",
+              title: "",
+            },
+          ]);
+          setStudents(fetchstudents);
+          setData(courseData);
+
+          if (!groupData.leaderGroup) {
+            setIsLeaderExist(false);
+          } else {
+            setIsLeaderExist(true);
+            const lead = await getLeaderByRef(groupData.leaderGroup);
+            setLeader(lead);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    fetchCourses();
+  }, [userId]);
 
   const showError = () => {
     toast.current.show({
@@ -57,37 +102,6 @@ const ManageGroup = () => {
       setUserId(user.uid);
     }
   }, [user]);
-
-  const fetchStudents = async () => {
-    const students = await getStudentsByGroupId(groupId);
-    setStudents(students);
-
-    setTasks([
-      {
-        studentId: null,
-        description: "",
-        title: "",
-      },
-    ]);
-  };
-
-  const fetchCourse = async () => {
-    const groupData = await getDocumentById("groups", groupId);
-    const courseData = await getDocumentById("courses", groupData.courseDocId);
-    setCourse(courseData);
-    if (!groupData.leaderGroup) {
-      setIsLeaderExist(false);
-    } else {
-      setIsLeaderExist(true);
-      const lead = await getDocumentById("user", groupData.leaderGroup);
-      setLeader(lead);
-    }
-  };
-
-  useEffect(() => {
-    fetchStudents();
-    fetchCourse();
-  }, [groupId]);
 
   useEffect(() => {
     if (leader && leader.id === userId) {
@@ -126,15 +140,15 @@ const ManageGroup = () => {
 
   const handleCreateTasks = async () => {
     try {
-      if (userId && course) {
+      if (user.uid && data) {
         for (const task of tasks) {
           await createTask(
-            userId,
+            user.uid,
             groupId,
             "new",
             task.description,
             task.title,
-            course.courseId
+            data.courseId
           );
         }
       }
@@ -159,7 +173,6 @@ const ManageGroup = () => {
   const handleStudentChange = (e, taskIndex) => {
     const updatedTasks = tasks.map((task, index) => {
       if (index === taskIndex) {
-        // Update the studentId for the task that changed
         return { ...task, studentId: e.value.id };
       }
       return task;
@@ -168,19 +181,25 @@ const ManageGroup = () => {
     setTasks(updatedTasks);
   };
 
+  const handleDeleteTask = (index) => {
+    const updatedTasks = [...tasks];
+    updatedTasks.splice(index, 1);
+    setTasks(updatedTasks);
+  };
+
   return (
     <>
       <MenubarCustom />
       <Toast ref={toast} />
-      {course ? (
+      {data ? (
         <div className="containers">
           <h2 className="project-title">Group details</h2>
           <p className="m-2 bg-panel1">
             {" "}
             <div className="grid m-3">
               <div>
-                <h3 className="ml-2">{course.title} course</h3>
-                <Image src={course.imageUrl} alt="Image" width="600" />
+                <h3 className="ml-2">{data.title} course</h3>
+                <Image src={data.imageUrl} alt="Image" width="600" />
               </div>
               <div className="mt-6 ml-8">
                 <h4>Members of the group:</h4>
@@ -288,6 +307,12 @@ const ManageGroup = () => {
                           />
                         </div>
                       </div>
+                      <Button
+                        icon="pi pi-trash"
+                        className="p-button-rounded p-button-success mt-4"
+                        onClick={() => handleDeleteTask(index)}
+                        label="Delete the task"
+                      />
                     </Card>
                   </Panel>
                 ))}

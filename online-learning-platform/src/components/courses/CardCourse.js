@@ -14,7 +14,12 @@ const CardCourse = ({ title, imageUrl, desc, id, groupId }) => {
       : desc;
   };
 
-  const header = <img alt="Card" src={imageUrl} />;
+  const header = (
+    <div className="flex align-items-center justify-content-center w-200px h-200px">
+      <img alt="Card" src={imageUrl} className="w-200px h-200px" />
+    </div>
+  );
+  // <img alt="Card" src={imageUrl} />;
   const onClickBoard = () => {
     navigate(id);
   };

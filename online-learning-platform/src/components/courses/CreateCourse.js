@@ -7,6 +7,7 @@ import { InputNumber } from "primereact/inputnumber";
 import { Button } from "primereact/button";
 import MenubarCustom from "../menu/Menubar";
 import { db, auth, storage } from "../../config/firebase";
+import { useAuth } from "../../context/AuthContext";
 import { v4 } from "uuid";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
@@ -24,22 +25,31 @@ const CreateCourse = () => {
   const [imageCourse, setImageCourse] = useState(null);
   const [lessons, setLessons] = useState([]);
   const navigate = useNavigate();
+  const user = useAuth();
 
   useEffect(() => {
-    const array = Array.from(
-      { length: newNumberOfClasses },
-      (_, index) => index
-    );
+    if (user && user.uid) {
+      setLessons([
+        { title: "", description: "", videoURL: null, teacher: user.uid },
+      ]);
+    }
+  }, [user]);
 
-    setLessons(
-      Array.from({ length: newNumberOfClasses }, () => ({
-        title: "",
-        description: "",
-        imageUrl: null,
-      }))
-    );
-    setArrayForClasses(array);
-  }, [newNumberOfClasses]);
+  // useEffect(() => {
+  //   const array = Array.from(
+  //     { length: newNumberOfClasses },
+  //     (_, index) => index
+  //   );
+
+  //   setLessons(
+  //     Array.from({ length: newNumberOfClasses }, () => ({
+  //       title: "",
+  //       description: "",
+  //       imageUrl: null,
+  //     }))
+  //   );
+  //   setArrayForClasses(array);
+  // }, [newNumberOfClasses]);
 
   const handleCreateCourse = async () => {
     try {
@@ -92,107 +102,119 @@ const CreateCourse = () => {
     return mainFieldsFilled && validNumberOfClasses && lessonsValid;
   };
 
+  const removeLesson = (index) => {
+    const updatedLessons = lessons.filter((_, i) => i !== index);
+    setLessons(updatedLessons);
+  };
+
+  const addNewLesson = () => {
+    setLessons([
+      ...lessons,
+      { title: "", description: "", videoURL: null, teacher: user.uid },
+    ]);
+  };
+
   return (
     <div>
       <MenubarCustom />
       <h2 className="mt-4 ml-4">Create New Course</h2>
-      <Card>
-        <Panel header="Course Information">
-          <div className="p-fluid p-formgrid p-grid">
-            <div className="p-field p-col-12 p-md-4 mt-4">
-              <label htmlFor="title">
-                Title: <sup>*</sup>
-              </label>
-              <InputText
-                id="title"
-                value={newCourseTitle}
-                onChange={(e) => setNewCourseTitle(e.target.value)}
-                className="mt-4"
-              />
-            </div>
-            <div className="p-field p-col-12 p-md-4 mt-4">
-              <label htmlFor="courseImage">
-                Course Image: <sup>*</sup>
-              </label>
-              <input
-                className="flex mt-4"
-                type="file"
-                accept="image/*"
-                onChange={(event) => {
-                  setImageCourse(event.target.files[0]);
-                }}
-              />
-            </div>
-            <div className="p-field p-col-12 p-md-8 mt-4">
-              <label htmlFor="description">
-                Description: <sup>*</sup>
-              </label>
-              <InputTextarea
-                id="description"
-                value={newCourseDescription}
-                onChange={(e) => setNewCourseDescription(e.target.value)}
-                rows={5}
-                cols={30}
-                className="mt-4"
-              />
-            </div>
-            <div className="p-field p-col-12 p-md-4 mt-4">
-              <label htmlFor="numberOfClasses">
-                Number of lessons: <sup>*</sup>
-              </label>
-              <InputNumber
-                id="numberOfClasses"
-                value={newNumberOfClasses}
-                onValueChange={(e) => setNewNumberOfClasses(parseInt(e.value))}
-                showButtons
-                min={0}
-                max={20}
-                className="mt-4"
-              />
-              <small style={{ color: "blue" }} className="mb-4">
-                Maximum number of classes allowed is 20.
-              </small>
-            </div>
-            <div className="p-field p-col-12 p-md-8 mt-5">
-              <label htmlFor="description">
-                Final project task description: <sup>*</sup>
-              </label>
-              <InputTextarea
-                id="description"
-                value={newTaskDescription}
-                onChange={(e) => setNewTaskDescription(e.target.value)}
-                rows={5}
-                cols={30}
-                className="mt-4"
-              />
-            </div>
-            <div className="p-field p-col-12 p-md-8 mt-4">
-              <label htmlFor="description">
-                Answer for final project: <sup>*</sup>
-              </label>
-              <InputTextarea
-                id="description"
-                value={newAnswer}
-                onChange={(e) => setNewAnswer(e.target.value)}
-                rows={5}
-                cols={30}
-                className="mt-4"
-              />
-            </div>
+      {/* <Card> */}
+      <Panel header="Course Information">
+        <div className="p-fluid p-formgrid p-grid">
+          <div className="p-field p-col-12 p-md-4 mt-4">
+            <label htmlFor="title">
+              Title: <sup>*</sup>
+            </label>
+            <InputText
+              id="title"
+              value={newCourseTitle}
+              onChange={(e) => setNewCourseTitle(e.target.value)}
+              className="mt-4"
+            />
           </div>
-        </Panel>
-      </Card>
+          <div className="p-field p-col-12 p-md-4 mt-4">
+            <label htmlFor="courseImage">
+              Course Image: <sup>*</sup>
+            </label>
+            <input
+              className="flex mt-4"
+              type="file"
+              accept="image/*"
+              onChange={(event) => {
+                setImageCourse(event.target.files[0]);
+              }}
+            />
+          </div>
+          <div className="p-field p-col-12 p-md-8 mt-4">
+            <label htmlFor="description">
+              Description: <sup>*</sup>
+            </label>
+            <InputTextarea
+              id="description"
+              value={newCourseDescription}
+              onChange={(e) => setNewCourseDescription(e.target.value)}
+              rows={5}
+              cols={30}
+              className="mt-4"
+            />
+          </div>
+          <div className="p-field p-col-12 p-md-4 mt-4">
+            <label htmlFor="numberOfClasses">
+              Number of lessons: <sup>*</sup>
+            </label>
+            <InputNumber
+              id="numberOfClasses"
+              value={newNumberOfClasses}
+              onValueChange={(e) => setNewNumberOfClasses(parseInt(e.value))}
+              showButtons
+              min={0}
+              max={20}
+              className="mt-4"
+            />
+            <small style={{ color: "blue" }} className="mb-4">
+              Maximum number of classes allowed is 20.
+            </small>
+          </div>
+          <div className="p-field p-col-12 p-md-8 mt-5">
+            <label htmlFor="description">
+              Final project task description: <sup>*</sup>
+            </label>
+            <InputTextarea
+              id="description"
+              value={newTaskDescription}
+              onChange={(e) => setNewTaskDescription(e.target.value)}
+              rows={5}
+              cols={30}
+              className="mt-4"
+            />
+          </div>
+          <div className="p-field p-col-12 p-md-8 mt-4">
+            <label htmlFor="description">
+              Answer for final project: <sup>*</sup>
+            </label>
+            <InputTextarea
+              id="description"
+              value={newAnswer}
+              onChange={(e) => setNewAnswer(e.target.value)}
+              rows={5}
+              cols={30}
+              className="mt-4"
+            />
+          </div>
+        </div>
+      </Panel>
+      {/* </Card> */}
       <div>
         {newNumberOfClasses > 0 ? (
           <h2 className="mt-5 ml-5">Create New Lessons</h2>
         ) : (
           ""
         )}
-        {arrayForClasses.map((lesson, index) => (
+        {lessons.map((lesson, index) => (
           <Panel
             key={index}
             header={`Lesson Form ${index + 1}`}
-            className="m-3"
+            className="mt-4 w-full"
           >
             <Card className="mt-3">
               <div className="p-fluid p-formgrid p-grid">
@@ -246,16 +268,27 @@ const CreateCourse = () => {
                   />
                 </div>
               </div>
+              <Button
+                icon="pi pi-trash"
+                className="p-button-rounded p-button-success mt-4"
+                onClick={() => removeLesson(index)}
+                label="Delete the lesson"
+              />
             </Card>
           </Panel>
         ))}
-      </div>
-      <div className="p-mt-2 m-3">
+        <Button
+          icon="pi pi-plus"
+          className="p-button-rounded p-button-success mt-3"
+          onClick={addNewLesson}
+          label="Add New Lesson"
+        />
         <Button
           type="button"
           label="Create Course"
           onClick={handleCreateCourse}
           disabled={!isFormValid()}
+          className="mt-3 ml-8 p-button-rounded w-20rem"
         />
       </div>
     </div>

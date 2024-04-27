@@ -99,7 +99,7 @@ const Lesson = () => {
           </div>
 
           <div className=" flex justify-content-center mt-4 mb-5">
-            <ScrollPanel className="description">
+            <ScrollPanel className="description w-full h-20rem">
               <p>{lesson.description}</p>
             </ScrollPanel>
           </div>

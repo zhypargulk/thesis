@@ -41,22 +41,24 @@ export const createTask = async (
   courseId
 ) => {
   try {
-    const taskRef = await addDoc(collection(db, "tasks"), {
-      user_id: userId,
-      group_id: groupId,
+    const userDocRef = doc(db, "user", userId);
+    const groupDocRef = doc(db, "groups", groupId);
+    const courseDocRef = doc(db, "courses", courseId);
+    const tasksRef = collection(db, "tasks");
+
+    const taskRef = await addDoc(tasksRef, {
+      userRef: userDocRef,
+      groupRef: groupDocRef,
+      courseRef: courseDocRef,
       status: status,
       description: description,
       title: title,
-      courseId: courseId,
     });
 
-    const userDocRef = doc(db, "user", userId);
-    console.log("user=", userDocRef.id);
     await updateDoc(userDocRef, {
       tasks: arrayUnion(taskRef.id),
     });
 
-    const groupDocRef = doc(db, "groups", groupId);
     await updateDoc(groupDocRef, {
       tasks: arrayUnion(taskRef.id),
     });
@@ -74,7 +76,6 @@ export const updateTaskStatus = async (taskId, newStatus) => {
     await updateDoc(taskDocRef, {
       status: newStatus,
     });
-    console.log(`Task ${taskId} updated to status: ${newStatus}`);
   } catch (error) {
     console.error("Error updating task status:", error);
   }

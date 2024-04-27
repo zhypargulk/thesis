@@ -16,6 +16,7 @@ const GroupBoard = () => {
     const fetchTasks = async () => {
       if (docId) {
         const fetchedTasks = await getAllTasks(docId);
+        console.log(fetchedTasks);
         setTasks(fetchedTasks);
       }
     };
