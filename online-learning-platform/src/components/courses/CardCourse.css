@@ -55,3 +55,11 @@
 .green-border-card {
   border: 3px solid #004D40; 
 }
+
+.w-200px {
+  width: 460px;
+}
+
+.h-200px {
+  height: 250px ;
+}

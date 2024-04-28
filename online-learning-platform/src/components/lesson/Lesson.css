@@ -26,3 +26,15 @@ background-color: #f4f4f4;
   font-family: 'Roboto', sans-serif;
   text-align: center;
 }
+
+.spinner-container {
+  position: fixed; /* or 'absolute' if the parent is positioned */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* High z-index to ensure it's on top of other content */
+}

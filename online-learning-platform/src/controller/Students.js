@@ -6,33 +6,23 @@ export const getAllEnrolledStudents = async (courseId) => {
     const courseRef = doc(db, "courses", courseId);
     const courseSnapshot = await getDoc(courseRef);
 
-    if (!courseSnapshot.exists()) {
-      throw new Error("Course document not found");
-    }
-
     const courseData = courseSnapshot.data();
-    if (!courseData.students || !Array.isArray(courseData.students)) {
-      throw new Error("Invalid or missing 'students' field in course document");
-    }
 
     const studentIds = courseData.students;
 
     const enrolledStudents = [];
 
     for (const studentId of studentIds) {
-      const userRef = doc(db, "user", studentId);
-      const userSnapshot = await getDoc(userRef);
+      const userSnapshot = await getDoc(studentId);
 
       if (userSnapshot.exists()) {
         const userData = userSnapshot.data();
-        enrolledStudents.push({
-          id: studentId,
-          email: userData.email,
-          name: userData.name,
-        });
+        console.log(userData);
+        enrolledStudents.push(userData);
       }
     }
 
+    console.log(enrolledStudents);
     return enrolledStudents;
   } catch (error) {
     console.error("Error fetching enrolled students:", error);
@@ -51,7 +41,7 @@ export const getUserById = async (userId) => {
         id: userId,
         email: userData.email,
         name: userData.name,
-        role: userData.role, // Add any additional fields you need
+        role: userData.role,
       };
     } else {
       throw new Error("User document not found");

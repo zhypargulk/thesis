@@ -15,7 +15,10 @@ import {
 export const getAllTasks = async (groupId) => {
   try {
     const tasksRef = collection(db, "tasks");
-    const tasksQuery = query(tasksRef, where("group_id", "==", groupId));
+
+    const groupRef = doc(db, "groups", groupId);
+
+    const tasksQuery = query(tasksRef, where("groupRef", "==", groupRef));
 
     const taskSnapshot = await getDocs(tasksQuery);
 
@@ -37,24 +40,32 @@ export const createTask = async (
   groupId,
   status,
   description,
-  title
+  title,
+  courseId
 ) => {
   try {
-    const taskRef = await addDoc(collection(db, "tasks"), {
-      user_id: userId,
-      group_id: groupId,
+    const userDocRef = doc(db, "user", userId);
+    const groupDocRef = doc(db, "groups", groupId);
+    const courseDocRef = doc(db, "courses", courseId);
+    const tasksRef = collection(db, "tasks");
+
+    const taskRef = await addDoc(tasksRef, {
+      userRef: userDocRef,
+      groupRef: groupDocRef,
+      courseRef: courseDocRef,
       status: status,
       description: description,
       title: title,
     });
 
-    const userDocRef = doc(db, "user", userId);
-    console.log("user=", userDocRef.id);
     await updateDoc(userDocRef, {
       tasks: arrayUnion(taskRef.id),
     });
 
-    const groupDocRef = doc(db, "groups", groupId);
+    await updateDoc(taskRef, {
+      _id: taskRef.id,
+    });
+
     await updateDoc(groupDocRef, {
       tasks: arrayUnion(taskRef.id),
     });
@@ -72,7 +83,6 @@ export const updateTaskStatus = async (taskId, newStatus) => {
     await updateDoc(taskDocRef, {
       status: newStatus,
     });
-    console.log(`Task ${taskId} updated to status: ${newStatus}`);
   } catch (error) {
     console.error("Error updating task status:", error);
   }
@@ -85,11 +95,35 @@ export const getAllTasksBoard = async (groupId) => {
     const taskSnapshot = await getDocs(tasksQuery);
     const tasks = [];
     taskSnapshot.forEach((doc) => {
-      tasks.push({ _id: doc.id, ...doc.data() }); // Ensure this structure matches your existing tasks
+      tasks.push({ _id: doc.id, ...doc.data() });
     });
     return tasks;
   } catch (error) {
     console.error("Error fetching tasks:", error);
     return [];
+  }
+};
+
+export const uploadTheTask = async (taskId, code) => {
+  try {
+    const taskDocRef = doc(db, "tasks", taskId);
+    await updateDoc(taskDocRef, {
+      code: code,
+    });
+  } catch (error) {
+    console.error("Error updating task status:", error);
+  }
+};
+
+export const updateGroupTaskStatus = async (groupId, output, finishedTask) => {
+  const groupDocRef = doc(db, "groups", groupId);
+
+  try {
+    await updateDoc(groupDocRef, {
+      output: output,
+      finishedTask: finishedTask,
+    });
+  } catch (error) {
+    console.error("Error updating the group:", error);
   }
 };

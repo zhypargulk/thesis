@@ -3,7 +3,7 @@ import { fetchUserData } from "../controller/User";
 import { getDocumentById } from "../controller/Courses";
 import { Button } from "primereact/button";
 import { useAuth } from "../context/AuthContext";
-import MenubarCustom from "./Menubar";
+import MenubarCustom from "./menu/Menubar";
 import CardCourse from "./courses/CardCourse";
 import AcceptGroups from "./AcceptGroups";
 

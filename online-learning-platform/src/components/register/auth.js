@@ -2,16 +2,19 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState, useRef } from "react";
-import { auth } from "../../config/firebase";
+import { auth, storage } from "../../config/firebase";
 import { updateProfile } from "firebase/auth"; // Import updateProfile
 import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+// import / from "../../config/firebase"; // Adjust the path as needed
+
 import { Dropdown } from "primereact/dropdown";
 import { useNavigate } from "react-router-dom";
 import { Password } from "primereact/password";
 import { Toast } from "primereact/toast";
-import { getNoAvatarImage } from "../../controller/User";
+import img from "./images/no-avatar.png";
 import "./Auth.css";
-import MenubarCustom from "../Menubar";
+import MenubarCustom from "../menu/Menubar";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -60,6 +63,21 @@ const Auth = () => {
     );
   };
 
+  const uploadImageToFirebase = async () => {
+    const response = await fetch(img);
+    const blob = await response.blob();
+    const storageRef = ref(storage, `images/${img.split("/").pop()}`);
+
+    try {
+      const uploadResult = await uploadBytes(storageRef, blob);
+      const downloadUrl = await getDownloadURL(uploadResult.ref);
+      return downloadUrl;
+    } catch (error) {
+      console.error("Upload failed", error);
+      throw error;
+    }
+  };
+
   const register = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -67,6 +85,10 @@ const Auth = () => {
         email,
         password
       );
+
+      uploadImageToFirebase().then((url) => {
+        console.log("Uploaded image URL:", url);
+      });
 
       await updateUserProfile(userCredential.user, {
         displayName: `${name} - ${role.role}`,
@@ -77,7 +99,7 @@ const Auth = () => {
         email,
         role: role.role,
         id: userCredential.user.uid,
-        imageUrl: getNoAvatarImage(),
+        imageUrl: await uploadImageToFirebase(),
       });
 
       clearForm();

@@ -25,12 +25,6 @@ export const updateProfileData = async (userDocRef, data) => {
   }
 };
 
-export const getNoAvatarImage = async () => {
-  const fileRef = ref(storage, `profileImages/no-avatar`);
-  const downloadURL = await getDownloadURL(fileRef);
-  return downloadURL;
-};
-
 export const userPasswordReset = async (user, newPassword) => {
   try {
     await updatePassword(user, newPassword);

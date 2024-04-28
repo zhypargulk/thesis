@@ -9,27 +9,27 @@ import {
   checkUserEnrollment,
   enrollUserInCourse,
   getDocumentById,
+  fetchLessonsByReferences,
 } from "../../controller/Courses";
-import MenubarCustom from "../Menubar";
+import MenubarCustom from "../menu/Menubar";
 import "./CourseDetails.css";
 
 const CourseDetails = () => {
   const [enrolled, setEnrolled] = useState(false);
   const [course, setCourse] = useState(null);
+  const [lessons, setLessons] = useState(null);
   const { docId } = useParams();
-  const colorClasses = ["yellow-tab", "green-tab", "blue-tab"];
-  const colors = ["#FFFF00", "#00FF00", "#0000FF"]; // Hex codes for yellow, green, blue
-
-  const getHeaderStyle = (index) => ({
-    backgroundColor: `${colors[index % colors.length]} !important`,
-  });
 
   useEffect(() => {
     const fetchCourseAndCheckEnrollment = async () => {
       try {
         const selectedCourse = await getDocumentById("courses", docId);
         if (selectedCourse) {
+          const selectedLessons = await fetchLessonsByReferences(
+            selectedCourse.lessons
+          );
           setCourse(selectedCourse);
+          setLessons(selectedLessons);
 
           const user = auth.currentUser;
           if (user) {
@@ -72,10 +72,10 @@ const CourseDetails = () => {
           {course && (
             <div className="course-sidebar">
               <h1 className="h1-custom">About course</h1>
-              <p class="course-description">{course.description}</p>
+              <p className="course-description">{course.description}</p>
               <h1 className="h1-custom">Course content</h1>
               <Accordion multiple>
-                {course.lessons.map((lesson, index) => (
+                {lessons.map((lesson, index) => (
                   <AccordionTab
                     header={lesson.title}
                     key={index}
