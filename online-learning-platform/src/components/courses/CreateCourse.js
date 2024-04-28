@@ -20,36 +20,12 @@ const CreateCourse = () => {
   const [newCourseDescription, setNewCourseDescription] = useState("");
   const [newTaskDescription, setNewTaskDescription] = useState("");
   const [newAnswer, setNewAnswer] = useState("");
-  const [newNumberOfClasses, setNewNumberOfClasses] = useState(0);
+
   const [arrayForClasses, setArrayForClasses] = useState([]);
   const [imageCourse, setImageCourse] = useState(null);
   const [lessons, setLessons] = useState([]);
   const navigate = useNavigate();
   const user = useAuth();
-
-  useEffect(() => {
-    if (user && user.uid) {
-      setLessons([
-        { title: "", description: "", videoURL: null, teacher: user.uid },
-      ]);
-    }
-  }, [user]);
-
-  // useEffect(() => {
-  //   const array = Array.from(
-  //     { length: newNumberOfClasses },
-  //     (_, index) => index
-  //   );
-
-  //   setLessons(
-  //     Array.from({ length: newNumberOfClasses }, () => ({
-  //       title: "",
-  //       description: "",
-  //       imageUrl: null,
-  //     }))
-  //   );
-  //   setArrayForClasses(array);
-  // }, [newNumberOfClasses]);
 
   const handleCreateCourse = async () => {
     try {
@@ -69,18 +45,16 @@ const CreateCourse = () => {
         title: newCourseTitle,
         description: newCourseDescription,
         finalProject: newTaskDescription,
-        numberOfClasses: newNumberOfClasses,
+        numberOfClasses: lessons.length,
         answer: newAnswer,
         courseId: v4(),
         user: doc(db, "user/" + auth?.currentUser?.uid),
-        students: [],
       };
       createCourse(imageCourse, obj, lessons);
       setNewCourseTitle("");
       setNewAnswer("");
       setNewTaskDescription("");
       setNewCourseDescription("");
-      setNewNumberOfClasses(0);
       navigate("/");
     } catch (err) {
       console.error(err);
@@ -94,7 +68,7 @@ const CreateCourse = () => {
       newTaskDescription &&
       newAnswer &&
       imageCourse;
-    const validNumberOfClasses = newNumberOfClasses > 0;
+    const validNumberOfClasses = lessons.length > 0;
     const lessonsValid = lessons.every(
       (lesson) => lesson.title && lesson.description && lesson.videoURL
     );
@@ -118,7 +92,7 @@ const CreateCourse = () => {
     <div>
       <MenubarCustom />
       <h2 className="mt-4 ml-4">Create New Course</h2>
-      {/* <Card> */}
+
       <Panel header="Course Information">
         <div className="p-fluid p-formgrid p-grid">
           <div className="p-field p-col-12 p-md-4 mt-4">
@@ -158,23 +132,7 @@ const CreateCourse = () => {
               className="mt-4"
             />
           </div>
-          <div className="p-field p-col-12 p-md-4 mt-4">
-            <label htmlFor="numberOfClasses">
-              Number of lessons: <sup>*</sup>
-            </label>
-            <InputNumber
-              id="numberOfClasses"
-              value={newNumberOfClasses}
-              onValueChange={(e) => setNewNumberOfClasses(parseInt(e.value))}
-              showButtons
-              min={0}
-              max={20}
-              className="mt-4"
-            />
-            <small style={{ color: "blue" }} className="mb-4">
-              Maximum number of classes allowed is 20.
-            </small>
-          </div>
+
           <div className="p-field p-col-12 p-md-8 mt-5">
             <label htmlFor="description">
               Final project task description: <sup>*</sup>
@@ -203,13 +161,7 @@ const CreateCourse = () => {
           </div>
         </div>
       </Panel>
-      {/* </Card> */}
       <div>
-        {newNumberOfClasses > 0 ? (
-          <h2 className="mt-5 ml-5">Create New Lessons</h2>
-        ) : (
-          ""
-        )}
         {lessons.map((lesson, index) => (
           <Panel
             key={index}

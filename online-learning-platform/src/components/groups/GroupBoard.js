@@ -2,22 +2,27 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Kanban from "./Kanban";
 import { getAllTasks } from "../../controller/Tasks";
+import { getCourseByGroupId } from "../../controller/Groups";
 import MenubarCustom from "../menu/Menubar";
 import ChatGroup from "./ChatGroup";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
+import "./Kanban.css";
 
 const GroupBoard = () => {
   const { docId } = useParams();
   const [tasks, setTasks] = useState([]);
+  const [course, setCourse] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTasks = async () => {
       if (docId) {
         const fetchedTasks = await getAllTasks(docId);
-        console.log(fetchedTasks);
+        const fetchedCourse = await getCourseByGroupId(docId);
         setTasks(fetchedTasks);
+        setCourse(fetchedCourse);
+        console.log(fetchedCourse);
       }
     };
 
@@ -27,6 +32,12 @@ const GroupBoard = () => {
   return (
     <>
       <MenubarCustom />
+      <div className="flex align-items-center justify-content-center mt-4">
+        <p className="m-2 bg-panel">
+          <p>Task description</p>
+          {course.finalProject}
+        </p>
+      </div>
       <div className="flex flex-row">
         <Kanban id={docId}></Kanban>
         <ChatGroup />

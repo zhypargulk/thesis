@@ -6,6 +6,7 @@ import {
   getAllTasksBoard,
   updateTaskStatus,
   uploadTheTask,
+  getAllTasks,
 } from "../../controller/Tasks";
 import { InputTextarea } from "primereact/inputtextarea";
 import { getDocumentById } from "../../controller/Courses";
@@ -30,7 +31,7 @@ const classes = {
   column: {
     minWidth: 100,
     width: "20vw",
-    height: "80vh",
+    height: "60vh",
     margin: "0 auto",
     backgroundColor: "#E5E4E2",
     borderColor: "#AC6CFF",
@@ -80,13 +81,13 @@ class Kanban extends React.Component {
 
   async fetchTasks() {
     const { id: groupId } = this.props;
-    let fetchedTasks = await getAllTasksBoard(groupId);
+    let fetchedTasks = await getAllTasks(groupId);
 
     console.log(fetchedTasks);
     const tasksWithUserNames = await Promise.all(
       fetchedTasks.map(async (task) => {
         try {
-          const userData = await getDocumentById("user", task.user_id);
+          const userData = await getDocumentById("user", task.userRef.id);
           return {
             ...task,
             userName: userData ? userData.name : "Unknown",
@@ -134,7 +135,9 @@ class Kanban extends React.Component {
     return (
       <>
         <div>
-          <h3 className="mt-4 ml-5 text-3xl text-white">Progress board</h3>
+          <div className="flex align-items-center justify-content-center mt-4 head-text">
+            <h3 className="mt-4 ml-5 text-3xl text-white">Progress board</h3>
+          </div>
 
           <div className="ml-5 mr-4">
             <section style={classes.board}>
@@ -240,6 +243,7 @@ class KanbanItem extends React.Component {
 
   check = async () => {
     const { id } = this.props;
+
     try {
       const task = await getDocumentById("tasks", id);
       if (task && task.code) {
@@ -327,7 +331,7 @@ class KanbanItem extends React.Component {
         <Dialog
           header={status !== "done" ? "Task Details" : "Submit Code"}
           visible={showDialog}
-          style={{ width: "50vw" }}
+          style={{ width: "80vw", height: "50vw" }}
           footer={
             !codeSubmitted ? (
               dialogFooter
@@ -345,8 +349,8 @@ class KanbanItem extends React.Component {
             <InputTextarea
               value={codeText}
               onChange={this.handleCodeChange}
-              rows={5}
-              cols={30}
+              rows={20}
+              cols={100}
             />
           )}
         </Dialog>

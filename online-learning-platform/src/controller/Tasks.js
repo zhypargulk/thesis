@@ -15,7 +15,10 @@ import {
 export const getAllTasks = async (groupId) => {
   try {
     const tasksRef = collection(db, "tasks");
-    const tasksQuery = query(tasksRef, where("group_id", "==", groupId));
+
+    const groupRef = doc(db, "groups", groupId);
+
+    const tasksQuery = query(tasksRef, where("groupRef", "==", groupRef));
 
     const taskSnapshot = await getDocs(tasksQuery);
 
@@ -57,6 +60,10 @@ export const createTask = async (
 
     await updateDoc(userDocRef, {
       tasks: arrayUnion(taskRef.id),
+    });
+
+    await updateDoc(taskRef, {
+      _id: taskRef.id,
     });
 
     await updateDoc(groupDocRef, {
@@ -105,5 +112,18 @@ export const uploadTheTask = async (taskId, code) => {
     });
   } catch (error) {
     console.error("Error updating task status:", error);
+  }
+};
+
+export const updateGroupTaskStatus = async (groupId, output, finishedTask) => {
+  const groupDocRef = doc(db, "groups", groupId);
+
+  try {
+    await updateDoc(groupDocRef, {
+      output: output,
+      finishedTask: finishedTask,
+    });
+  } catch (error) {
+    console.error("Error updating the group:", error);
   }
 };

@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { fetchCourses } from "../../controller/Courses";
+import { fetchMyCourses } from "../../controller/Courses";
 import { InputText } from "primereact/inputtext";
 import { useNavigate } from "react-router-dom";
 import MenubarCustom from "../menu/Menubar";
-import img from "./images/earth.png";
-import moon from "./images/Planet=Moon.png";
-import CardCourse from "./CardCourse";
-import "./CourseDashboard.css";
+import img from "../courses/images/earth.png";
+import moon from "../courses/images/Planet=Moon.png";
+import CardMyCourse from "./CardMyCourse";
+import "./EnrolledCourses.css";
 
-const CourseDashboard = () => {
+const EnrolledCourses = () => {
   const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchCourses();
+        const response = await fetchMyCourses();
         setCourses(response);
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -38,7 +37,7 @@ const CourseDashboard = () => {
     <>
       <MenubarCustom />
       <div className="flex align-items-center justify-content-center mt-4 head-text">
-        <span className=" text-6xl course-color">Course Dashboard</span>
+        <span className=" text-6xl course-color">Your enrolled courses</span>
       </div>
       <img src={img} className="absolute top-0 right-0" alt="Earth" />
       <img
@@ -55,10 +54,16 @@ const CourseDashboard = () => {
           placeholder="Find the course"
         />
       </div>
+      <br></br>
+      {filteredCourses.length === 0 && (
+        <div className="flex align-items-center justify-content-center mt-4">
+          <p className=" text-white">You haven't enrolled to any course</p>
+        </div>
+      )}
       <div className="grid m-3">
         {filteredCourses.map((course) => (
           <div key={course.docId} className="col-12 col-md-4 w-30rem m-3">
-            <CardCourse
+            <CardMyCourse
               title={course.title}
               imageUrl={course.imageUrl}
               desc={course.description}
@@ -71,4 +76,4 @@ const CourseDashboard = () => {
   );
 };
 
-export default CourseDashboard;
+export default EnrolledCourses;

@@ -51,6 +51,7 @@ const FinalProject = () => {
     }
   };
 
+  console.log(students);
   useEffect(() => {
     fetchStudents();
   }, [user]);

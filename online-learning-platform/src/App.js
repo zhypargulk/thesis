@@ -28,6 +28,7 @@ import GroupBoard from "./components/groups/GroupBoard";
 import ManageGroup from "./components/groups/ManageGroup";
 import Test from "./components/Test";
 import Kanban from "./components/groups/Kanban";
+import EnrolledCourses from "./components/mycourses/EnrolledCourses";
 
 const App = () => {
   return (
@@ -40,6 +41,7 @@ const App = () => {
         <Route path="/ide" element={<OnlineIDE />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/courses" element={<CourseDashboard />} />
+        <Route path="/mycourses" element={<EnrolledCourses />} />
         <Route path="/create" element={<CreateCourse />} />
         <Route path="/course/:docId/task" element={<FinalProject />} />
         <Route path="/courses/:docId" element={<CourseDetails />} />

@@ -1,39 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { fetchStudentCoursesAndGroups } from "../../controller/Groups"; // Import the function
+import { fetchStudentCoursesAndGroups } from "../../controller/Groups";
 import { useAuth } from "../../context/AuthContext";
 import CardGroup from "./CardGroup";
 import MenubarCustom from "../menu/Menubar";
 import { InputText } from "primereact/inputtext";
 
 const GroupsComponent = () => {
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  const [data, setData] = useState([]); // Initialize to an empty array
+  const [filteredData, setFilteredData] = useState([]); // Initialize to an empty array
   const user = useAuth();
-  const [userId, setUserId] = useState();
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    if (user) {
-      setUserId(user.uid);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        if (user && user.uid) {
+    if (user && user.uid) {
+      const fetchCourses = async () => {
+        try {
           const fetchData = await fetchStudentCoursesAndGroups(user.uid);
-
           setData(fetchData);
           setFilteredData(fetchData);
+        } catch (error) {
+          console.error("Error fetching courses:", error);
         }
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
+      };
 
-    fetchCourses();
-  }, [userId]);
+      fetchCourses();
+    }
+  }, [user]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -41,17 +33,17 @@ const GroupsComponent = () => {
 
   useEffect(() => {
     const filteredCourses = data.filter((course) =>
-      course.courseData.title.toLowerCase().includes(searchTerm.toLowerCase())
+      course.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filteredCourses);
-  }, [searchTerm]);
+  }, [searchTerm, data]);
 
   return (
     <>
       <MenubarCustom />
       <div>
         <div className="flex align-items-center justify-content-center mt-4 head-text">
-          <span className=" text-6xl course-color">Your groups</span>
+          <span className="text-6xl course-color">Your groups</span>
         </div>
         <div className="flex align-items-center justify-content-center mt-4">
           <InputText
@@ -63,12 +55,10 @@ const GroupsComponent = () => {
         </div>
         <div className="grid m-3">
           {filteredData.map((item) => (
-            <div className="col-12 col-md-4 w-30rem m-3">
+            <div key={item.groupId} className="col-12 col-md-4 w-30rem m-3">
               <CardGroup
-                key={item.docId}
-                title={item.courseData.title}
-                imageUrl={item.courseData.imageUrl}
-                id={item.courseData.docId}
+                title={item.title} // Direct access
+                imageUrl={item.imageUrl} // Direct access
                 groupId={item.groupId}
               />
             </div>

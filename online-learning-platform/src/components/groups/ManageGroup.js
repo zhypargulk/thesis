@@ -138,6 +138,7 @@ const ManageGroup = () => {
     setTasks(updatedTasks);
   };
 
+  console.log(data.courseId);
   const handleCreateTasks = async () => {
     try {
       if (user.uid && data) {
@@ -148,7 +149,7 @@ const ManageGroup = () => {
             "new",
             task.description,
             task.title,
-            data.courseId
+            data.docId
           );
         }
       }

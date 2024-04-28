@@ -108,15 +108,15 @@ export default function MenubarCustom() {
             activeItem === "/notifications" ? "underline" : ""
           }`}
         >
-          Notifications
+          My Courses
         </p>
       ),
       icon: (
         <p>
-          <i className="pi pi-bell mr-2"></i>
+          <i className="pi pi-book mr-2"></i>
         </p>
       ),
-      command: () => handleNavigation("/notifications"),
+      command: () => handleNavigation("/mycourses"),
     },
     {
       label: (

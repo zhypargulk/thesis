@@ -19,6 +19,15 @@
     border-radius: 8px;
     white-space: pre-wrap;
     word-wrap: break-word;
-    font-family: 'Courier New', Courier, monospace; /* Ensures code is displayed with a monospaced font */
-    overflow-x: auto; /* Adds a horizontal scrollbar if the code overflows */
+    font-family: 'Courier New', Courier, monospace; 
+    overflow-x: auto; 
+}
+
+.task-container {
+    min-width: 250px;
+    max-width: 450px;
+    max-height: 100vh; /* Control the height of the scrollable area */
+    overflow-y: auto; /* Enables vertical scrolling */
+    padding: 20px;
+    background-color: #473EAC;
 }

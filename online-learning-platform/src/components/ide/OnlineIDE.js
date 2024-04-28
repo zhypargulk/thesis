@@ -9,8 +9,8 @@ import { java } from "@codemirror/lang-java";
 import { cpp } from "@codemirror/lang-cpp";
 import axios from "axios";
 import MenubarCustom from "../menu/Menubar";
-import { getAllTasks } from "../../controller/Tasks";
-import { updateGroupAnswer } from "../../controller/Groups";
+import { getAllTasks, updateGroupTaskStatus } from "../../controller/Tasks";
+import { updateGroupAnswer, getCourseByRef } from "../../controller/Groups";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Message } from "primereact/message";
@@ -62,20 +62,24 @@ function OnlineIDE() {
     const fetchTasks = async () => {
       if (docId) {
         const fetchedTasks = await getAllTasks(docId);
-        const getAnswer = await getDocumentById(
-          "courses",
-          fetchedTasks[0].courseId
-        );
+        if (fetchedTasks.length !== 0) {
+          const courseRef = fetchedTasks[0].courseRef;
+          const courseData = await getCourseByRef(courseRef);
 
-        const group = await getDocumentById("groups", docId);
-        setIsCorrect(group.success);
-        setTasks(fetchedTasks);
-        setAnswer(getAnswer.answer);
-        const codes = fetchedTasks
-          .filter((task) => task.code)
-          .map((task) => task.code);
-        const allCodeString = codes.join("\n");
-        setAllCode(allCodeString);
+          const group = await getDocumentById("groups", docId);
+          setIsCorrect(group.success);
+          setTasks(fetchedTasks);
+          if (group && group.output) {
+            setOutput(group.output);
+          }
+
+          setAnswer(courseData.answer);
+          const codes = fetchedTasks
+            .filter((task) => task.code)
+            .map((task) => task.code);
+          const allCodeString = codes.join("\n");
+          setAllCode(allCodeString);
+        }
       }
     };
 
@@ -83,10 +87,24 @@ function OnlineIDE() {
   }, []);
 
   useEffect(() => {
-    if (output == answer) {
-      setIsCorrect(true);
-    } else {
-      setIsCorrect(false);
+    if (output) {
+      if (String(output).trim() == String(answer).trim()) {
+        setCheckAnswer({
+          status: "success",
+          message: "Code execution successful!",
+        });
+        updateGroupAnswer(docId, true);
+        setIsCorrect(true);
+        updateGroupTaskStatus(docId, output, true);
+      } else {
+        setCheckAnswer({
+          status: "error",
+          message: `Error! Code execution failed! The answer is "${answer}"`,
+        });
+        setIsCorrect(false);
+        updateGroupAnswer(docId, false);
+        updateGroupTaskStatus(docId, output, false);
+      }
     }
   }, [output]);
 
@@ -103,6 +121,7 @@ function OnlineIDE() {
         response.data.data !== "" ? response.data.data : response.data.error
       );
 
+      // This check may be using the old value of output
       if (String(response.data.data).trim() == String(answer).trim()) {
         setCheckAnswer({
           status: "success",
@@ -198,15 +217,7 @@ function OnlineIDE() {
             className="p-button-success mt-2 h-3"
           />
         </div>
-        <div
-          className="flex flex-column"
-          style={{
-            minWidth: "250px",
-            maxWidth: "450px",
-            padding: "20px",
-            backgroundColor: "#473EAC",
-          }}
-        >
+        <div className="task-container">
           <h2 className="task-title text-white">
             Get all completed tasks code
           </h2>

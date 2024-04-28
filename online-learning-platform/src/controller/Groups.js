@@ -13,12 +13,7 @@ import {
 } from "firebase/firestore";
 import { fetchUserData } from "../controller/User";
 
-export const createGroupWithModifications = async (
-  docId,
-  selectedStudents,
-  studentsIds,
-  userId
-) => {
+export const createGroupWithModifications = async (docId, selectedStudents) => {
   try {
     const groupCollectionRef = collection(db, "groups");
     const courseDocRef = doc(db, "courses", docId);
@@ -63,37 +58,36 @@ export const fetchStudentCoursesAndGroups = async (userId) => {
   try {
     const userDocRef = doc(db, "user", userId);
     const groupCollectionRef = collection(db, "groups");
-
     const groupsQuery = query(
       groupCollectionRef,
       where("students", "array-contains", userDocRef)
     );
     const querySnapshot = await getDocs(groupsQuery);
 
-    const coursesAndGroups = await Promise.all(
-      querySnapshot.docs.map(async (groupDoc) => {
-        const groupData = groupDoc.data();
-        const courseDocRef = groupData.courseDocRef;
-        const courseDocSnapshot = await getDoc(courseDocRef);
+    const coursesAndGroups = [];
 
-        let courseData = {};
-        if (courseDocSnapshot.exists()) {
-          courseData = courseDocSnapshot.data();
-        }
+    for (const groupDoc of querySnapshot.docs) {
+      const groupData = groupDoc.data();
+      const courseDocRef = groupData.courseDocRef;
+      const courseDocSnapshot = await getDoc(courseDocRef);
 
-        return {
-          groupId: groupDoc.id,
-          groupData: groupData,
-          courseId: courseDocRef.id,
-          courseData: courseData,
-        };
-      })
-    );
+      let courseData;
+      if (courseDocSnapshot.exists()) {
+        courseData = courseDocSnapshot.data();
+      }
+
+      coursesAndGroups.push({
+        groupId: String(groupDoc.id),
+        courseId: courseDocRef.id,
+        title: courseData.title,
+        imageUrl: courseData.imageUrl,
+      });
+    }
 
     return coursesAndGroups;
   } catch (error) {
     console.error("Error fetching courses and groups for the student: ", error);
-    throw error; // Re-throw the error for handling by the caller
+    return [];
   }
 };
 
@@ -172,7 +166,26 @@ export const addLeaderToGroup = async (groupId, userId) => {
     console.log("Leader added to group:", userId);
   } catch (error) {
     console.error("Error adding leader to group:", error);
-    throw error;
+  }
+};
+
+export const getLeaderOfGroup = async (groupId) => {
+  try {
+    const groupDocRef = doc(db, "groups", groupId);
+    const groupDocSnap = await getDoc(groupDocRef);
+
+    if (groupDocSnap.exists()) {
+      const groupData = groupDocSnap.data();
+
+      if (groupData.leaderGroup) {
+        return await getLeaderByRef(groupData.leaderGroup);
+      } else {
+        return "no leader";
+      }
+    }
+  } catch (error) {
+    console.error("Error retrieving leader of the group:", error);
+    return "no leader";
   }
 };
 
@@ -232,5 +245,29 @@ export const getLeaderByRef = async (ref) => {
     return docSnapshot.data();
   } catch (error) {
     console.error("Error retrieving leader data:", error);
+  }
+};
+
+export const getCourseByGroupId = async (id) => {
+  try {
+    const groupDocRef = doc(db, "groups", id);
+
+    const groupDocSnapshot = await getDoc(groupDocRef);
+
+    if (!groupDocSnapshot.exists()) {
+      console.error("Group document does not exist.");
+    }
+
+    const groupData = groupDocSnapshot.data();
+
+    if (!groupData.courseDocRef) {
+      console.error("Course document reference not found in group data.");
+      return null;
+    }
+
+    const courseData = await getCourseByRef(groupData.courseDocRef);
+    return courseData;
+  } catch (error) {
+    console.error("Error retrieving course data:", error);
   }
 };

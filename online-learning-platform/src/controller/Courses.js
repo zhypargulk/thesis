@@ -11,47 +11,89 @@ import {
   doc,
   arrayUnion,
 } from "firebase/firestore";
-import { db, storage } from "../config/firebase";
+import { auth, db, storage } from "../config/firebase";
 
 const courseCollectionRef = collection(db, "courses");
 
-export const createCourse = async (imageCourse, object, lessons) => {
+// export const createCourse = async (imageCourse, object, lessons) => {
+//   try {
+//     const imageRef = ref(storage, `images/${imageCourse.name + v4()}`);
+//     await uploadBytes(imageRef, imageCourse);
+
+//     const imageUrl = await getDownloadURL(imageRef);
+//     object.imageUrl = imageUrl;
+//     const courseDocRef = await addDoc(courseCollectionRef, object);
+//     await updateDoc(courseDocRef, { docId: courseDocRef.id });
+
+//     // const lessonCollectionRef = collection(courseDocRef, "lessons");
+//     const lessonCollectionRef = collection(
+//       db,
+//       `courses/${courseDocRef.id}/lessons`
+//     );
+
+//     for (let i = 0; i < lessons.length; i++) {
+//       const lesson = lessons[i];
+//       const lessonId = v4();
+//       await addDoc(lessonCollectionRef, {
+//         id: lessonId,
+//         title: lesson.title,
+//         description: lesson.description,
+//         videoURL: lesson.videoURL,
+//         lessonNumber: i + 1,
+//       });
+//     }
+
+//     const lessonsQuerySnapshot = await getDocs(lessonCollectionRef);
+//     const lessonsData = lessonsQuerySnapshot.docs.map((doc) => ({
+//       id: doc.id,
+//       ...doc.data(),
+//     }));
+
+//     await updateDoc(courseDocRef, { lessons: lessonsData });
+//   } catch (error) {
+//     console.error("An error occurred:", error);
+//   }
+// };
+
+export const createCourse = async (imageCourse, courseObject, lessons) => {
   try {
-    const imageRef = ref(storage, `images/${imageCourse.name + v4()}`);
+    const imageRef = ref(storage, `images/${imageCourse.name}-${v4()}`);
     await uploadBytes(imageRef, imageCourse);
-
     const imageUrl = await getDownloadURL(imageRef);
-    object.imageUrl = imageUrl;
-    const courseDocRef = await addDoc(courseCollectionRef, object);
-    await updateDoc(courseDocRef, { docId: courseDocRef.id });
 
-    // const lessonCollectionRef = collection(courseDocRef, "lessons");
-    const lessonCollectionRef = collection(
-      db,
-      `courses/${courseDocRef.id}/lessons`
-    );
+    courseObject.imageUrl = imageUrl;
 
+    const courseDocRef = await addDoc(collection(db, "courses"), courseObject);
+    await updateDoc(courseDocRef, {
+      docId: courseDocRef.id,
+    });
+
+    const lessonsCollectionRef = collection(db, "lessons");
     for (let i = 0; i < lessons.length; i++) {
       const lesson = lessons[i];
-      const lessonId = v4();
-      await addDoc(lessonCollectionRef, {
-        id: lessonId,
+
+      const lessonRef = await addDoc(lessonsCollectionRef, {
         title: lesson.title,
         description: lesson.description,
         videoURL: lesson.videoURL,
         lessonNumber: i + 1,
+        docId: courseDocRef.id,
+        course: courseDocRef,
+      });
+
+      await updateDoc(courseDocRef, {
+        lessons: arrayUnion(lessonRef),
+      });
+
+      await updateDoc(lessonRef, {
+        lessonId: lessonRef.id,
       });
     }
-
-    const lessonsQuerySnapshot = await getDocs(lessonCollectionRef);
-    const lessonsData = lessonsQuerySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
-    await updateDoc(courseDocRef, { lessons: lessonsData });
   } catch (error) {
-    console.error("An error occurred:", error);
+    console.error(
+      "An error occurred while creating the course and lessons:",
+      error
+    );
   }
 };
 
@@ -64,6 +106,32 @@ export const fetchCourses = async () => {
       const course = doc.data();
       fetchedCourses.push(course);
     });
+    return fetchedCourses;
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    return [];
+  }
+};
+
+export const fetchMyCourses = async () => {
+  try {
+    const userRef = doc(db, "user", auth.currentUser.uid); // Creating a reference to the user's document
+    const courseCollectionRef = collection(db, "courses");
+
+    // Create a query against the collection.
+    const q = query(
+      courseCollectionRef,
+      where("students", "array-contains", userRef)
+    );
+
+    const querySnapshot = await getDocs(q);
+    const fetchedCourses = [];
+    querySnapshot.forEach((doc) => {
+      let course = doc.data();
+      course.id = doc.id; // Add document ID to the course data
+      fetchedCourses.push(course);
+    });
+
     return fetchedCourses;
   } catch (error) {
     console.error("Error fetching courses:", error);
@@ -108,7 +176,7 @@ export const checkUserEnrollment = async (uid, docId) => {
     const userSnapshot = await getDoc(userDocRef);
     if (true) {
       const enrollments = userSnapshot.data().enrollments || [];
-      const isEnrolled = enrollments.includes(docId);
+      const isEnrolled = enrollments.some((item) => item.id === docId);
       return isEnrolled;
     }
   } catch (error) {
@@ -120,13 +188,13 @@ export const checkUserEnrollment = async (uid, docId) => {
 export const enrollUserInCourse = async (uid, courseDocId) => {
   try {
     const courseDocRef = doc(db, "courses", courseDocId);
+    const userDocRef = doc(db, "user", uid);
     await updateDoc(courseDocRef, {
-      students: arrayUnion(uid),
+      students: arrayUnion(userDocRef),
     });
 
-    const userDocRef = doc(db, "user", uid);
     await updateDoc(userDocRef, {
-      enrollments: arrayUnion(courseDocId),
+      enrollments: arrayUnion(courseDocRef),
     });
 
     return true;
@@ -145,5 +213,134 @@ export const getDocumentById = async (collectionPath, documentId) => {
   } catch (error) {
     console.error("Error getting document:", error);
     throw error;
+  }
+};
+
+export const fetchLessonsByReferences = async (lessonsRef) => {
+  const lessons = [];
+
+  for (const lessonRef of lessonsRef) {
+    try {
+      const lessonSnapshot = await getDoc(lessonRef);
+      if (lessonSnapshot.exists()) {
+        lessons.push({
+          id: lessonSnapshot.id,
+          ...lessonSnapshot.data(),
+        });
+      } else {
+        console.log("No data found for:", lessonRef.id);
+      }
+    } catch (error) {
+      console.error("Error fetching lesson data:", error);
+    }
+  }
+
+  const sortedLessons = lessons.sort((a, b) => a.lessonNumber - b.lessonNumber);
+  return sortedLessons;
+};
+
+export const markLessonAsDone = async (lessonId, uid) => {
+  const userRef = doc(db, "user", uid);
+  const lessonRef = doc(db, "lessons", lessonId);
+
+  try {
+    await updateDoc(lessonRef, {
+      students: arrayUnion(userRef),
+    });
+  } catch (error) {
+    console.error("Error marking lesson as done:", error);
+  }
+};
+
+export const fetchAllLessonsWithCompletionStatus = async (courseId, userId) => {
+  const lessonsRef = collection(db, "lessons");
+  const courseRef = doc(db, "courses", courseId);
+  const userRef = doc(db, "user", userId);
+
+  const q = query(lessonsRef, where("course", "==", courseRef));
+
+  try {
+    const querySnapshot = await getDocs(q);
+    const lessons = [];
+
+    for (const docSnapshot of querySnapshot.docs) {
+      const data = docSnapshot.data();
+
+      let checked = false;
+      if (data.students) {
+        for (const studentRef of data.students) {
+          const studentDoc = await getDoc(studentRef);
+          if (studentDoc.id === userRef.id) {
+            checked = true;
+            break;
+          }
+        }
+      }
+
+      lessons.push({
+        id: docSnapshot.id,
+        ...data,
+        checked: checked,
+      });
+    }
+
+    const sortedLessons = lessons.sort(
+      (a, b) => a.lessonNumber - b.lessonNumber
+    );
+    return sortedLessons;
+  } catch (error) {
+    console.error("Error fetching lessons:", error);
+    return [];
+  }
+};
+
+export const fetchLastCompletedLesson = async (courseId, userId) => {
+  const lessonsRef = collection(db, "lessons");
+  const courseRef = doc(db, "courses", courseId);
+  const userRef = doc(db, "user", userId);
+
+  const q = query(lessonsRef, where("course", "==", courseRef));
+
+  try {
+    const querySnapshot = await getDocs(q);
+    const lessons = [];
+
+    for (const docSnapshot of querySnapshot.docs) {
+      const data = docSnapshot.data();
+
+      let checked = false;
+      if (data.students) {
+        for (const studentRef of data.students) {
+          const studentDoc = await getDoc(studentRef);
+          if (studentDoc.id === userRef.id) {
+            checked = true;
+            break;
+          }
+        }
+      }
+
+      lessons.push({
+        id: docSnapshot.id,
+        ...data,
+        checked: checked,
+      });
+    }
+
+    const sortedLessons = lessons.sort(
+      (a, b) => a.lessonNumber - b.lessonNumber
+    );
+
+    const firstIncompleteLessonIndex = sortedLessons.findIndex(
+      (lesson) => !lesson.checked
+    );
+
+    if (firstIncompleteLessonIndex === -1) {
+      return lessons.length;
+    }
+
+    return firstIncompleteLessonIndex + 1;
+  } catch (error) {
+    console.error("Error fetching lessons:", error);
+    return [];
   }
 };

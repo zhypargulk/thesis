@@ -41,13 +41,13 @@ const ChatGroup = () => {
         setMessages(msgs);
       });
 
-      return () => unsubscribe(); // Clean up the subscription when the component unmounts or docId changes
+      return () => unsubscribe();
     }
   }, [docId]);
 
   useEffect(() => {
     endOfMessagesRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]); // Scroll to bottom every time messages update
+  }, [messages]);
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -65,7 +65,7 @@ const ChatGroup = () => {
 
   return (
     <div className="Chat">
-      <div>
+      <div className="flex align-items-center justify-content-center mt-4 ">
         <h1 className="text-white">Chat for the Group</h1>
       </div>
       <div className="chat-section">

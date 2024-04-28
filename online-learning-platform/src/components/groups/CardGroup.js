@@ -3,14 +3,18 @@ import { Card } from "primereact/card";
 import "../courses/CardCourse.css";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import { fetchStudentsInGroup, getLeaderByRef } from "../../controller/Groups";
+import {
+  fetchStudentsInGroup,
+  getLeaderByRef,
+  getLeaderOfGroup,
+} from "../../controller/Groups";
 import "./CardGroup.css";
 import { getDocumentById } from "../../controller/Courses";
 
 const CardGroup = ({ title, imageUrl, groupId }) => {
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
-  const [leader, setLeader] = useState([]);
+  const [leader, setLeader] = useState();
   const [group, setGroup] = useState([]);
 
   const header = (
@@ -28,10 +32,12 @@ const CardGroup = ({ title, imageUrl, groupId }) => {
       if (groupId) {
         const students = await fetchStudentsInGroup(groupId);
         const groupData = await getDocumentById("groups", groupId);
+        const st = students.map((item) => item.name);
         setGroup(groupData);
-        setStudents(students.map((item) => item.name));
+        setStudents(st);
         if (groupData.leaderGroup) {
           const leadData = await getLeaderByRef(groupData.leaderGroup);
+          console.log(leadData);
           setLeader(leadData);
         }
       }
@@ -47,13 +53,16 @@ const CardGroup = ({ title, imageUrl, groupId }) => {
         icon="pi pi-check"
         onClick={onClickBoard}
       />
-      <Button label="Open the Board" onClick={() => {}} />
+      <Button
+        label="Open the Board"
+        onClick={() => navigate(`/groups/${groupId}/board`)}
+      />
     </div>
   );
 
   useEffect(() => {
     fetchStudents();
-  }, [groupId]);
+  }, []);
 
   return (
     <div className=" flex justify-content-center">
@@ -65,12 +74,14 @@ const CardGroup = ({ title, imageUrl, groupId }) => {
               <b>All members of group: </b>
               {students.join(", ")}
               <br />
-              <b>Leader: group.</b>
+              <p>
+                {" "}
+                <b>Leader:</b> {leader ? leader.name : "No leader"}
+              </p>
             </span>
           }
           footer={footer}
           header={header}
-          className=""
         >
           <p className="m-0"></p>
         </Card>
