@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { InputText } from "primereact/inputtext";
-import { Panel } from "primereact/panel";
-import { Card } from "primereact/card";
 import { InputTextarea } from "primereact/inputtextarea";
-import { InputNumber } from "primereact/inputnumber";
 import { Button } from "primereact/button";
 import MenubarCustom from "../menu/Menubar";
 import { db, auth, storage } from "../../config/firebase";
@@ -13,6 +10,8 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { createCourse } from "../../controller/Courses"; // Import CSS file
 import { doc } from "firebase/firestore";
+import { Toast } from "primereact/toast";
+
 import "./CreateCourse.css";
 
 const CreateCourse = () => {
@@ -20,12 +19,10 @@ const CreateCourse = () => {
   const [newCourseDescription, setNewCourseDescription] = useState("");
   const [newTaskDescription, setNewTaskDescription] = useState("");
   const [newAnswer, setNewAnswer] = useState("");
-
-  const [arrayForClasses, setArrayForClasses] = useState([]);
   const [imageCourse, setImageCourse] = useState(null);
   const [lessons, setLessons] = useState([]);
-  const navigate = useNavigate();
   const user = useAuth();
+  const toast = useRef(null);
 
   const handleCreateCourse = async () => {
     try {
@@ -51,14 +48,24 @@ const CreateCourse = () => {
         user: doc(db, "user/" + auth?.currentUser?.uid),
       };
       createCourse(imageCourse, obj, lessons);
+      showSuccessCreatedCourse();
       setNewCourseTitle("");
       setNewAnswer("");
       setNewTaskDescription("");
       setNewCourseDescription("");
-      navigate("/");
+      setLessons([]);
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const showSuccessCreatedCourse = () => {
+    toast.current.show({
+      severity: "success",
+      summary: "Success",
+      detail: "New tasks were created",
+      life: 3000,
+    });
   };
 
   const isFormValid = () => {
@@ -89,161 +96,144 @@ const CreateCourse = () => {
   };
 
   return (
-    <div>
+    <>
       <MenubarCustom />
-      <h2 className="mt-4 ml-4">Create New Course</h2>
+      <Toast ref={toast} />
+      <div className="create-course-container">
+        <div className="flex align-items-center justify-content-center mt-4 head-text">
+          <span className="text-6xl course-color">Create New Course</span>
+        </div>
 
-      <Panel header="Course Information">
-        <div className="p-fluid p-formgrid p-grid">
-          <div className="p-field p-col-12 p-md-4 mt-4">
-            <label htmlFor="title">
-              Title: <sup>*</sup>
-            </label>
-            <InputText
-              id="title"
-              value={newCourseTitle}
-              onChange={(e) => setNewCourseTitle(e.target.value)}
-              className="mt-4"
-            />
-          </div>
-          <div className="p-field p-col-12 p-md-4 mt-4">
-            <label htmlFor="courseImage">
-              Course Image: <sup>*</sup>
-            </label>
-            <input
-              className="flex mt-4"
-              type="file"
-              accept="image/*"
-              onChange={(event) => {
-                setImageCourse(event.target.files[0]);
-              }}
-            />
-          </div>
-          <div className="p-field p-col-12 p-md-8 mt-4">
-            <label htmlFor="description">
-              Description: <sup>*</sup>
-            </label>
-            <InputTextarea
-              id="description"
-              value={newCourseDescription}
-              onChange={(e) => setNewCourseDescription(e.target.value)}
-              rows={5}
-              cols={30}
-              className="mt-4"
-            />
-          </div>
-
-          <div className="p-field p-col-12 p-md-8 mt-5">
-            <label htmlFor="description">
-              Final project task description: <sup>*</sup>
-            </label>
-            <InputTextarea
-              id="description"
-              value={newTaskDescription}
-              onChange={(e) => setNewTaskDescription(e.target.value)}
-              rows={5}
-              cols={30}
-              className="mt-4"
-            />
-          </div>
-          <div className="p-field p-col-12 p-md-8 mt-4">
-            <label htmlFor="description">
-              Answer for final project: <sup>*</sup>
-            </label>
-            <InputTextarea
-              id="description"
-              value={newAnswer}
-              onChange={(e) => setNewAnswer(e.target.value)}
-              rows={5}
-              cols={30}
-              className="mt-4"
-            />
+        <div className="course-panel">
+          <div className="p-formgrid p-grid">
+            <div className="form-field p-col-12 p-md-4">
+              <label htmlFor="title">
+                Title: <sup>*</sup>
+              </label>
+              <InputText
+                id="title"
+                value={newCourseTitle}
+                onChange={(e) => setNewCourseTitle(e.target.value)}
+              />
+            </div>
+            <div className="form-field p-col-12 p-md-4">
+              <label htmlFor="courseImage">
+                Course Image: <sup>*</sup>
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(event) => setImageCourse(event.target.files[0])}
+              />
+            </div>
+            <div className="form-field p-col-12 p-md-8">
+              <label htmlFor="description">
+                Description: <sup>*</sup>
+              </label>
+              <InputTextarea
+                id="description"
+                value={newCourseDescription}
+                onChange={(e) => setNewCourseDescription(e.target.value)}
+                rows={5}
+                cols={30}
+              />
+            </div>
+            <div className="form-field p-col-12 p-md-8">
+              <label htmlFor="taskDescription">
+                Final Project Task Description: <sup>*</sup>
+              </label>
+              <InputTextarea
+                id="taskDescription"
+                value={newTaskDescription}
+                onChange={(e) => setNewTaskDescription(e.target.value)}
+                rows={5}
+                cols={30}
+              />
+            </div>
+            <div className="form-field p-col-12 p-md-8">
+              <label htmlFor="answer">
+                Answer for Final Project: <sup>*</sup>
+              </label>
+              <InputTextarea
+                id="answer"
+                value={newAnswer}
+                onChange={(e) => setNewAnswer(e.target.value)}
+                rows={5}
+                cols={30}
+              />
+            </div>
           </div>
         </div>
-      </Panel>
-      <div>
+
         {lessons.map((lesson, index) => (
-          <Panel
-            key={index}
-            header={`Lesson Form ${index + 1}`}
-            className="mt-4 w-full"
-          >
-            <Card className="mt-3">
-              <div className="p-fluid p-formgrid p-grid">
-                <div className="p-field p-col-12 p-md-4 mt-4">
-                  <label htmlFor={`lessonTitle${index}`}>
-                    Lesson Title: <sup>*</sup>
-                  </label>
-                  <InputText
-                    id={`lessonTitle${index}`}
-                    value={lesson.title}
-                    onChange={(event) => {
-                      const updatedLessons = [...lessons];
-                      updatedLessons[index].title = event.target.value;
-                      setLessons(updatedLessons);
-                    }}
-                    className="mt-4"
-                  />
-                </div>
-
-                <div className="p-field p-col-12 p-md-8 mt-4">
-                  <label htmlFor={`lessonDescription${index}`}>
-                    Lesson Description: <sup>*</sup>
-                  </label>
-                  <InputTextarea
-                    id={`lessonDescription${index}`}
-                    value={lesson.description}
-                    onChange={(e) => {
-                      const updatedLessons = [...lessons];
-                      updatedLessons[index].description = e.target.value;
-                      setLessons(updatedLessons);
-                    }}
-                    rows={5}
-                    cols={30}
-                    className="mt-4"
-                  />
-                </div>
-
-                <div className="p-field p-col-12 p-md-8 mt-4">
-                  <label htmlFor="courseImage">
-                    Lesson video or image: <sup>*</sup>
-                  </label>
-                  <input
-                    className="flex mt-4"
-                    type="file"
-                    accept="video/*,image/*"
-                    onChange={(e) => {
-                      const updatedLessons = [...lessons];
-                      updatedLessons[index].videoURL = e.target.files[0];
-                      setLessons(updatedLessons);
-                    }}
-                  />
-                </div>
+          <div key={index} className="lesson-panel">
+            <div className="p-formgrid p-grid">
+              <div className="form-field p-col-12 p-md-4">
+                <label htmlFor={`lessonTitle${index}`}>
+                  Lesson Title: <sup>*</sup>
+                </label>
+                <InputText
+                  id={`lessonTitle${index}`}
+                  value={lesson.title}
+                  onChange={(event) => {
+                    const updatedLessons = [...lessons];
+                    updatedLessons[index].title = event.target.value;
+                    setLessons(updatedLessons);
+                  }}
+                />
+              </div>
+              <div className="form-field p-col-12 p-md-8">
+                <label htmlFor={`lessonDescription${index}`}>
+                  Lesson Description: <sup>*</sup>
+                </label>
+                <InputTextarea
+                  id={`lessonDescription${index}`}
+                  value={lesson.description}
+                  onChange={(event) => {
+                    const updatedLessons = [...lessons];
+                    updatedLessons[index].description = event.target.value;
+                    setLessons(updatedLessons);
+                  }}
+                  rows={5}
+                  cols={30}
+                />
+              </div>
+              <div className="form-field p-col-12 p-md-8">
+                <label htmlFor={`lessonVideo${index}`}>
+                  Lesson Video or Image: <sup>*</sup>
+                </label>
+                <input
+                  type="file"
+                  accept="video/*, image/*"
+                  onChange={(event) => {
+                    const updatedLessons = [...lessons];
+                    updatedLessons[index].videoURL = event.target.files[0];
+                    setLessons(updatedLessons);
+                  }}
+                />
               </div>
               <Button
-                icon="pi pi-trash"
-                className="p-button-rounded p-button-success mt-4"
+                label="Delete the Lesson"
+                className="button"
                 onClick={() => removeLesson(index)}
-                label="Delete the lesson"
               />
-            </Card>
-          </Panel>
+            </div>
+          </div>
         ))}
+
         <Button
-          icon="pi pi-plus"
-          className="p-button-rounded p-button-success mt-3"
-          onClick={addNewLesson}
           label="Add New Lesson"
+          className="button"
+          onClick={addNewLesson}
         />
         <Button
-          type="button"
           label="Create Course"
+          className="button"
           onClick={handleCreateCourse}
           disabled={!isFormValid()}
-          className="mt-3 ml-8 p-button-rounded w-20rem"
         />
       </div>
-    </div>
+    </>
   );
 };
 

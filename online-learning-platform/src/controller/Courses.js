@@ -344,3 +344,20 @@ export const fetchLastCompletedLesson = async (courseId, userId) => {
     return [];
   }
 };
+
+export const fetchMyCreatedCourses = async (userId) => {
+  try {
+    const coursesCollection = collection(db, "courses");
+    const userDocRef = doc(db, "user", userId);
+    const q = query(coursesCollection, where("user", "==", userDocRef));
+    const querySnapshot = await getDocs(q);
+    const courses = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    console.log(courses);
+    return courses;
+  } catch (error) {
+    console.error("Failed to fetch courses: ", error);
+  }
+};

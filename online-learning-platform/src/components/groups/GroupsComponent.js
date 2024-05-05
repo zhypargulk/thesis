@@ -57,8 +57,8 @@ const GroupsComponent = () => {
           {filteredData.map((item) => (
             <div key={item.groupId} className="col-12 col-md-4 w-30rem m-3">
               <CardGroup
-                title={item.title} // Direct access
-                imageUrl={item.imageUrl} // Direct access
+                title={item.title}
+                imageUrl={item.imageUrl}
                 groupId={item.groupId}
               />
             </div>

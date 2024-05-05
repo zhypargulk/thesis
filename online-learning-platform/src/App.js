@@ -10,7 +10,7 @@ import "primereact/resources/primereact.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import "./index.css";
-import "./flag.css";
+// import "./flag.css";
 
 import Auth from "./components/register/auth";
 import LogIn from "./components/login/LogIn";
@@ -29,6 +29,12 @@ import ManageGroup from "./components/groups/ManageGroup";
 import Test from "./components/Test";
 import Kanban from "./components/groups/Kanban";
 import EnrolledCourses from "./components/mycourses/EnrolledCourses";
+import MyCreatedCourses from "./components/created-courses/MyCreatedCourses";
+import EditCourse from "./components/created-courses/EditCourse";
+
+if (process.env.NODE_ENV !== "test") {
+  require("./index.css");
+}
 
 const App = () => {
   return (
@@ -48,6 +54,8 @@ const App = () => {
         <Route path="/groups/:groupId" element={<ManageGroup />} />
         <Route path="/groups" element={<GroupsComponent />} />
         <Route path="/kanban" element={<Kanban />} />
+        <Route path="/createdcourses" element={<MyCreatedCourses />} />
+        <Route path="/edit/:courseId" element={<EditCourse />} />
         <Route path="/groups/:docId/board" element={<GroupBoard />} />
         <Route path="/groups/:docId/ide" element={<OnlineIDE />} />
         <Route path="/notifications" element={<Notifications />} />

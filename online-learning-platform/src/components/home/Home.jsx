@@ -20,11 +20,15 @@ export default function Home() {
     "era of engaged, practical education.";
   const navigate = useNavigate();
   const [authExist, setAuthExist] = useState();
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user && user.displayName) {
+        const newRole = user.displayName.split("-")[1].trim();
+
         setAuthExist(true);
+        setRole(newRole === "Teacher" ? "Teacher" : "Student");
       } else {
         setAuthExist(false);
       }
@@ -49,7 +53,7 @@ export default function Home() {
               <span className="span-text">
                 It is an online learning platform for{" "}
               </span>
-              <span className="text-white text-home">students</span>.
+              <span className="text-white text-home">students</span>
             </h3>
             <div
               style={{
@@ -67,11 +71,17 @@ export default function Home() {
                 label="Register/Login"
                 onClick={() => navigate("/login")}
               />
-            ) : (
+            ) : role === "Student" ? (
               <Button
                 className=" w-full mt-5 mr-3 font-semibold"
                 label="Explore courses"
                 onClick={() => navigate("/courses")}
+              />
+            ) : (
+              <Button
+                className=" w-full mt-5 mr-3 font-semibold"
+                label="Create a new course"
+                onClick={() => navigate("/create")}
               />
             )}
           </div>
