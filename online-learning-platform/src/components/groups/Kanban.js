@@ -8,7 +8,10 @@ import {
   uploadTheTask,
   getAllTasks,
 } from "../../controller/Tasks";
-import { InputTextarea } from "primereact/inputtextarea";
+import CodeMirror from "@uiw/react-codemirror";
+import { vscodeDark } from "@uiw/codemirror-theme-vscode";
+import { Message } from "primereact/message";
+
 import { getDocumentById } from "../../controller/Courses";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
@@ -83,7 +86,6 @@ class Kanban extends React.Component {
     const { id: groupId } = this.props;
     let fetchedTasks = await getAllTasks(groupId);
 
-    console.log(fetchedTasks);
     const tasksWithUserNames = await Promise.all(
       fetchedTasks.map(async (task) => {
         try {
@@ -238,7 +240,7 @@ class KanbanItem extends React.Component {
   };
 
   handleCodeChange = (e) => {
-    this.setState({ codeText: e.target.value });
+    this.setState({ codeText: e });
   };
 
   check = async () => {
@@ -336,9 +338,12 @@ class KanbanItem extends React.Component {
             !codeSubmitted ? (
               dialogFooter
             ) : (
-              <Button className="" onClick={this.uploadCode}>
-                Resubmit the code
-              </Button>
+              <>
+                <Message severity="success" text="Success Message" />
+                <Button className="" onClick={this.uploadCode}>
+                  Resubmit the code
+                </Button>
+              </>
             )
           }
           onHide={this.toggleDialog}
@@ -346,8 +351,10 @@ class KanbanItem extends React.Component {
           {status !== "done" ? (
             <p>{description}</p>
           ) : (
-            <InputTextarea
+            <CodeMirror
               value={codeText}
+              height="600px"
+              theme={vscodeDark}
               onChange={this.handleCodeChange}
               rows={20}
               cols={100}

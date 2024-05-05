@@ -19,3 +19,12 @@
     border: 3px solid #ffffff;
     
 }
+
+.code-input {
+  background-color: #f4f4f4; 
+  border: 1px solid #ccc;
+  color: #333; 
+  line-height: 1.5; 
+  padding: 8px; 
+  tab-size: 4; 
+}

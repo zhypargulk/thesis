@@ -1,7 +1,7 @@
-import { useAuth } from "../context/AuthContext";
+// import { useAuth } from "../context/AuthContext";
 
-export const useAuthenticatedUser = () => {
-  const user = useAuth();
+// export const useAuthenticatedUser = () => {
+//   const user = useAuth();
 
-  return user;
-};
+//   return user;
+// };

@@ -97,6 +97,15 @@ const ManageGroup = () => {
     });
   };
 
+  const showSuccessCreatedTask = () => {
+    toast.current.show({
+      severity: "success",
+      summary: "Success",
+      detail: "New tasks were created",
+      life: 3000,
+    });
+  };
+
   useEffect(() => {
     if (user) {
       setUserId(user.uid);
@@ -138,7 +147,6 @@ const ManageGroup = () => {
     setTasks(updatedTasks);
   };
 
-  console.log(data.courseId);
   const handleCreateTasks = async () => {
     try {
       if (user.uid && data) {
@@ -153,7 +161,9 @@ const ManageGroup = () => {
           );
         }
       }
-      getTasks();
+      // getTasks();
+      showSuccessCreatedTask();
+      setTasks([{ studentId: null, title: "", description: "" }]);
     } catch (error) {
       console.error("Error creating tasks:", error);
     }
@@ -253,7 +263,7 @@ const ManageGroup = () => {
           </p>
           <h1 className="text-white">Assign tasks:</h1>
           <div className=" bg-panel ">
-            <div className="=">
+            <div>
               <div>
                 {tasks.map((task, index) => (
                   <Panel
