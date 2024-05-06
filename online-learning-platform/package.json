@@ -26,6 +26,7 @@
     "axios": "^1.6.7",
     "codemirror": "^6.0.1",
     "firebase": "^10.8.1",
+    "happy-dom": "^14.7.1",
     "immutability-helper": "^2.9.0",
     "jquery": "^3.7.1",
     "lucide-react": "^0.358.0",
@@ -46,7 +47,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "vitest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
