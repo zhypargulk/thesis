@@ -78,6 +78,7 @@ const LogIn = () => {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                
               />
               {emailError && <Message severity="error" text={emailError} />}
             </div>

@@ -10,9 +10,8 @@ import "primereact/resources/primereact.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import "./index.css";
-// import "./flag.css";
 
-import Auth from "./components/register/auth";
+import Auth from "./components/register/Register";
 import LogIn from "./components/login/LogIn";
 import Profile from "./components/profile/Profile";
 import OnlineIDE from "./components/ide/OnlineIDE";

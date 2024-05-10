@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchCourses } from "../../controller/Courses";
 import { InputText } from "primereact/inputtext";
-import { useNavigate } from "react-router-dom";
 import MenubarCustom from "../menu/Menubar";
 import img from "./images/earth.png";
 import moon from "./images/Planet=Moon.png";
@@ -11,7 +10,6 @@ import "./CourseDashboard.css";
 const CourseDashboard = () => {
   const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {

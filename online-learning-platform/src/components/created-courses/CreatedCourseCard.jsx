@@ -1,32 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import { fetchLastCompletedLesson } from "../../controller/Courses";
 import "../courses/CardCourse.css";
 
 const CreatedCourseCard = ({ title, imageUrl, desc, id, groupId }) => {
   const navigate = useNavigate();
   const [showFullDesc, setShowFullDesc] = useState(false);
-  const [lessonNumber, setLessonNumber] = useState();
-  const user = useAuth();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (user && user.uid) {
-          const index = await fetchLastCompletedLesson(id, user.uid);
-          console.log(index);
-          setLessonNumber(index);
-        }
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const truncateDesc = (desc, length = 100) => {
     return desc.length > length && !showFullDesc

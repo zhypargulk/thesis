@@ -1,22 +1,10 @@
-// import React from 'react';
-import { render as rtlRender, screen } from "@testing-library/react";
+import { render , screen } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { auth } from "../../config/firebase"; // ensure path accuracy
 import { act } from "@testing-library/react";
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { vi } from 'vitest';
+import { expect, vi } from 'vitest';
 import { userEvent } from '@testing-library/user-event';
 import Home from './Home';
-
-const render = (component, container) => {
-    return rtlRender(
-      <Provider store={store}>
-        <BrowserRouter>{component}</BrowserRouter>
-      </Provider>,
-      container
-    );
-  };
 
 vi.mock('../../config/firebase', () => ({
   auth: {
@@ -25,8 +13,6 @@ vi.mock('../../config/firebase', () => ({
 }));
 
 const mockNavigate = vi.fn()
-
-
 
 vi.mock('react-router-dom', async () => {
   const client = await vi.importActual('react-router-dom');
@@ -38,11 +24,42 @@ vi.mock('react-router-dom', async () => {
   return res;
 });
 
-describe('MenubarCustom Component', () => {
-  test('renders the teacher menu items when user is a teacher', () => {
-   render(<Home/>);
+const setup = (initialEntry = "/", user = null) => {
+  const userMock = user ? { displayName: user } : null;
+  auth.onAuthStateChanged.mockImplementation(callback => {
+    callback(userMock);
+    return vi.fn(); 
   });
 
+  return render(
+    <RouterProvider router={createMemoryRouter([{ path: initialEntry, element: <Home /> }], { initialEntries: [initialEntry] })} />
+  );
+};
 
+describe('MenubarCustom Component', () => {
+  test('mount title and header', async() => {
+  setup("/", "John - Teacher");
+  const title = screen.getByText('Welcome!');
+  const title2 = screen.getByText('It is an online learning platform for');
+  expect(title).toBeInTheDocument();
+  expect(title2).toBeInTheDocument();
+  });
 
+  test('renders the teacher home page', async() => {
+    setup("/", "John - Teacher");
+    const buttonCreateCourse = screen.getByText('Create a new course');
+    expect(buttonCreateCourse).toBeInTheDocument();
+  
+    await act( async() => {
+      await userEvent.click(buttonCreateCourse);  })
+    });
+
+    test('renders the student home page', async() => {
+      setup("/", "John - Student");
+      const buttonCreateCourse = screen.getByText('Explore courses');
+      expect(buttonCreateCourse).toBeInTheDocument();
+    
+      await act( async() => {
+        await userEvent.click(buttonCreateCourse);  })
+   });
 });

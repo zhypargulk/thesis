@@ -3,11 +3,9 @@ import { Button } from "primereact/button";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState, useRef } from "react";
 import { auth, storage } from "../../config/firebase";
-import { updateProfile } from "firebase/auth"; // Import updateProfile
+import { updateProfile } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-// import / from "../../config/firebase"; // Adjust the path as needed
-
 import { Dropdown } from "primereact/dropdown";
 import { useNavigate } from "react-router-dom";
 import { Password } from "primereact/password";
@@ -16,7 +14,7 @@ import img from "./images/no-avatar.png";
 import "./Auth.css";
 import MenubarCustom from "../menu/Menubar";
 
-const Auth = () => {
+const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -163,6 +161,7 @@ const Auth = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 feedback={true}
                 toggleMask
+                placeholder="Your password"
                 className="input-field"
               />
               {password.length < 8 && password.length > 1 ? (
@@ -177,6 +176,7 @@ const Auth = () => {
               </label>
               <Dropdown
                 value={role}
+                data-testid='dropdownID'
                 onChange={(e) => setRole(e.target.value)}
                 options={roles}
                 optionLabel="role"
@@ -190,6 +190,7 @@ const Auth = () => {
               label="Create account"
               type="submit"
               disabled={!getIsFormValid()}
+              data-testid='SubmitButton'
             />
           </fieldset>
         </form>
@@ -198,4 +199,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default Register;
