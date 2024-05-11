@@ -169,6 +169,7 @@ function OnlineIDE() {
             optionLabel="label"
             placeholder="Select a language"
             className="w-full mt-3"
+            data-testid='dropdownTest'
           />
           <CodeMirror
             value={allCode}

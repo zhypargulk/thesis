@@ -20,14 +20,11 @@ const render = (component) =>
       currentUser: { uid: '123', email: 'user@example.com' }
     };
   
-    // Enhance the mock to more accurately simulate Firestore behavior
     const mockFirestore = {
       doc: vi.fn((db, path) => ({
         id: path.split("/").pop(),
-        collection: vi.fn(() => ({  // Mock collection method inside doc
-          // Additional methods or mock implementations can be added here
+        collection: vi.fn(() => ({  
         })),
-        // Ensure that any method that could be called on a document reference is mocked
       })),
       getDoc: vi.fn(docRef => Promise.resolve({
         exists: () => true,
@@ -36,12 +33,12 @@ const render = (component) =>
           description: "This course covers advanced topics in web development.",
           finalProject: "Build a full-stack application.",
           answer: "Detailed project requirements and answers.",
-          lessons: [docRef, docRef]  // Example using document references
+          lessons: [docRef, docRef]  
         }),
       })),
       updateDoc: vi.fn(() => Promise.resolve()),
       collection: vi.fn(() => ({
-        doc: vi.fn(() => ({  // Ensure you can chain collection().doc() calls
+        doc: vi.fn(() => ({ 
           id: 'newDoc'
         }))
       })),

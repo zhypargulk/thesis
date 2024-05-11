@@ -4,17 +4,14 @@ import {
   query,
   collection,
   orderBy,
-  limit,
   where,
   onSnapshot,
   addDoc,
   serverTimestamp,
 } from "firebase/firestore";
-import { useCollectionData } from "react-firebase-hooks/firestore";
 import "./ChatGroup.css";
 import { useParams } from "react-router-dom";
 import { getDocumentById } from "../../controller/Courses";
-import { getMessages } from "../../controller/Messages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "primereact/button";

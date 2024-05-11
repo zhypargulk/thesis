@@ -114,7 +114,6 @@ function Profile() {
                 </div>
                 <div className="button-under-left">
                   {" "}
-                  {/* This wrapper ensures button alignment */}
                   <Button
                     icon="pi pi-pencil"
                     label="Edit image"

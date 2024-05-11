@@ -13,48 +13,6 @@ import {
 } from "firebase/firestore";
 import { auth, db, storage } from "../config/firebase";
 
-const courseCollectionRef = collection(db, "courses");
-
-// export const createCourse = async (imageCourse, object, lessons) => {
-//   try {
-//     const imageRef = ref(storage, `images/${imageCourse.name + v4()}`);
-//     await uploadBytes(imageRef, imageCourse);
-
-//     const imageUrl = await getDownloadURL(imageRef);
-//     object.imageUrl = imageUrl;
-//     const courseDocRef = await addDoc(courseCollectionRef, object);
-//     await updateDoc(courseDocRef, { docId: courseDocRef.id });
-
-//     // const lessonCollectionRef = collection(courseDocRef, "lessons");
-//     const lessonCollectionRef = collection(
-//       db,
-//       `courses/${courseDocRef.id}/lessons`
-//     );
-
-//     for (let i = 0; i < lessons.length; i++) {
-//       const lesson = lessons[i];
-//       const lessonId = v4();
-//       await addDoc(lessonCollectionRef, {
-//         id: lessonId,
-//         title: lesson.title,
-//         description: lesson.description,
-//         videoURL: lesson.videoURL,
-//         lessonNumber: i + 1,
-//       });
-//     }
-
-//     const lessonsQuerySnapshot = await getDocs(lessonCollectionRef);
-//     const lessonsData = lessonsQuerySnapshot.docs.map((doc) => ({
-//       id: doc.id,
-//       ...doc.data(),
-//     }));
-
-//     await updateDoc(courseDocRef, { lessons: lessonsData });
-//   } catch (error) {
-//     console.error("An error occurred:", error);
-//   }
-// };
-
 export const createCourse = async (imageCourse, courseObject, lessons) => {
   try {
     const imageRef = ref(storage, `images/${imageCourse.name}-${v4()}`);
@@ -136,24 +94,6 @@ export const fetchMyCourses = async () => {
   } catch (error) {
     console.error("Error fetching courses:", error);
     return [];
-  }
-};
-
-export const fetchCourseById = async (docId) => {
-  try {
-    const courseDocRef = doc(db, "courses", docId);
-    const docSnap = await getDoc(courseDocRef);
-
-    if (docSnap.exists()) {
-      const selectedCourse = { ...docSnap.data(), docId: docSnap.id };
-      return selectedCourse;
-    } else {
-      console.log("No such document!");
-      return null;
-    }
-  } catch (error) {
-    console.error("Error fetching course:", error);
-    throw error;
   }
 };
 

@@ -6,8 +6,8 @@ import MenubarCustom from "../menu/Menubar";
 import { InputText } from "primereact/inputtext";
 
 const GroupsComponent = () => {
-  const [data, setData] = useState([]); // Initialize to an empty array
-  const [filteredData, setFilteredData] = useState([]); // Initialize to an empty array
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const user = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
 

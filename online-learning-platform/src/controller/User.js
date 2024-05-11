@@ -1,7 +1,6 @@
 import { updatePassword } from "firebase/auth";
-import { auth, db, storage } from "../config/firebase";
+import { auth, db } from "../config/firebase";
 import { getDoc, doc, updateDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const fetchUserData = async (id) => {
   try {

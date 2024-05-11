@@ -24,7 +24,7 @@ const Lesson = () => {
   const [lesson, setLesson] = useState(null);
   const [lessons, setLessons] = useState(null);
   const [showButton, setShowButton] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate() ;
   const [length, setLength] = useState();
   const [course, setCourse] = useState();
   const [loading, setLoading] = useState(true);
@@ -38,10 +38,12 @@ const Lesson = () => {
         const selectedLessons = await fetchLessonsByReferences(
           courseData.lessons
         );
+        console.log(selectedLessons);
         const lessonsWithStatus = await fetchAllLessonsWithCompletionStatus(
           docId,
           user.uid
         );
+        console.log(lessonsWithStatus);
 
         setLessons(lessonsWithStatus);
         setLength(selectedLessons.length);

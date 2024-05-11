@@ -1,5 +1,3 @@
-// firestoreUtils.js
-
 import { db } from "../config/firebase";
 import {
   collection,
@@ -85,22 +83,6 @@ export const updateTaskStatus = async (taskId, newStatus) => {
     });
   } catch (error) {
     console.error("Error updating task status:", error);
-  }
-};
-
-export const getAllTasksBoard = async (groupId) => {
-  try {
-    const tasksRef = collection(db, "tasks");
-    const tasksQuery = query(tasksRef, where("group_id", "==", groupId));
-    const taskSnapshot = await getDocs(tasksQuery);
-    const tasks = [];
-    taskSnapshot.forEach((doc) => {
-      tasks.push({ _id: doc.id, ...doc.data() });
-    });
-    return tasks;
-  } catch (error) {
-    console.error("Error fetching tasks:", error);
-    return [];
   }
 };
 

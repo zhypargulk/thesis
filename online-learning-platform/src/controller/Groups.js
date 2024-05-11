@@ -91,71 +91,6 @@ export const fetchStudentCoursesAndGroups = async (userId) => {
   }
 };
 
-export const getGroupsByUserId = async (userId) => {
-  try {
-    const groupsCollectionRef = collection(db, "groups");
-    const q = query(
-      groupsCollectionRef,
-      where("students", "array-contains", userId)
-    );
-    const querySnapshot = await getDocs(q);
-
-    const groups = [];
-    querySnapshot.forEach((doc) => {
-      groups.push({ id: doc.id, ...doc.data() });
-    });
-
-    return groups;
-  } catch (error) {
-    console.error("Error fetching groups:", error);
-  }
-};
-
-export const getCoursesByUserId = async (studentId) => {
-  try {
-    const groupsQuery = query(
-      collection(db, "groups"),
-      where("studentIds", "array-contains", studentId)
-    );
-    const groupsQuerySnapshot = await getDocs(groupsQuery);
-
-    const courseIds = [];
-
-    groupsQuerySnapshot.forEach((doc) => {
-      const { courseDocId } = doc.data();
-
-      courseIds.push(courseDocId);
-    });
-
-    return courseIds;
-  } catch (error) {
-    console.error("Error fetching course IDs:", error);
-  }
-};
-
-export const getGroupByUserIdAndCourseId = async (userId, courseId) => {
-  try {
-    const groupsQuery = query(
-      collection(db, "groups"),
-      where("studentIds", "array-contains", userId)
-    );
-
-    const groupsQuerySnapshot = await getDocs(groupsQuery);
-
-    // Check if any matching group document exists
-    if (!groupsQuerySnapshot.empty) {
-      const groupDoc = groupsQuerySnapshot.docs[0];
-      return { id: groupDoc.id, ...groupDoc.data() };
-    } else {
-      // No matching group found
-      return null;
-    }
-  } catch (error) {
-    console.error("Error fetching group:", error);
-    throw error; // Rethrow the error for handling it outside the function if needed
-  }
-};
-
 export const addLeaderToGroup = async (groupId, userId) => {
   try {
     const userDocRef = doc(db, "user", userId);
@@ -166,26 +101,6 @@ export const addLeaderToGroup = async (groupId, userId) => {
     console.log("Leader added to group:", userId);
   } catch (error) {
     console.error("Error adding leader to group:", error);
-  }
-};
-
-export const getLeaderOfGroup = async (groupId) => {
-  try {
-    const groupDocRef = doc(db, "groups", groupId);
-    const groupDocSnap = await getDoc(groupDocRef);
-
-    if (groupDocSnap.exists()) {
-      const groupData = groupDocSnap.data();
-
-      if (groupData.leaderGroup) {
-        return await getLeaderByRef(groupData.leaderGroup);
-      } else {
-        return "no leader";
-      }
-    }
-  } catch (error) {
-    console.error("Error retrieving leader of the group:", error);
-    return "no leader";
   }
 };
 
