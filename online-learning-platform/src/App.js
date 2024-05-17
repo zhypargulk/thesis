@@ -10,9 +10,8 @@ import "primereact/resources/primereact.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import "./index.css";
-// import "./flag.css";
 
-import Auth from "./components/register/auth";
+import Auth from "./components/register/Register";
 import LogIn from "./components/login/LogIn";
 import Profile from "./components/profile/Profile";
 import OnlineIDE from "./components/ide/OnlineIDE";
@@ -22,15 +21,14 @@ import CourseDashboard from "./components/courses/CourseDashboard";
 import CourseDetails from "./components/course-details/CourseDetails";
 import Lesson from "./components/lesson/Lesson";
 import FinalProject from "./components/project/FinalProject";
-import Notifications from "./components/Notifications";
 import GroupsComponent from "./components/groups/GroupsComponent";
 import GroupBoard from "./components/groups/GroupBoard";
 import ManageGroup from "./components/groups/ManageGroup";
-import Test from "./components/Test";
 import Kanban from "./components/groups/Kanban";
 import EnrolledCourses from "./components/mycourses/EnrolledCourses";
 import MyCreatedCourses from "./components/created-courses/MyCreatedCourses";
 import EditCourse from "./components/created-courses/EditCourse";
+import ResetPassword from "./components/login/ResetPassword";
 
 if (process.env.NODE_ENV !== "test") {
   require("./index.css");
@@ -41,8 +39,8 @@ const App = () => {
     <Router>
       <Routes>
         <Route exact path="/register" element={<Auth />} />
-        <Route exact path="/test" element={<Test />} />
         <Route path="/login" element={<LogIn />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/" element={<Home />} />
         <Route path="/ide" element={<OnlineIDE />} />
         <Route path="/profile" element={<Profile />} />
@@ -58,7 +56,6 @@ const App = () => {
         <Route path="/edit/:courseId" element={<EditCourse />} />
         <Route path="/groups/:docId/board" element={<GroupBoard />} />
         <Route path="/groups/:docId/ide" element={<OnlineIDE />} />
-        <Route path="/notifications" element={<Notifications />} />
         <Route
           path="/course/:docId/lessons/:lessonNumber"
           element={<Lesson />}

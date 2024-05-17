@@ -108,7 +108,7 @@ const FinalProject = () => {
       {students && (
         <div className="container">
           <Toast ref={toast} />
-          <h2 className="project-title">Final Project Description</h2>
+          <h1 className="text-white">Final Project Description</h1>
           <p className="m-2 bg-panel">{project}</p>
           <img src={img} width="100" alt="Raketa" className="mt-8" />
           <p className="project-question">
@@ -125,7 +125,7 @@ const FinalProject = () => {
                 >
                   Select students enrolled to the course
                 </h4>
-
+{/**fix */}
                 <MultiSelect
                   value={selectedStudents}
                   options={students}

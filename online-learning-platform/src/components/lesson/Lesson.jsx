@@ -5,6 +5,7 @@ import {
   fetchLessonsByReferences,
   markLessonAsDone,
   fetchAllLessonsWithCompletionStatus,
+  parseContent,
 } from "../../controller/Courses";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +25,7 @@ const Lesson = () => {
   const [lesson, setLesson] = useState(null);
   const [lessons, setLessons] = useState(null);
   const [showButton, setShowButton] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate() ;
   const [length, setLength] = useState();
   const [course, setCourse] = useState();
   const [loading, setLoading] = useState(true);
@@ -38,10 +39,12 @@ const Lesson = () => {
         const selectedLessons = await fetchLessonsByReferences(
           courseData.lessons
         );
+        console.log(selectedLessons);
         const lessonsWithStatus = await fetchAllLessonsWithCompletionStatus(
           docId,
           user.uid
         );
+        console.log(lessonsWithStatus);
 
         setLessons(lessonsWithStatus);
         setLength(selectedLessons.length);
@@ -156,7 +159,7 @@ const Lesson = () => {
 
               <div className="flex justify-content-center mt-4 mb-5">
                 <ScrollPanel className="description w-full h-20rem">
-                  <p>{lesson.description}</p>
+                  <p>{parseContent(lesson.description)}</p>
                 </ScrollPanel>
               </div>
 

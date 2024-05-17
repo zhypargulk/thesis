@@ -63,7 +63,7 @@ const CreateCourse = () => {
     toast.current.show({
       severity: "success",
       summary: "Success",
-      detail: "New tasks were created",
+      detail: "New course was created",
       life: 3000,
     });
   };

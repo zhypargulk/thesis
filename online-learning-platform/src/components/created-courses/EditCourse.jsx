@@ -9,9 +9,6 @@ import {
   doc,
   getDoc,
   updateDoc,
-  deleteDoc,
-  arrayUnion,
-  arrayRemove,
 } from "firebase/firestore";
 
 import { db, storage } from "../../config/firebase";
@@ -53,9 +50,7 @@ const EditCourse = () => {
             console.error("Error fetching lessons:", error);
           }
         }
-      } else {
-        console.log("No such course!");
-      }
+      } 
       setIsLoading(false);
     };
 
@@ -107,33 +102,6 @@ const EditCourse = () => {
     setLessons(updatedLessons);
   };
 
-  const removeLesson = async (index) => {
-    const courseRef = doc(db, "courses", courseId); // Re-defining courseRef if not globally available
-    const removedLesson = lessons[index];
-    const updatedLessons = lessons.filter((_, idx) => idx !== index);
-    setLessons(updatedLessons);
-
-    // Check if the lesson has a defined ID and remove it
-    if (removedLesson.id) {
-      await deleteDoc(doc(db, "lessons", removedLesson.id));
-      // Optionally update the course document to remove the reference
-      await updateDoc(courseRef, {
-        lessons: arrayRemove(doc(db, "lessons", removedLesson.id)),
-      });
-    }
-  };
-
-  if (isLoading) return <p>Loading...</p>;
-  if (!course) return <p>No Course Found!</p>;
-
-  const showSuccessUpdatedCourse = () => {
-    toast.current.show({
-      severity: "success",
-      summary: "Success",
-      detail: "New tasks were created",
-      life: 3000,
-    });
-  };
 
   return (
     <>
@@ -142,7 +110,7 @@ const EditCourse = () => {
       <div className="edit-course-container">
         <h2 className="edit-course-header">Edit Course</h2>
         <Panel header="Course Information" className="panel-custom">
-          <InputText
+         {course ? ( <><InputText
             value={course.title}
             onChange={(e) => setCourse({ ...course, title: e.target.value })}
             className="input-text-custom"
@@ -232,6 +200,7 @@ const EditCourse = () => {
             onClick={handleUpdateCourse}
             className="button-custom"
           />
+         </>) : <></>}
         </Panel>
       </div>
     </>

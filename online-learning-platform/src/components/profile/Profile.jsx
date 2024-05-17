@@ -22,7 +22,7 @@ import { Toast } from "primereact/toast";
 
 function Profile() {
   const [userDetails, setUserDetails] = useState();
-  const [imageUpload, setImageUpload] = useState(null);
+  const [passwordError, setPasswordError] = useState("");
   const [profileImageUrl, setProfileImageUrl] = useState();
   const [passwordNew, setPasswordNew] = useState();
   const [passwordNew2, setPasswordNew2] = useState();
@@ -80,18 +80,54 @@ function Profile() {
     setProfileImageUrl(url);
   };
 
-  const onSubmitHandler = async () => {
+  const validatePassword = (password) => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+
+    if (
+      password.length >= minLength &&
+      hasUpperCase &&
+      hasLowerCase &&
+      hasNumber 
+      
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
     if (passwordNew === passwordNew2) {
+      if (!validatePassword(passwordNew)) {
+
+        toast.current.show({
+          severity: "error",
+          summary: "Error!",
+          detail: "Password must be at least 8 chars and include upper/lower case letters, numbers, and special characters.",
+        });
+        return;
+      }
       const user = auth.currentUser;
       const result = await userPasswordReset(user, passwordNew);
 
       show();
       setPasswordNew("");
       setPasswordNew2("");
+      setPasswordError('')
     } else {
       error();
       setPasswordNew("");
       setPasswordNew2("");
+      toast.current.show({
+        severity: "error",
+        summary: "Error!",
+        detail: "Passwords do not match.",
+      });
     }
   };
 
@@ -114,7 +150,6 @@ function Profile() {
                 </div>
                 <div className="button-under-left">
                   {" "}
-                  {/* This wrapper ensures button alignment */}
                   <Button
                     icon="pi pi-pencil"
                     label="Edit image"
@@ -157,10 +192,10 @@ function Profile() {
                     onChange={(e) => setPasswordNew(e.target.value)}
                     toggleMask
                     promptLabel="Choose a password"
-                    weakLabel="Too simple"
-                    mediumLabel="Average complexity"
-                    strongLabel="Complex password"
+                    feedback={true}
+                  
                   />
+                   
                   <label htmlFor="value">New password</label>
 
                   <Password
@@ -172,15 +207,16 @@ function Profile() {
                     onChange={(e) => setPasswordNew2(e.target.value)}
                     toggleMask
                     promptLabel="Choose a password"
-                    weakLabel="Too simple"
-                    mediumLabel="Average complexity"
-                    strongLabel="Complex password"
+                    feedback={true}
+                    
                   />
+
                   <Button
                     label="Reset password"
                     type="submit"
-                    icon="pi pi-check"
+          
                     className="mt-4"
+                    disabled={!passwordNew  || !passwordNew2 }
                   />
                 </form>
               </div>
@@ -193,27 +229,3 @@ function Profile() {
 }
 
 export default Profile;
-{
-  /* <h1>Profile</h1>
-        <p>Full Name: userDetails.fullName</p>
-        <h2>Groups</h2>
-        <ul>
-          {groups.map((group, index) => (
-            <li key={index}>{group}</li>
-          ))}
-        </ul>
-        <div>
-          {profileImageUrl && (
-            <img
-              src={profileImageUrl}
-              alt="Profile"
-              style={{ width: "100px", height: "100px" }}
-            />
-          )}
-          <input
-            type="file"
-            onChange={(event) => setImageUpload(event.target.files[0])}
-          />
-          <Button label="Upload Image" onClick={uploadProfileImage} />
-        </div> */
-}

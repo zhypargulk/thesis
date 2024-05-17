@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import "./CardCourse.css";
+import "../courses/CardCourse.css";
 
-const CardCourse = ({ title, imageUrl, desc, id, groupId }) => {
+const CreatedCourseCard = ({ title, imageUrl, desc, id, groupId }) => {
   const navigate = useNavigate();
   const [showFullDesc, setShowFullDesc] = useState(false);
 
@@ -21,15 +21,15 @@ const CardCourse = ({ title, imageUrl, desc, id, groupId }) => {
   );
 
   const onClickBoard = () => {
-    navigate(`/courses/${id}`);
+    navigate(`/edit/${id}`);
   };
 
   const footer = (
     <div className="flex flex-wrap justify-content-end gap-2">
       <Button
-        label="Details of the course"
-        icon="pi pi-check"
-        onClick={onClickBoard}
+        label="Edit the course"
+        icon="pi pi-pencil"
+        onClick={() => onClickBoard()}
       />
     </div>
   );
@@ -56,4 +56,4 @@ const CardCourse = ({ title, imageUrl, desc, id, groupId }) => {
   );
 };
 
-export default CardCourse;
+export default CreatedCourseCard;

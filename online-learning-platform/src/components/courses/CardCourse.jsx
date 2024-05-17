@@ -1,32 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import { fetchLastCompletedLesson } from "../../controller/Courses";
-import "../courses/CardCourse.css";
+import "./CardCourse.css";
 
-const CreatedCourseCard = ({ title, imageUrl, desc, id, groupId }) => {
+const CardCourse = ({ title, imageUrl, desc, id, groupId }) => {
   const navigate = useNavigate();
   const [showFullDesc, setShowFullDesc] = useState(false);
-  const [lessonNumber, setLessonNumber] = useState();
-  const user = useAuth();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (user && user.uid) {
-          const index = await fetchLastCompletedLesson(id, user.uid);
-          console.log(index);
-          setLessonNumber(index);
-        }
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const truncateDesc = (desc, length = 100) => {
     return desc.length > length && !showFullDesc
@@ -41,15 +21,15 @@ const CreatedCourseCard = ({ title, imageUrl, desc, id, groupId }) => {
   );
 
   const onClickBoard = () => {
-    navigate(`/edit/${id}`);
+    navigate(`/courses/${id}`);
   };
 
   const footer = (
     <div className="flex flex-wrap justify-content-end gap-2">
       <Button
-        label="Edit the course"
-        icon="pi pi-pencil"
-        onClick={() => onClickBoard()}
+        label="Details of the course"
+
+        onClick={onClickBoard}
       />
     </div>
   );
@@ -76,4 +56,4 @@ const CreatedCourseCard = ({ title, imageUrl, desc, id, groupId }) => {
   );
 };
 
-export default CreatedCourseCard;
+export default CardCourse;

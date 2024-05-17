@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { fetchMyCourses } from "../../controller/Courses";
+import { fetchCourses } from "../../controller/Courses";
 import { InputText } from "primereact/inputtext";
-import { useNavigate } from "react-router-dom";
 import MenubarCustom from "../menu/Menubar";
-import img from "../courses/images/earth.png";
-import moon from "../courses/images/Planet=Moon.png";
-import CardMyCourse from "./CardMyCourse";
-import "./EnrolledCourses.css";
+import img from "./images/earth.png";
+import moon from "./images/Planet=Moon.png";
+import CardCourse from "./CardCourse";
+import "./CourseDashboard.css";
 
-const EnrolledCourses = () => {
+const CourseDashboard = () => {
   const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchMyCourses();
+        const response = await fetchCourses();
         setCourses(response);
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -33,11 +32,13 @@ const EnrolledCourses = () => {
     course.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const isCentered = filteredCourses.length > 2;
+
   return (
     <>
       <MenubarCustom />
       <div className="flex align-items-center justify-content-center mt-4 head-text">
-        <span className=" text-6xl course-color">Your enrolled courses</span>
+        <span className=" text-6xl course-color">Course Dashboard</span>
       </div>
       <img src={img} className="absolute top-0 right-0" alt="Earth" />
       <img
@@ -54,26 +55,25 @@ const EnrolledCourses = () => {
           placeholder="Find the course"
         />
       </div>
-      <br></br>
-      {filteredCourses.length === 0 && (
-        <div className="flex align-items-center justify-content-center mt-4">
-          <p className=" text-white">You haven't enrolled to any course</p>
+      <div className={`grid  ${isCentered ? 'flex justify-content-center ml-4 mt-4' : 'ml-8 mt-6'}`}>
+        <div className="">
+          {filteredCourses.map((course) => (
+            <div key={course.docId} className="col-12 col-md-4 w-30rem m-3">
+              <CardCourse
+                title={course.title}
+                imageUrl={course.imageUrl}
+                desc={course.description}
+                id={course.docId}
+              />
+            </div>
+          ))}
         </div>
-      )}
-      <div className="grid m-3">
-        {filteredCourses.map((course) => (
-          <div key={course.docId} className="col-12 col-md-4 w-30rem m-3">
-            <CardMyCourse
-              title={course.title}
-              imageUrl={course.imageUrl}
-              desc={course.description}
-              id={course.docId}
-            />
-          </div>
-        ))}
       </div>
+      { filteredCourses.length === 0 &&  <div className="flex align-items-center justify-content-center mt-4">
+          <span className="text-sm course-color">You are not in any group</span>
+        </div>}
     </>
   );
 };
 
-export default EnrolledCourses;
+export default CourseDashboard;

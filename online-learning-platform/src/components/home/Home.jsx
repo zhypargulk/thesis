@@ -2,12 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import MenubarCustom from "../menu/Menubar";
 import home_img from "./images/home.png";
 import "./Home.css";
-import Writer from "./Writer.js";
+import Writer from "./Writer";
 import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { auth } from "../../config/firebase";
 
-export default function Home() {
+ const Home = () => {
   const text =
     "Innovative online learning platform, designed to enhance " +
     "collaborative learning in virtual environments. Our intuitive " +
@@ -90,3 +90,4 @@ export default function Home() {
     </>
   );
 }
+export default Home;

@@ -99,6 +99,8 @@ const CourseDetails = () => {
             <>
               <div className="course-image-container">
                 <img
+                width={700}
+                height={600}
                   src={course.imageUrl}
                   alt={course.title}
                   className="course-image"
