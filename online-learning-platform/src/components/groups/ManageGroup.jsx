@@ -21,7 +21,6 @@ import { Toast } from "primereact/toast";
 import { ProgressSpinner } from "primereact/progressspinner";
 
 import "./ManageGroup.css";
-import { confirmPasswordReset } from "firebase/auth";
 
 const ManageGroup = () => {
   const [students, setStudents] = useState([]);

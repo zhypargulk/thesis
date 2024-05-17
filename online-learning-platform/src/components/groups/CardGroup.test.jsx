@@ -6,13 +6,18 @@ import { BrowserRouter } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
 import CardGroup from './CardGroup';
-import { fetchStudentsInGroup, getLeaderByRef, getDocumentById } from '../../controller/Groups';
+import { fetchStudentsInGroup, getLeaderByRef } from '../../controller/Groups';
+import { getDocumentById } from "../../controller/Courses";
 
 vi.mock('../../controller/Groups', () => ({
   fetchStudentsInGroup: vi.fn(),
-  getDocumentById: vi.fn(),
   getLeaderByRef: vi.fn()
 }));
+
+vi.mock('../../controller/Courses', () => ({
+  getDocumentById: vi.fn(),
+}));
+
 const render = (component) => 
   rtlRender(
     <BrowserRouter>
