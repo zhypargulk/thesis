@@ -28,7 +28,7 @@ const CardCourse = ({ title, imageUrl, desc, id, groupId }) => {
     <div className="flex flex-wrap justify-content-end gap-2">
       <Button
         label="Details of the course"
-        icon="pi pi-check"
+
         onClick={onClickBoard}
       />
     </div>

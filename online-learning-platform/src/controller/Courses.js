@@ -301,3 +301,15 @@ export const fetchMyCreatedCourses = async (userId) => {
     console.error("Failed to fetch courses: ", error);
   }
 };
+
+export const parseContent = (content) => {
+  return content.split("\n").map((line, index) => {
+    if (line.startsWith("Topics:")) {
+      return <strong key={index}>{line}</strong>;
+    }
+    if (line.startsWith("  ")) {
+      return <li key={index}>{line.trim()}</li>;
+    }
+    return <p key={index}>{line}</p>;
+  });
+};

@@ -17,6 +17,8 @@ import MenubarCustom from "../menu/Menubar";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const navigate = useNavigate();
@@ -116,9 +118,43 @@ const Register = () => {
     await setDoc(doc(firestore, "user", userId), userData);
   };
 
+    const validatePassword = (password) => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+
+
+    if (
+      password.length >= minLength &&
+      hasUpperCase &&
+      hasLowerCase &&
+      hasNumber 
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(password === password2) {
+      if(!validatePassword(password)){
+       toast.current.show({
+      severity: "error",
+      summary: "Error!",
+      detail: "Password must be at least 8 chars and include upper/lower case letters, numbers, and special characters.",
+    });
+    return;
+  }
+  setPasswordError('')
     await register();
+      return;
+    } else {
+      setPasswordError("Passwords do not match.");
+      return;
+    }
   };
 
   return (
@@ -164,11 +200,30 @@ const Register = () => {
                 placeholder="Your password"
                 className="input-field"
               />
-              {password.length < 8 && password.length > 1 ? (
+               {passwordError && (
                 <p className="FieldError">
-                  Password should have at least 8 characters
+                 {passwordError}
                 </p>
-              ) : null}
+              )}
+            </div>
+
+             <div className="Field">
+              <label>
+                Password again<sup>*</sup>
+              </label>
+              <Password
+                value={password2}
+                onChange={(e) => setPassword2(e.target.value)}
+                feedback={true}
+                toggleMask
+                placeholder="Your password"
+                className="input-field"
+              />
+              {passwordError && (
+                <p className="FieldError">
+                 {passwordError}
+                </p>
+              )}
             </div>
             <div className="Field">
               <label>

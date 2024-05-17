@@ -61,56 +61,58 @@ const LogIn = () => {
     navigate("/register");
   };
 
+  const onClickForgotPassword = () => {
+    navigate("/reset-password");
+  };
+
   return (
     <>
-      <>
-        <MenubarCustom />
-        <Toast ref={toast} />
-        <div className="page-container-login">
-          <div className="card-login">
-            <h2 className="mt-0">
-              Welcome Back! <FontAwesomeIcon icon={faLaptopCode} />
-            </h2>
+      <MenubarCustom />
+      <Toast ref={toast} />
+      <div className="page-container-login">
+        <div className="card-login">
+          <h2 className="mt-0">
+            Welcome Back! <FontAwesomeIcon icon={faLaptopCode} />
+          </h2>
 
-            <div className="flex-column-login">
-              <InputText
-                className={`w-30rem ${invalidInputClass} text-lg`}
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                
-              />
-              {emailError && <Message severity="error" text={emailError} />}
-            </div>
-
-            <div className="flex-column-login">
-              <InputText
-                className={`w-30rem ${invalidInputClass} text-lg mt-3`}
-                placeholder="Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              {passwordError && (
-                <Message severity="error" text={passwordError} />
-              )}
-            </div>
-
-            <Button
-              className="w-30rem p-3 text-lg mt-4"
-              label="Sign in"
-              onClick={signIn}
+          <div className="flex-column-login">
+            <InputText
+              className={`w-30rem ${invalidInputClass} text-lg`}
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <Button
-              className="w-30rem p-button-text mt-3 text-link"
-              label="Create a new account"
-              onClick={onClickCreateNewAccount}
-              link
-              text
-            />
+            {emailError && <Message severity="error" text={emailError} />}
           </div>
+
+          <div className="flex-column-login">
+            <InputText
+              className={`w-30rem ${invalidInputClass} text-lg mt-3`}
+              placeholder="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {passwordError && <Message severity="error" text={passwordError} />}
+          </div>
+
+          <Button
+            className="w-30rem p-3 text-lg mt-4"
+            label="Sign in"
+            onClick={signIn}
+          />
+          <Button
+            className="w-30rem p-button-text mt-3 text-link"
+            label="Create a new account"
+            onClick={onClickCreateNewAccount}
+          />
+          <Button
+            className="w-30rem p-button-text mt-3 text-link"
+            label="Forgot Password?"
+            onClick={onClickForgotPassword}
+          />
         </div>
-      </>
+      </div>
     </>
   );
 };

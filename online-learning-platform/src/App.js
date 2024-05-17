@@ -28,6 +28,7 @@ import Kanban from "./components/groups/Kanban";
 import EnrolledCourses from "./components/mycourses/EnrolledCourses";
 import MyCreatedCourses from "./components/created-courses/MyCreatedCourses";
 import EditCourse from "./components/created-courses/EditCourse";
+import ResetPassword from "./components/login/ResetPassword";
 
 if (process.env.NODE_ENV !== "test") {
   require("./index.css");
@@ -39,6 +40,7 @@ const App = () => {
       <Routes>
         <Route exact path="/register" element={<Auth />} />
         <Route path="/login" element={<LogIn />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/" element={<Home />} />
         <Route path="/ide" element={<OnlineIDE />} />
         <Route path="/profile" element={<Profile />} />

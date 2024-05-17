@@ -64,6 +64,9 @@ const GroupsComponent = () => {
             </div>
           ))}
         </div>
+          { filteredData.length === 0 &&  <div className="flex align-items-center justify-content-center mt-4">
+          <span className="text-sm course-color">You are not in any group</span>
+        </div>}
       </div>
     </>
   );

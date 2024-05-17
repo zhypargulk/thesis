@@ -32,6 +32,8 @@ const CourseDashboard = () => {
     course.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const isCentered = filteredCourses.length > 2;
+
   return (
     <>
       <MenubarCustom />
@@ -53,18 +55,23 @@ const CourseDashboard = () => {
           placeholder="Find the course"
         />
       </div>
-      <div className="grid m-3">
-        {filteredCourses.map((course) => (
-          <div key={course.docId} className="col-12 col-md-4 w-30rem m-3">
-            <CardCourse
-              title={course.title}
-              imageUrl={course.imageUrl}
-              desc={course.description}
-              id={course.docId}
-            />
-          </div>
-        ))}
+      <div className={`grid  ${isCentered ? 'flex justify-content-center ml-4 mt-4' : 'ml-8 mt-6'}`}>
+        <div className="">
+          {filteredCourses.map((course) => (
+            <div key={course.docId} className="col-12 col-md-4 w-30rem m-3">
+              <CardCourse
+                title={course.title}
+                imageUrl={course.imageUrl}
+                desc={course.description}
+                id={course.docId}
+              />
+            </div>
+          ))}
+        </div>
       </div>
+      { filteredCourses.length === 0 &&  <div className="flex align-items-center justify-content-center mt-4">
+          <span className="text-sm course-color">You are not in any group</span>
+        </div>}
     </>
   );
 };

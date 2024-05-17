@@ -5,6 +5,7 @@ import {
   fetchLessonsByReferences,
   markLessonAsDone,
   fetchAllLessonsWithCompletionStatus,
+  parseContent,
 } from "../../controller/Courses";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
@@ -158,7 +159,7 @@ const Lesson = () => {
 
               <div className="flex justify-content-center mt-4 mb-5">
                 <ScrollPanel className="description w-full h-20rem">
-                  <p>{lesson.description}</p>
+                  <p>{parseContent(lesson.description)}</p>
                 </ScrollPanel>
               </div>
 

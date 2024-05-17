@@ -32,13 +32,12 @@
 .course-image-container {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 20px;
+  margin-bottom: 20px;
+
 }
 
-.course-image-container img {
-  max-width: 100%;
-  height: auto;
-}
 
 .course-description {
   margin-top: 20px;

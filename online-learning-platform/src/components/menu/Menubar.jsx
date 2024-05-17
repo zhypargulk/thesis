@@ -209,7 +209,7 @@ export default function MenubarCustom() {
   ];
 
   const start = (
-    <div className="brand-container">
+    <div className="brand-container ml-4">
       <span className="brand-text text-white">collabLearn</span>
     </div>
   );
@@ -218,7 +218,7 @@ export default function MenubarCustom() {
     <>
       {authExist ? (
         <Button
-          className="p-button-rounded "
+          className="mr-4 p-button-rounded "
           label="Logout"
           icon="pi pi-sign-out"
           onClick={() => signOut(auth).then(() => navigate("/login"))}
@@ -226,7 +226,7 @@ export default function MenubarCustom() {
         />
       ) : (
         <Button
-          className="p-button-rounded "
+          className="mr-4 p-button-rounded "
           label="Sign-in/Login"
           icon="pi pi-sign-out"
           onClick={() => navigate("/login")}

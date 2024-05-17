@@ -39,3 +39,23 @@ body .p-accordion .p-accordion-header.p-highlight {
   color: white !important;
 }
 
+.p-toast {
+
+  color: #333 !important; /* Text color */
+  border-radius: 10px !important; /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important; /* Box shadow */
+}
+
+.p-toast-message {
+  font-size: 1.2rem !important; /* Increase font size */
+}
+
+.p-toast-message-content {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.p-toast-icon {
+  font-size: 1.5rem !important; /* Increase icon size */
+  margin-right: 10px !important; /* Add space between icon and text */
+}

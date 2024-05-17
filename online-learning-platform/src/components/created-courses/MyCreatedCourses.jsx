@@ -39,6 +39,8 @@ const MyCreatedCourses = () => {
     course.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const isCentered = filteredCourses.length > 2;
+
   return (
     <>
       <MenubarCustom />
@@ -66,7 +68,7 @@ const MyCreatedCourses = () => {
           <p className=" text-white">You haven't created any course</p>
         </div>
       )}
-      <div className="grid m-3">
+       <div className={`grid  ${isCentered ? 'flex justify-content-center ml-4 mt-4' : 'ml-8 mt-6'}`}>
         {filteredCourses.map((course) => (
           <div key={course.docId} className="col-12 col-md-4 w-30rem m-3">
             <CreatedCourseCard
