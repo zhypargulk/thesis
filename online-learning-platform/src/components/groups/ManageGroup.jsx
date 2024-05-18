@@ -150,8 +150,9 @@ const ManageGroup = () => {
     try {
       if (user.uid && data) {
         for (const task of tasks) {
+          console.log(task);
           await createTask(
-            user.uid,
+            task.studentId,
             groupId,
             "new",
             task.description,
