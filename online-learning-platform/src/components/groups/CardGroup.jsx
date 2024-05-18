@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import {
   fetchStudentsInGroup,
   getLeaderByRef,
-  getLeaderOfGroup,
+  
 } from "../../controller/Groups";
 import "./CardGroup.css";
 import { getDocumentById } from "../../controller/Courses";

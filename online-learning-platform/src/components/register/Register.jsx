@@ -216,7 +216,7 @@ const Register = () => {
                 onChange={(e) => setPassword2(e.target.value)}
                 feedback={true}
                 toggleMask
-                placeholder="Your password"
+                placeholder="Repeat password"
                 className="input-field"
               />
               {passwordError && (

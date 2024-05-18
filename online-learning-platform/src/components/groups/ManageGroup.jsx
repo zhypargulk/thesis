@@ -21,7 +21,6 @@ import { Toast } from "primereact/toast";
 import { ProgressSpinner } from "primereact/progressspinner";
 
 import "./ManageGroup.css";
-import { confirmPasswordReset } from "firebase/auth";
 
 const ManageGroup = () => {
   const [students, setStudents] = useState([]);
@@ -151,8 +150,9 @@ const ManageGroup = () => {
     try {
       if (user.uid && data) {
         for (const task of tasks) {
+          console.log(task);
           await createTask(
-            user.uid,
+            task.studentId,
             groupId,
             "new",
             task.description,

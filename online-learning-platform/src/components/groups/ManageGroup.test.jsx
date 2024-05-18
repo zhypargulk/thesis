@@ -1,14 +1,22 @@
 import React from 'react';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import ManageGroup from './ManageGroup';
-import * as GroupController from '../../controller/Groups';
-import * as TaskController from '../../controller/Tasks';
-import * as AuthContext from '../../context/AuthContext';
-import { userEvent } from '@testing-library/user-event';
+import {
+  addLeaderToGroup,
+  getCourseByRef,
+  fetchStudentsInGroup,
+  getLeaderByRef,
 
+} from "../../controller/Groups";
+import { getDocumentById } from "../../controller/Courses";
+import { createTask, getAllTasks } from "../../controller/Tasks";
+import { useAuth } from "../../context/AuthContext";
+
+import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
 
 vi.mock('../../context/AuthContext', () => ({
   useAuth: vi.fn(() => ({ uid: 'user1' })),
@@ -22,6 +30,11 @@ vi.mock('../../controller/Groups', () => ({
   getDocumentById: vi.fn(),
 }));
 
+vi.mock('../../controller/Courses', () => ({
+
+  getDocumentById: vi.fn(),
+}));
+
 vi.mock('../../controller/Tasks', () => ({
   createTask: vi.fn(),
   getAllTasks: vi.fn(),
@@ -29,11 +42,11 @@ vi.mock('../../controller/Tasks', () => ({
 
 describe('ManageGroup Component', () => {
   beforeEach(() => {
-    // Set up any default mock implementations
-    GroupController.getDocumentById.mockResolvedValue({ courseDocRef: 'ref1' });
-    GroupController.getCourseByRef.mockResolvedValue({ title: 'Test Course', imageUrl: 'url' });
-    GroupController.fetchStudentsInGroup.mockResolvedValue([{ id: 's1', name: 'John Doe' }]);
-    GroupController.getLeaderByRef.mockResolvedValue({ id: 'l1', name: 'Jane Doe' });
+
+    getDocumentById.mockResolvedValue({ courseDocRef: 'ref1' });
+    getCourseByRef.mockResolvedValue({ title: 'Test Course', imageUrl: 'url' });
+    fetchStudentsInGroup.mockResolvedValue([{ id: 's1', name: 'John Doe' }]);
+    getLeaderByRef.mockResolvedValue({ id: 'l1', name: 'Jane Doe' });
   });
 
   it('renders and fetches data correctly', async () => {
@@ -45,23 +58,88 @@ describe('ManageGroup Component', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Group details')).toBeInTheDocument();
-      expect(screen.getByText('course')).toBeInTheDocument();
+      expect(screen.getByText('Test Course course')).toBeInTheDocument();
     });
   });
 
-  it('handles leader promotion', async () => {
-    const mockPromoteLeader = GroupController.addLeaderToGroup.mockResolvedValue();
+  it('mounts promotion of leader', async () => {
+    addLeaderToGroup.mockResolvedValue();
     render(
       <BrowserRouter>
         <ManageGroup />
       </BrowserRouter>
     );
 
-    const leaderButton = screen.getByText('Promote Leader');
-    userEvent.click(leaderButton);
 
-    await waitFor(() => {
-    });
+    expect(screen.getByText('Group details')).toBeInTheDocument();
+    expect(screen.getByText('Leader of the group:')).toBeInTheDocument();
+    expect(screen.getByText('There is no leader yet. Promote first please!')).toBeInTheDocument();
+    expect(screen.getByText('Promote a leader')).toBeInTheDocument();
+    expect(screen.getByText('Go to the board')).toBeInTheDocument();
   });
 
+  it('mounts task distribution', async () => {
+    addLeaderToGroup.mockResolvedValue();
+    render(
+      <BrowserRouter>
+        <ManageGroup />
+      </BrowserRouter>
+    );
+
+
+    expect(screen.getByText('If you are a leader, please distribute tasks among students.')).toBeInTheDocument();
+    expect(screen.getByText('Assign tasks:')).toBeInTheDocument();
+    expect(screen.getByText('Add New Task')).toBeInTheDocument();
+
+  });
+
+  it('mounts task adding', async () => {
+
+    render(
+      <BrowserRouter>
+        <ManageGroup />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByText('Add New Task')).toBeInTheDocument();
+    
+    await act(async() => await userEvent.click(screen.getByText('Add New Task')));
+
+    await waitFor(() => {
+      const buttons = screen.getAllByText('Add New Task');
+      expect(buttons.length).toBe(1);
+    })
+
+  });
+
+  it('mounts delete and add course', async () => {
+
+    render(
+      <BrowserRouter>
+        <ManageGroup />
+      </BrowserRouter>
+    );
+    
+    await act(async() => await userEvent.click(screen.getByText('Add New Task')));
+
+    await waitFor( async() => {
+      const buttons = screen.getAllByText('Add New Task');
+      expect(buttons.length).toBe(1);
+      const del = screen.getByText('Delete the task');
+
+
+       await act(async() => await userEvent.click(screen.getByText('Delete the task')));
+
+       await waitFor(() =>  expect(del).not.toBeInTheDocument())
+      expect(del).not.toBeInTheDocument();
+
+
+    
+
+    });
+
+
+
+
+  });
 });
