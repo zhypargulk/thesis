@@ -14,36 +14,35 @@ import { Message } from "primereact/message";
 import { getDocumentById } from "../../controller/Courses";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
+import { useNavigate, useParams } from "react-router-dom";
 import "./Kanban.css";
 
 const labels = ["new", "going", "done"];
 const labelsMap = {
-  new: "To Do",
-  going: "In Progress",
-
-  done: "Done",
+  new: "TO DO",
+  going: "IN PROGRESS",
+  done: "DONE",
 };
 
 const classes = {
   board: {
     display: "flex",
     width: "60vw",
-    fontFamily: 'Arial, "Helvetica Neue", sans-serif',
   },
   column: {
     minWidth: 100,
     width: "20vw",
     height: "60vh",
     margin: "0 auto",
-    backgroundColor: "#E5E4E2",
-    borderColor: "#AC6CFF",
+    backgroundColor: "#ffff",
+    borderColor: "black",
     borderStyle: "solid",
   },
   columnHead: {
     textAlign: "center",
     padding: 10,
-    fontSize: "2rem",
-    backgroundColor: "#AC6CFF",
+    fontSize: "1rem",
+    backgroundColor: "black",
     color: "white",
   },
   item: {
@@ -129,21 +128,33 @@ class Kanban extends React.Component {
     this.setState({ tasks: newTasks });
   };
 
+  allTasksDone = () => {
+    const { tasks } = this.state;
+    return tasks.every((task) => task.status === "done");
+  };
+
   render() {
     const { tasks } = this.state;
     const { id: groupId } = this.props;
+    const navigate = this.props.navigate;
+    const docId = this.props.docId;
 
     return (
       <>
         <div>
-          <div className="flex align-items-center justify-content-center mt-4 head-text">
-            <h3 className="mt-4 ml-5 text-3xl text-white">Progress board</h3>
+          <div className="flex flex-row">
+            <Button
+              label="Add task"
+              className="ml-5 h-2rem mt-2"
+              icon="pi pi-plus"
+              onClick={() => navigate(`/groups/${docId}`)}
+            />
           </div>
 
-          <div className="ml-5 mr-4">
+          <div className="ml-5 mr-4 mt-2">
             <section style={classes.board}>
               {labels.map((channel) => (
-                <KanbanColumn status={channel}>
+                <KanbanColumn status={channel} key={channel}>
                   <div style={classes.column}>
                     <div style={classes.columnHead}>{labelsMap[channel]}</div>
                     <div>
@@ -157,6 +168,7 @@ class Kanban extends React.Component {
                             title={item.title}
                             description={item.description}
                             status={item.status}
+                            key={item._id}
                           >
                             <div>{item.title}</div>
                           </KanbanItem>
@@ -166,6 +178,16 @@ class Kanban extends React.Component {
                 </KanbanColumn>
               ))}
             </section>
+            {this.allTasksDone() && (
+              <div className="run-project-container">
+                <Button
+                  label="Run Project"
+                  className="mt-4"
+                  icon="pi pi-play"
+                  onClick={() => navigate(`/groups/${docId}/ide`)}
+                />
+              </div>
+            )}
           </div>
         </div>
       </>
@@ -173,7 +195,14 @@ class Kanban extends React.Component {
   }
 }
 
-export default DragDropContext(HTML5Backend)(Kanban);
+const KanbanWithRouter = (props) => {
+  const navigate = useNavigate();
+  const { docId } = useParams();
+
+  return <Kanban {...props} navigate={navigate} docId={docId} />;
+};
+
+export default DragDropContext(HTML5Backend)(KanbanWithRouter);
 
 // Column
 

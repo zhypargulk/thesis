@@ -32,7 +32,7 @@ const CourseDashboard = () => {
     course.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const isCentered = filteredCourses.length > 2;
+  const isCentered = filteredCourses.length < 2;
 
   return (
     <>
@@ -55,8 +55,8 @@ const CourseDashboard = () => {
           placeholder="Find the course"
         />
       </div>
-      <div className={`grid  ${isCentered ? 'flex justify-content-center ml-4 mt-4' : 'ml-8 mt-6'}`}>
-        <div className="">
+      <div className={`grid  ${isCentered ? 'flex justify-content-center ' : 'ml-3 mt-6'}`}>
+        <div className="grid">
           {filteredCourses.map((course) => (
             <div key={course.docId} className="col-12 col-md-4 w-30rem m-3">
               <CardCourse

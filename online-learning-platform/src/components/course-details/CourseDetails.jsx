@@ -114,7 +114,7 @@ const CourseDetails = () => {
                       href={`/course/${course.docId}/lessons/1`}
                       className="w-full text-white link-custom"
                     >
-                      Start taking the classes
+                      Start learning
                     </a>
                   </>
                 ) : (

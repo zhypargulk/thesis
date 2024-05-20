@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import MenubarCustom from "../menu/Menubar";
-import home_img from "./images/home.png";
+import home_img from "./images/man.png";
 import "./Home.css";
 import Writer from "./Writer";
 import { useNavigate } from "react-router-dom";

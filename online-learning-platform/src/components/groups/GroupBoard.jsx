@@ -22,7 +22,6 @@ const GroupBoard = () => {
         const fetchedCourse = await getCourseByGroupId(docId);
         setTasks(fetchedTasks);
         setCourse(fetchedCourse);
-        console.log(fetchedCourse);
       }
     };
 
@@ -32,28 +31,23 @@ const GroupBoard = () => {
   return (
     <>
       <MenubarCustom />
-      <div className="flex align-items-center justify-content-center mt-4">
-        <p className="m-2 bg-panel">
-          <p>Task description</p>
+      <div className=" align-items-center justify-content-center mt-4 bg-panel2">
+        <p>
+
           {course.finalProject}
         </p>
       </div>
-      <div className="flex flex-row">
+      <div className="flex flex-row mt-5 ml-5">
         <Kanban id={docId}></Kanban>
-        <ChatGroup />
-      </div>
-      <div className="flex flex-row w-full items-center">
-        <Button
-          label="Add new tasks"
-          className="ml-5 mt-2 w-30rem"
+        <ChatGroup id={docId}/>
+        {/* <Button
+          label="Add task"
+          className="ml-5 h-2rem"
+          icon='pi pi-plus'
           onClick={() => navigate(`/groups/${docId}`)}
-        />
-        <Button
-          label="Check your project status"
-          className="mt-2 w-4 ml-auto mr-5"
-          onClick={() => navigate(`/groups/${docId}/ide`)}
-        />
+        /> */}
       </div>
+  
     </>
   );
 };

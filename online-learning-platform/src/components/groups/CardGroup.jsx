@@ -65,7 +65,7 @@ const CardGroup = ({ title, imageUrl, groupId }) => {
   }, []);
 
   return (
-    <div className=" flex justify-content-center">
+    <div className="ml-8 flex justify-content-center">
       {group && (
         <Card
           title={`${title} group project`}

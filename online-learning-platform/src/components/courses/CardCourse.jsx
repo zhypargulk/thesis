@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import "./CardCourse.css";
 
-const CardCourse = ({ title, imageUrl, desc, id, groupId }) => {
+const CardCourse = ({ title, imageUrl, desc, id }) => {
   const navigate = useNavigate();
   const [showFullDesc, setShowFullDesc] = useState(false);
 
@@ -24,33 +24,29 @@ const CardCourse = ({ title, imageUrl, desc, id, groupId }) => {
     navigate(`/courses/${id}`);
   };
 
-  const footer = (
-    <div className="flex flex-wrap justify-content-end gap-2">
-      <Button
-        label="Details of the course"
-
-        onClick={onClickBoard}
-      />
-    </div>
-  );
-
   return (
-    <div className=" flex justify-content-center">
+    <div className="ml-8 flex justify-content-center">
       <Card
         title={<span className="black-text">{title}</span>}
         subTitle={<span className="black-text">Course Description</span>}
-        footer={footer}
         header={header}
-        className="md:w-30rem  green-border-card"
+        className="w-30rem h-40rem black-border-card card-content"
       >
-        <p className="m-0 black-text">{truncateDesc(desc)}</p>
-        {desc.length > 100 && (
+        <div className="card-content-container flex-grow-1 d-flex flex-column">
+          <p className="m-0 black-text">{truncateDesc(desc)}</p>
+          {/* {desc.length > 100 && (
+            <Button
+              label={"Show More"}
+              className="button-link-text"
+              onClick={() => navigate(`/courses/${id}`)}
+            />
+          )} */}
           <Button
-            label={showFullDesc ? "Show Less" : "Show More"}
-            className="button-link-text"
-            onClick={() => setShowFullDesc(!showFullDesc)}
+            label="Details of the course"
+            onClick={onClickBoard}
+            className="details-button mt-4"
           />
-        )}
+        </div>
       </Card>
     </div>
   );

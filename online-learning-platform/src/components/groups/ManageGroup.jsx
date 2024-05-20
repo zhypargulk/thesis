@@ -204,13 +204,13 @@ const ManageGroup = () => {
       <Toast ref={toast} />
       {data ? (
         <div className="containers">
-          <h2 className="project-title">Group details</h2>
+          <h2 className="text-6xl text-white">Group details</h2>
           <p className="m-2 bg-panel1">
             {" "}
             <div className="grid m-3">
               <div>
                 <h3 className="ml-2">{data.title} course</h3>
-                <Image src={data.imageUrl} alt="Image" width="600" />
+                <Image src={data.imageUrl} alt="Image" width="500" />
               </div>
               <div className="mt-6 ml-8">
                 <h4>Members of the group:</h4>

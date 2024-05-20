@@ -15,6 +15,7 @@ import { getDocumentById } from "../../controller/Courses";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "primereact/button";
+import { useNavigate } from "react-router-dom";
 
 const ChatGroup = () => {
   const messagesRef = collection(db, "messages");
@@ -22,6 +23,8 @@ const ChatGroup = () => {
   const [formValue, setFormValue] = useState("");
   const { docId } = useParams();
   const [messages, setMessages] = useState([]);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     if (docId) {
@@ -61,10 +64,10 @@ const ChatGroup = () => {
   };
 
   return (
+    <>
+    <div className="flex flex-column mr-8 mt-6">
+
     <div className="Chat">
-      <div className="flex align-items-center justify-content-center mt-4 ">
-        <h1 className="text-white">Chat for the Group</h1>
-      </div>
       <div className="chat-section">
         <div className="chat-main">
           {messages.map((msg) => (
@@ -78,14 +81,15 @@ const ChatGroup = () => {
             className="message-input"
             value={formValue}
             onChange={(e) => setFormValue(e.target.value)}
-            placeholder="Say something nice"
+            placeholder="Enter your message"
           />
-          <Button type="submit" className="submit-button" disabled={!formValue}>
-            <FontAwesomeIcon icon={faPaperPlane} />
-          </Button>
+          <Button type="submit" className="large-icon submit-button" icon='pi pi-send' disabled={!formValue}/>
         </form>
       </div>
     </div>
+  
+    </div>
+    </>
   );
 };
 

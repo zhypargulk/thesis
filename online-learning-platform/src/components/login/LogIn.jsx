@@ -15,6 +15,7 @@ const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [error, setError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [invalidInputClass, setInvalidInputClass] = useState("");
   const navigate = useNavigate();
@@ -51,8 +52,9 @@ const LogIn = () => {
         setPassword("");
         navigate("/");
       } catch (error) {
-        console.error("Error signing in:", error.message);
-        showError("Login Failed", error.message);
+        showError("Login Failed", error.message); 
+        setError("Incorrect email or password");
+        setInvalidInputClass("border-red-500");
       }
     }
   };
@@ -95,7 +97,9 @@ const LogIn = () => {
             />
             {passwordError && <Message severity="error" text={passwordError} />}
           </div>
-
+          {error && <p className="text-red-500 mt-2">
+            {error}!
+        </p>}
           <Button
             className="w-30rem p-3 text-lg mt-4"
             label="Sign in"

@@ -140,8 +140,8 @@ const Lesson = () => {
                 className="mt-2"
                 onClick={() => markAsCompleteLesson()}
               />
-              <div className="course-title">
-                <h1 className="h1-title">{lesson.title}</h1>
+              <div >
+                <h3 className="h3-title">{lesson.title}</h3>
               </div>
 
               <div className="flex justify-content-center">
@@ -158,7 +158,7 @@ const Lesson = () => {
               </div>
 
               <div className="flex justify-content-center mt-4 mb-5">
-                <ScrollPanel className="description w-full h-20rem">
+                <ScrollPanel className="description w-full h-15rem">
                   <p>{parseContent(lesson.description)}</p>
                 </ScrollPanel>
               </div>
