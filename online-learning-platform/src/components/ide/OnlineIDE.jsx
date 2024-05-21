@@ -192,10 +192,10 @@ function OnlineIDE() {
               severity={isCorrect ? "success" : "error"}
               text={
                 isCorrect
-                  ? "Previous code check was successful!"
-                  : `Previous code check failed.The correct answer is ${answer}`
+                  ? "Correct output!"
+                  : `Wrong output! The correct answer is ${answer}`
               }
-              className="mt-2 ml-5"
+              className="mt-2 ml-5 bg-white"
             />
           )}
 

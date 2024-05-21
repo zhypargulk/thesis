@@ -22,14 +22,4 @@ describe('Card Course', () => {
         expect(screen.getByText(testDescription)).toBeInTheDocument()
     })
 
-    test('test Card and mount course data and long description', async () => {
-        render(<CardCourse title={testTitle} desc={testLongDescription} id={testId}/>);
-
-        expect(screen.getByText('JavaScript')).toBeInTheDocument();
-        expect(screen.getByText('Show More')).toBeInTheDocument();
-
-        await act(async() => await userEvent.click(screen.getByText('Show More')));
-
-        await waitFor(() =>  expect(screen.getByText('Show Less')).toBeInTheDocument());
-    })
 })

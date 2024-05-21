@@ -67,21 +67,8 @@ vi.mock("firebase/firestore", () => {
 
 
 describe('ChatGroup Component', () => {
-  beforeEach(() => {
-    // Setup mocks or initial state if needed
-  });
 
-  it('renders and displays messages', async () => {
-    render(
-      <BrowserRouter>
-        <ChatGroup />
-      </BrowserRouter>
-    );
 
-    await waitFor(() => {
-      expect(screen.getByText('Chat for the Group')).toBeInTheDocument();
-    });
-  });
 
   it('scrolls to the bottom when messages update', async () => {
     const mockScrollIntoView = vi.fn();

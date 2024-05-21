@@ -5,17 +5,11 @@ import { v4 } from "uuid";
 import {
   doc,
   getDoc,
-  collection,
-  query,
-  where,
-  getDocs,
 } from "firebase/firestore";
 import { Button } from "primereact/button";
 import MenubarCustom from "../menu/Menubar";
 import { updateProfileData, userPasswordReset } from "../../controller/User";
 import { useAuth } from "../../context/AuthContext";
-import { Image } from "primereact/image";
-import { InputText } from "primereact/inputtext";
 import "./Profile.css";
 import { Password } from "primereact/password";
 import { Toast } from "primereact/toast";
@@ -173,7 +167,10 @@ function Profile() {
             </div>
 
             <div className="card-content">
-              <h2 className="name">{userDetails.name}</h2>
+            <div className="user-details">
+              <h3 className="name">Name: {userDetails.name}</h3>
+              <h3 className="name">Role: {userDetails.role}</h3>
+            </div>
               <p className="description">{userDetails.email}</p>
 
               <div className=" flex justify-content-center">

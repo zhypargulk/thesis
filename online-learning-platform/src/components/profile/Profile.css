@@ -101,4 +101,9 @@
     margin-top: 8px;
   }
   
-  
+
+  .user-details {
+    display: flex;
+    flex-direction: column; 
+    gap: 10px; 
+  }

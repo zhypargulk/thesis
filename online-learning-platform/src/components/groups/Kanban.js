@@ -352,8 +352,8 @@ class KanbanItem extends React.Component {
           />
         ) : (
           <Button
-            label={codeSubmitted ? "Code submitted!" : "Submit Code"}
-            icon={codeSubmitted ? "pi pi-check" : "pi pi-upload"}
+            label={codeSubmitted ? "Resubmit the code" : "Submit Code"}
+            icon={codeSubmitted ? "pi pi-pencil" : "pi pi-upload"}
             onClick={this.toggleDialog}
             className="p-button-text text-button"
           />
@@ -367,7 +367,11 @@ class KanbanItem extends React.Component {
               dialogFooter
             ) : (
               <>
-                <Message severity="success" text="Success Message" />
+                <Message
+                  severity="success"
+                  text="Code submitted"
+                  className="mr-5"
+                />
                 <Button className="" onClick={this.uploadCode}>
                   Resubmit the code
                 </Button>
