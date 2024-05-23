@@ -34,13 +34,6 @@ const CardCourse = ({ title, imageUrl, desc, id }) => {
       >
         <div className="card-content-container flex-grow-1 d-flex flex-column">
           <p className="m-0 black-text">{truncateDesc(desc)}</p>
-          {/* {desc.length > 100 && (
-            <Button
-              label={"Show More"}
-              className="button-link-text"
-              onClick={() => navigate(`/courses/${id}`)}
-            />
-          )} */}
           <Button
             label="Details of the course"
             onClick={onClickBoard}

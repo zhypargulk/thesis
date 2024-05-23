@@ -11,7 +11,7 @@ import {
   arrayUnion,
   query,
 } from "firebase/firestore";
-import { fetchUserData } from "../controller/User";
+import { fetchUserData } from "./User";
 
 export const createGroupWithModifications = async (docId, selectedStudents) => {
   try {
