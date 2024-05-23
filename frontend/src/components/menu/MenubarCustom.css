@@ -1,0 +1,77 @@
+.menubar-custom .p-menubar {
+  background: #000 ;
+  color: #ffffff !important; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.menubar-custom .p-menubar .p-menubar-root-list {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0 auto;
+}
+
+.menubar-custom .p-menubar-start,
+.menubar-custom .p-menubar-end {
+  flex: 0 1 auto;
+}
+
+body {
+  padding-top: 60px;
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 25px;
+  font-weight: bold;
+  color: #ffffff !important; /* Ensuring brand text is white */
+}
+
+.menubar-custom .p-menuitem-link {
+  color: #ffffff !important; /* Ensuring link text is white */
+}
+
+.menubar-custom .p-menuitem-icon {
+  color: #ffffff !important; /* Ensuring icon color is white */
+  font-weight: bold;
+}
+
+.menubar-custom .p-menuitem {
+  font-weight: bold;
+}
+
+.menubar-custom .p-menubar .p-menuitem-link:hover {
+  background-color: transparent !important;  
+}
+
+.menubar-custom .p-menubar .p-menuitem-link:hover p {
+  text-decoration: underline;
+  color: #000 !important; /* Ensuring hover text is black */
+}
+
+/* Ensure styles for mobile screens */
+@media (max-width: 768px) {
+  .menubar-custom .p-menubar,
+  .menubar-custom .p-menuitem-link,
+  .menubar-custom .p-menuitem-icon {
+    background-color: #004D40 !important; /* Dark teal background */
+    color: #ffffff !important; /* White text and icons */
+  }
+}

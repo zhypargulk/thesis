@@ -1,0 +1,57 @@
+.create-course-container {
+  margin: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.create-course-heading {
+  margin-left: 20px;
+}
+
+.course-panel, .lesson-panel {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  background-color: #fff;
+}
+
+.form-field {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-field input, .form-field textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-field input[type="file"] {
+  padding: 4px;
+  background: #f7f7f7;
+}
+
+.button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.button.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
