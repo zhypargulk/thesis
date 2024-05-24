@@ -30,7 +30,7 @@ const render = (component) =>
 
 describe('MyCreatedCourses Component', () => {
   it('renders and fetches courses correctly', async () => {
-    useAuth.mockReturnValue({ uid: '123' }); // Simulate an authenticated user
+    useAuth.mockReturnValue({ uid: '123' }); 
     fetchMyCreatedCourses.mockResolvedValue(coursesMock);
     
     render(<MyCreatedCourses />);

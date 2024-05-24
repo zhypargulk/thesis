@@ -15,12 +15,17 @@ const render = (component) =>
   );
 
 describe('CreatedCourseCard' , () => {
-    test('test Card and mount course data', async () => {
+    test('test Card and mount course data title', async () => {
         render(<CreatedCourseCard title={testTitle} desc={testDescription} id={testId}/>);
 
         expect(screen.getByText('JavaScript')).toBeInTheDocument();
-        expect(screen.getByText(testDescription)).toBeInTheDocument()
     })
+
+    test('test Card and mount course data description', async () => {
+      render(<CreatedCourseCard title={testTitle} desc={testDescription} id={testId}/>);
+
+      expect(screen.getByText(testDescription)).toBeInTheDocument()
+  })
 
     test('test Card and mount course data and long description', async () => {
         render(<CreatedCourseCard title={testTitle} desc={testLongDescription} id={testId}/>);

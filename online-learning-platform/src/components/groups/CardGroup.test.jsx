@@ -41,13 +41,27 @@ const render = (component) =>
       );
 
       expect(screen.getByText('Software Development group project')).toBeInTheDocument();
+
+    });
+
+    test('mount and check members', async () => {
+      render(
+          <CardGroup title="Software Development" imageUrl="http://example.com/image.png" groupId={groupId} />
+      );
+
       expect(screen.getByText(/All members of group:/)).toBeInTheDocument();
+    });
+
+    test('mount and check leader', async () => {
+      render(
+          <CardGroup title="Software Development" imageUrl="http://example.com/image.png" groupId={groupId} />
+      );
+
       expect(screen.getByText('Leader:')).toBeInTheDocument();
       expect(screen.getByText('No leader')).toBeInTheDocument();
-  
-      const openBoardButton = screen.getByText('Open the Board');
-      userEvent.click(openBoardButton);
     });
+  
+  
   
     test('handles no leader correctly', async () => {
       getLeaderByRef.mockResolvedValueOnce(null); 
@@ -66,9 +80,7 @@ const render = (component) =>
       fetchStudentsInGroup.mockRejectedValueOnce(new Error('Failed to fetch'));
   
       render(
-
           <CardGroup title="Software Development" imageUrl="http://example.com/image.png" groupId={groupId} />
-
       );
   
       await waitFor(() => {

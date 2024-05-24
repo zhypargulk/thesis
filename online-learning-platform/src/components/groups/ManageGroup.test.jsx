@@ -73,9 +73,32 @@ describe('ManageGroup Component', () => {
 
     expect(screen.getByText('Group details')).toBeInTheDocument();
     expect(screen.getByText('Leader of the group:')).toBeInTheDocument();
+  });
+
+
+  it('mounts group details', async () => {
+    addLeaderToGroup.mockResolvedValue();
+    render(
+      <BrowserRouter>
+        <ManageGroup />
+      </BrowserRouter>
+    );
+
     expect(screen.getByText('There is no leader yet. Promote first please!')).toBeInTheDocument();
     expect(screen.getByText('Promote a leader')).toBeInTheDocument();
     expect(screen.getByText('Go to the board')).toBeInTheDocument();
+  });
+
+  it('mounts task title', async () => {
+    addLeaderToGroup.mockResolvedValue();
+    render(
+      <BrowserRouter>
+        <ManageGroup />
+      </BrowserRouter>
+    );
+
+
+    expect(screen.getByText('If you are a leader, please distribute tasks among students.')).toBeInTheDocument();
   });
 
   it('mounts task distribution', async () => {
@@ -86,8 +109,6 @@ describe('ManageGroup Component', () => {
       </BrowserRouter>
     );
 
-
-    expect(screen.getByText('If you are a leader, please distribute tasks among students.')).toBeInTheDocument();
     expect(screen.getByText('Assign tasks:')).toBeInTheDocument();
     expect(screen.getByText('Add New Task')).toBeInTheDocument();
 
@@ -132,14 +153,6 @@ describe('ManageGroup Component', () => {
 
        await waitFor(() =>  expect(del).not.toBeInTheDocument())
       expect(del).not.toBeInTheDocument();
-
-
-    
-
     });
-
-
-
-
   });
 });

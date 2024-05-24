@@ -68,8 +68,6 @@ vi.mock("firebase/firestore", () => {
 
 describe('ChatGroup Component', () => {
 
-
-
   it('scrolls to the bottom when messages update', async () => {
     const mockScrollIntoView = vi.fn();
     HTMLElement.prototype.scrollIntoView = mockScrollIntoView;

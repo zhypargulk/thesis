@@ -40,16 +40,52 @@ const render = (component) =>
   }));
   
   describe('CourseDashboard Component', () => {
-    test('should render and display initial UI elements', async () => {
+
+    test('should render the course title', async () => {
       render(<CourseDetails />);
   
       await waitFor(() => {
-          expect(screen.getByText('Sample Course')).toBeInTheDocument();
-          expect(screen.getByText('You can find the course details here.')).toBeInTheDocument();
-          expect(screen.getByText('Enroll')).toBeInTheDocument();
-          expect(screen.getByText('A great course')).toBeInTheDocument();
-          expect(screen.getByText('Course content')).toBeInTheDocument();
-          expect(screen.getByText('About course')).toBeInTheDocument();
+        expect(screen.getByText('Sample Course')).toBeInTheDocument();
+      });
+    });
+  
+    test('should render the course description', async () => {
+      render(<CourseDetails />);
+  
+      await waitFor(() => {
+        expect(screen.getByText('You can find the course details here.')).toBeInTheDocument();
+      });
+    });
+  
+    test('should render the enroll button', async () => {
+      render(<CourseDetails />);
+  
+      await waitFor(() => {
+        expect(screen.getByText('Enroll')).toBeInTheDocument();
+      });
+    });
+  
+    test('should render the course subtitle', async () => {
+      render(<CourseDetails />);
+  
+      await waitFor(() => {
+        expect(screen.getByText('A great course')).toBeInTheDocument();
+      });
+    });
+  
+    test('should render the course content header', async () => {
+      render(<CourseDetails />);
+  
+      await waitFor(() => {
+        expect(screen.getByText('Course content')).toBeInTheDocument();
+      });
+    });
+  
+    test('should render the about course section', async () => {
+      render(<CourseDetails />);
+  
+      await waitFor(() => {
+        expect(screen.getByText('About course')).toBeInTheDocument();
       });
     });
 

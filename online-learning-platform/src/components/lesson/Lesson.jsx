@@ -55,6 +55,7 @@ const Lesson = () => {
       }
     } catch (err) {
       console.error(err);
+      setLoading(false);
     }
   };
 
