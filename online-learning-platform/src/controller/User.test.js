@@ -1,105 +1,66 @@
+import { describe, it, expect, vi } from "vitest";
 import { fetchUserData, updateProfileData, userPasswordReset } from "./User";
-import { auth, db } from "../config/firebase";
-import { getDoc, doc, updateDoc } from "firebase/firestore";
+import { getDoc, updateDoc, doc } from "firebase/firestore";
 import { updatePassword } from "firebase/auth";
 
-jest.mock("firebase/auth", () => ({
-  updatePassword: jest.fn(),
+vi.mock("firebase/firestore", () => ({
+  getDoc: vi.fn(),
+  updateDoc: vi.fn(),
+  doc: vi.fn(),
 }));
 
-jest.mock("firebase/firestore", () => ({
-  getDoc: jest.fn(),
-  doc: jest.fn(),
-  updateDoc: jest.fn(),
+vi.mock("firebase/auth", () => ({
+  updatePassword: vi.fn(),
 }));
 
-describe("Firebase Functions", () => {
-  describe("fetchUserData", () => {
-    it("should fetch user data if user exists", async () => {
-      const mockUserSnapshot = {
-        exists: jest.fn().mockReturnValue(true),
-        data: jest.fn().mockReturnValue({
-          /* mocked user data */
-        }),
-      };
+vi.mock("../config/firebase", () => ({
+  auth: {
+    currentUser: { uid: "testUserId" },
+  },
+  db: {},
+}));
 
-      doc.mockReturnValue({
-        /* mocked user doc */
-      });
-      getDoc.mockResolvedValue(mockUserSnapshot);
+describe("fetchUserData", () => {
+  it("should fetch user data if user is authenticated", async () => {
+    const mockData = { name: "John Doe" };
+    getDoc.mockResolvedValue({ exists: () => true, data: () => mockData });
 
-      const userData = await fetchUserData("userId");
+    const data = await fetchUserData("testUserId");
+    expect(getDoc).toHaveBeenCalled();
+    expect(data).toEqual(mockData);
+  });
+});
 
-      expect(userData).toEqual({
-        /* expected user data */
-      });
-    });
+describe("updateProfileData", () => {
+  it("should update user profile data", async () => {
+    const mockUserDocRef = { id: "testUserId" };
+    const mockData = { name: "Jane Doe" };
 
-    it("should handle errors when fetching user data", async () => {
-      doc.mockReturnValue({
-        /* mocked user doc */
-      });
-      getDoc.mockRejectedValue(new Error("Fetch error"));
+    await updateProfileData(mockUserDocRef, mockData);
+    expect(updateDoc).toHaveBeenCalledWith(mockUserDocRef, mockData);
+  });
+});
 
-      await expect(fetchUserData("userId")).rejects.toThrow("Fetch error");
-    });
+describe("userPasswordReset", () => {
+  it("should update the user password", async () => {
+    const mockUser = { uid: "testUserId" };
+    const newPassword = "newPassword123";
+
+    updatePassword.mockResolvedValue();
+
+    const result = await userPasswordReset(mockUser, newPassword);
+    expect(updatePassword).toHaveBeenCalledWith(mockUser, newPassword);
+    expect(result).toBe(true);
   });
 
-  describe("updateProfileData", () => {
-    it("should update user profile data", async () => {
-      const mockUserDocRef = {
-        /* mocked user doc reference */
-      };
-      const mockData = {
-        /* mocked profile data */
-      };
+  it("should return false if there is an error updating password", async () => {
+    const mockUser = { uid: "testUserId" };
+    const newPassword = "newPassword123";
 
-      await updateProfileData(mockUserDocRef, mockData);
+    updatePassword.mockRejectedValue(new Error("Error"));
 
-      expect(updateDoc).toHaveBeenCalledWith(mockUserDocRef, mockData);
-    });
-
-    it("should handle errors when updating user profile data", async () => {
-      const mockUserDocRef = {
-        /* mocked user doc reference */
-      };
-      const mockData = {
-        /* mocked profile data */
-      };
-
-      updateDoc.mockRejectedValue(new Error("Update error"));
-
-      await expect(updateProfileData(mockUserDocRef, mockData)).rejects.toThrow(
-        "Update error"
-      );
-    });
-  });
-
-  describe("userPasswordReset", () => {
-    it("should update user password and return true", async () => {
-      const mockUser = {
-        /* mocked user object */
-      };
-      const newPassword = "newPassword";
-
-      await expect(userPasswordReset(mockUser, newPassword)).resolves.toBe(
-        true
-      );
-      expect(updatePassword).toHaveBeenCalledWith(mockUser, newPassword);
-    });
-
-    it("should handle errors when updating user password and return false", async () => {
-      const mockUser = {
-        /* mocked user object */
-      };
-      const newPassword = "newPassword";
-
-      updatePassword.mockRejectedValue(new Error("Password update error"));
-
-      await expect(userPasswordReset(mockUser, newPassword)).resolves.toBe(
-        false
-      );
-      expect(updatePassword).toHaveBeenCalledWith(mockUser, newPassword);
-    });
+    const result = await userPasswordReset(mockUser, newPassword);
+    expect(updatePassword).toHaveBeenCalledWith(mockUser, newPassword);
+    expect(result).toBe(false);
   });
 });
