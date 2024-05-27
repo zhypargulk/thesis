@@ -17,7 +17,6 @@ export const getAllEnrolledStudents = async (courseId) => {
 
       if (userSnapshot.exists()) {
         const userData = userSnapshot.data();
-        console.log(userData);
         enrolledStudents.push(userData);
       }
     }

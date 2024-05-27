@@ -12,18 +12,14 @@ import {
 import "./ChatGroup.css";
 import { useParams } from "react-router-dom";
 import { getDocumentById } from "../../controller/Courses";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "primereact/button";
-import { useNavigate } from "react-router-dom";
 
 const ChatGroup = () => {
   const messagesRef = collection(db, "messages");
-  const endOfMessagesRef = useRef(null); // Ref to maintain the scroll position
+  const endOfMessagesRef = useRef(null); 
   const [formValue, setFormValue] = useState("");
   const { docId } = useParams();
   const [messages, setMessages] = useState([]);
-  const navigate = useNavigate();
 
 
   useEffect(() => {

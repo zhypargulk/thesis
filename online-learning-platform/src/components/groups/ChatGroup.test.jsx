@@ -1,10 +1,9 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import { describe, expect, vi, beforeEach } from 'vitest';
+import { render, waitFor } from '@testing-library/react';
+import { describe, expect, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
-import ChatGroup from './ChatGroup'; // Assuming ChatMessage is not used here directly
+import ChatGroup from './ChatGroup';
 
-// Mocking firebase config
 vi.mock("../../config/firebase", () => {
     const mockAuth = {
       currentUser: { uid: '12345' }
@@ -16,7 +15,6 @@ vi.mock("../../config/firebase", () => {
     };
 });
 
-// Mocking Courses controller
 vi.mock("../../controller/Courses", () => ({
     getDocumentById: vi.fn(() => Promise.resolve({
       name: "Test User",
@@ -24,9 +22,8 @@ vi.mock("../../controller/Courses", () => ({
     }))
 }));
 
-// Correcting the react-router-dom mocking to use vi.importActual
 vi.mock('react-router-dom', async () => {
-    const actual = await vi.importActual('react-router-dom'); // Correctly imports the actual router elements
+    const actual = await vi.importActual('react-router-dom'); 
     return {
       ...actual,
       useParams: () => ({
@@ -35,7 +32,6 @@ vi.mock('react-router-dom', async () => {
     };
 });
 
-// Mocking firebase/firestore
 vi.mock("firebase/firestore", () => {
     return {
         collection: vi.fn((db, path) => ({ db, path })),

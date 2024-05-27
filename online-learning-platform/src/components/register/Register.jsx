@@ -87,7 +87,7 @@ const Register = () => {
       );
 
       uploadImageToFirebase().then((url) => {
-        console.log("Uploaded image URL:", url);
+        
       });
 
       await updateUserProfile(userCredential.user, {

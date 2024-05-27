@@ -21,7 +21,6 @@ export default function MenubarCustom() {
         setRole(newRole);
         setAuthExist(true);
       } else {
-        console.log("No Display Name found.");
         setRole("");
         setAuthExist(false);
       }

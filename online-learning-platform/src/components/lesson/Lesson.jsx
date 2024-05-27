@@ -39,12 +39,10 @@ const Lesson = () => {
         const selectedLessons = await fetchLessonsByReferences(
           courseData.lessons
         );
-        console.log(selectedLessons);
         const lessonsWithStatus = await fetchAllLessonsWithCompletionStatus(
           docId,
           user.uid
         );
-        console.log(lessonsWithStatus);
 
         setLessons(lessonsWithStatus);
         setLength(selectedLessons.length);

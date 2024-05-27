@@ -37,7 +37,6 @@ const CardGroup = ({ title, imageUrl, groupId }) => {
         setStudents(st);
         if (groupData.leaderGroup) {
           const leadData = await getLeaderByRef(groupData.leaderGroup);
-          console.log(leadData);
           setLeader(leadData);
         }
       }

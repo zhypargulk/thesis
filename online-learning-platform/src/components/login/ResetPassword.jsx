@@ -5,7 +5,7 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { auth } from "../../config/firebase";
 import MenubarCustom from "../menu/Menubar";
-import "./ResetPassword.css"; // Add a new CSS file for styling if needed
+import "./ResetPassword.css";
 import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {

@@ -7,7 +7,6 @@ import { db, auth, storage } from "../../config/firebase";
 import { useAuth } from "../../context/AuthContext";
 import { v4 } from "uuid";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { useNavigate } from "react-router-dom";
 import { createCourse } from "../../controller/Courses"; // Import CSS file
 import { doc } from "firebase/firestore";
 import { Toast } from "primereact/toast";

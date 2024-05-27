@@ -98,7 +98,6 @@ export const addLeaderToGroup = async (groupId, userId) => {
     await updateDoc(groupDocRef, {
       leaderGroup: userDocRef,
     });
-    console.log("Leader added to group:", userId);
   } catch (error) {
     console.error("Error adding leader to group:", error);
   }
@@ -121,7 +120,6 @@ export const fetchStudentsInGroup = async (groupId) => {
     const groupDocSnapshot = await getDoc(groupDocRef);
 
     if (!groupDocSnapshot.exists()) {
-      console.log("No such group exists!");
       return [];
     }
 

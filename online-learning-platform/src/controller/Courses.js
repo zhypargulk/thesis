@@ -73,10 +73,9 @@ export const fetchCourses = async () => {
 
 export const fetchMyCourses = async () => {
   try {
-    const userRef = doc(db, "user", auth.currentUser.uid); // Creating a reference to the user's document
+    const userRef = doc(db, "user", auth.currentUser.uid);
     const courseCollectionRef = collection(db, "courses");
 
-    // Create a query against the collection.
     const q = query(
       courseCollectionRef,
       where("students", "array-contains", userRef)
@@ -86,7 +85,7 @@ export const fetchMyCourses = async () => {
     const fetchedCourses = [];
     querySnapshot.forEach((doc) => {
       let course = doc.data();
-      course.id = doc.id; // Add document ID to the course data
+      course.id = doc.id;
       fetchedCourses.push(course);
     });
 
@@ -167,8 +166,6 @@ export const fetchLessonsByReferences = async (lessonsRef) => {
           id: lessonSnapshot.id,
           ...lessonSnapshot.data(),
         });
-      } else {
-        console.log("No data found for:", lessonRef.id);
       }
     } catch (error) {
       console.error("Error fetching lesson data:", error);
@@ -295,7 +292,7 @@ export const fetchMyCreatedCourses = async (userId) => {
       id: doc.id,
       ...doc.data(),
     }));
-    console.log(courses);
+
     return courses;
   } catch (error) {
     console.error("Failed to fetch courses: ", error);

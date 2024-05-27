@@ -1,11 +1,10 @@
-/* Google Fonts - Poppins */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
 .parent-container {
     display: flex;
-    justify-content: center; /* Centers items on the horizontal line */
-    align-items: center; /* Centers items on the vertical line */
-    height: 100vh; /* Take at least the full height of the viewport */
+    justify-content: center; 
+    align-items: center;
+    height: 100vh;
   }
 
 .card{

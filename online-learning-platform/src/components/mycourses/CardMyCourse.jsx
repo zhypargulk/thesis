@@ -17,7 +17,6 @@ const CardMyCourse = ({ title, imageUrl, desc, id, groupId }) => {
       try {
         if (user && user.uid) {
           const index = await fetchLastCompletedLesson(id, user.uid);
-          console.log(index);
           setLessonNumber(index);
         }
       } catch (error) {

@@ -6,7 +6,7 @@ import {
   fetchStudentsInGroup,
   getLeaderByRef,
 } from "../../controller/Groups";
-import { createTask, getAllTasks } from "../../controller/Tasks";
+import { createTask } from "../../controller/Tasks";
 import { Dropdown } from "primereact/dropdown";
 import { Panel } from "primereact/panel";
 import { Button } from "primereact/button";
@@ -25,18 +25,17 @@ import "./ManageGroup.css";
 const ManageGroup = () => {
   const [students, setStudents] = useState([]);
   const [data, setData] = useState([]);
-  const [course, setCourse] = useState();
   const [selectedLeader, setSelectedLeader] = useState(null);
   const [tasks, setTasks] = useState([]);
   const { groupId } = useParams();
   const user = useAuth();
   const navigate = useNavigate();
+  // eslint-disable-next-line
   const [isLeaderExist, setIsLeaderExist] = useState(false);
   const [leader, setLeader] = useState();
   const [disableAction, setDisableAction] = useState(true);
   const toast = useRef(null);
   const [userId, setUserId] = useState();
-  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (user) {
@@ -76,6 +75,7 @@ const ManageGroup = () => {
     };
 
     fetchCourses();
+    // eslint-disable-next-line
   }, [userId]);
 
   const showError = () => {
@@ -117,6 +117,7 @@ const ManageGroup = () => {
     } else {
       setDisableAction(true);
     }
+    // eslint-disable-next-line
   }, [leader]);
 
   const handleLeaderChange = (e) => {
@@ -150,7 +151,6 @@ const ManageGroup = () => {
     try {
       if (user.uid && data) {
         for (const task of tasks) {
-          console.log(task);
           await createTask(
             task.studentId,
             groupId,
@@ -161,7 +161,6 @@ const ManageGroup = () => {
           );
         }
       }
-      // getTasks();
       showSuccessCreatedTask();
       setTasks([{ studentId: null, title: "", description: "" }]);
     } catch (error) {
@@ -169,9 +168,6 @@ const ManageGroup = () => {
     }
   };
 
-  const getTasks = async () => {
-    const task = await getAllTasks(groupId);
-  };
 
   const onClickToBoardHandler = () => {
     navigate("board");

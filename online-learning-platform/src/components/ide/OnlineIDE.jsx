@@ -46,7 +46,6 @@ const languages = [
 
 function OnlineIDE() {
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
-  const [code, setCode] = useState(selectedLanguage.initialCode);
   const [output, setOutput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [lastLanguage, setLastLanguage] = useState(selectedLanguage.value);
@@ -54,6 +53,7 @@ function OnlineIDE() {
   const [allCode, setAllCode] = useState();
   const [tasks, setTasks] = useState([]);
   const [answer, setAnswer] = useState();
+  // eslint-disable-next-line
   const [checkAnswer, setCheckAnswer] = useState();
   const { docId } = useParams();
   const navigate = useNavigate();
@@ -84,11 +84,12 @@ function OnlineIDE() {
     };
 
     fetchTasks();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     if (output) {
-      if (String(output).trim() == String(answer).trim()) {
+      if (String(output).trim() === String(answer).trim()) {
         setCheckAnswer({
           status: "success",
           message: "Code execution successful!",
@@ -106,6 +107,7 @@ function OnlineIDE() {
         updateGroupTaskStatus(docId, output, false);
       }
     }
+    // eslint-disable-next-line
   }, [output]);
 
   const API = axios.create({ baseURL: "http://127.0.0.1:5000" });
@@ -121,8 +123,7 @@ function OnlineIDE() {
         response.data.data !== "" ? response.data.data : response.data.error
       );
 
-      // This check may be using the old value of output
-      if (String(response.data.data).trim() == String(answer).trim()) {
+      if (String(response.data.data).trim() === String(answer).trim()) {
         setCheckAnswer({
           status: "success",
           message: "Code execution successful!",
@@ -187,7 +188,7 @@ function OnlineIDE() {
             className="p-button-success mt-2 h-3"
           />
 
-          {isCorrect != undefined && (
+          {isCorrect !== undefined && (
             <Message
               severity={isCorrect ? "success" : "error"}
               text={

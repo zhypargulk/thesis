@@ -6,16 +6,7 @@ import {
   uploadTheTask,
   updateGroupTaskStatus,
 } from "./Tasks";
-import {
-  collection,
-  getDocs,
-  addDoc,
-  where,
-  query,
-  doc,
-  updateDoc,
-  arrayUnion,
-} from "firebase/firestore";
+import { getDocs, addDoc, doc, updateDoc } from "firebase/firestore";
 
 vi.mock("firebase/firestore", () => ({
   collection: vi.fn(),
@@ -79,7 +70,7 @@ describe("createTask", () => {
     );
 
     expect(addDoc).toHaveBeenCalled();
-    expect(updateDoc).toHaveBeenCalledTimes(3); // user, task, and group updates
+    expect(updateDoc).toHaveBeenCalledTimes(3);
     expect(taskId).toBe(mockTaskRef.id);
   });
 });

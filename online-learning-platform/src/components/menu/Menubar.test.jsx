@@ -40,7 +40,6 @@ vi.mock('react-router-dom', async () => {
 });
 
 describe('MenubarCustom Component', () => {
-  // Existing tests broken down into smaller, focused tests
   test('renders the teacher "Create a course" menu item', () => {
     setup("/", "John - Teacher");
     expect(screen.getByText("Create a course")).toBeInTheDocument();
@@ -115,7 +114,6 @@ describe('MenubarCustom Component', () => {
     expect(homeButton).not.toHaveClass('underline');
   });
 
-  // Additional tests
   test('navigates to the "Create a course" page when the menu item is clicked', async () => {
     setup("/", "John - Teacher");
     const createCourseButton = screen.getByText("Create a course");

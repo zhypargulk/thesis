@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { getDocumentById } from "../../controller/Courses";
 import { useState, useEffect, useRef } from "react"; // Combined useState and useEffect
 
-import { useNavigate } from "react-router-dom";
 import MenubarCustom from "../menu/Menubar";
 import { getAllEnrolledStudents } from "../../controller/Students";
 import img from "./images/raketa.png";
@@ -19,7 +18,6 @@ import "./Project.css";
 const FinalProject = () => {
   const { docId } = useParams();
   const [project, setProject] = useState();
-  const navigate = useNavigate();
   const [students, setStudents] = useState();
   const [selectedStudents, setSelectedStudents] = useState(null);
   const [studentIds, setStudentIds] = useState([]);
@@ -51,9 +49,9 @@ const FinalProject = () => {
     }
   };
 
-  console.log(students);
   useEffect(() => {
     fetchStudents();
+    // eslint-disable-next-line
   }, [user]);
 
   useEffect(() => {
