@@ -4,16 +4,16 @@ import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import Auth from './Register';
 
-const renderAuth = (initialEntry = "/register") => {
+const setup = (ui, { route = '/register' } = {}) => {
   render(
-    <RouterProvider router={createMemoryRouter([{ path: initialEntry, element: <Auth /> }], { initialEntries: [initialEntry] })} />
+    <RouterProvider router={createMemoryRouter([{ path: route, element: ui }], { initialEntries: [route] })} />
   );
 };
 
 describe('Auth Component', () => {
   test('renders registration form with all fields', async () => {
-    renderAuth();
-    expect(screen.getByText('Register the User')).toBeInTheDocument();
+    setup(<Auth />);
+    await waitFor(() => expect(screen.getByText('Register the User')).toBeInTheDocument());
     expect(screen.getByPlaceholderText('Your full name')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Your email address')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Your password')).toBeInTheDocument();
@@ -22,20 +22,19 @@ describe('Auth Component', () => {
     expect(screen.getByTestId('SubmitButton')).toBeDisabled();
   });
 
-
   test('displays error when trying to submit with invalid email', async () => {
-    renderAuth();
+    setup(<Auth />);
+
     await userEvent.type(screen.getByPlaceholderText('Your full name'), 'John Doe');
     await userEvent.type(screen.getByPlaceholderText('Your email address'), 'john.doe@mail.ru');
     await userEvent.type(screen.getByPlaceholderText('Your password'), 'password123');
     await userEvent.click(screen.getByTestId('dropdownID'));
     await userEvent.click(screen.getByText('Teacher'));
-
     await userEvent.click(screen.getByText('Create account'));
 
     await waitFor(() => {
-        expect(screen.getByTestId('SubmitButton')).not.toBeDisabled();
+      expect(screen.getByTestId('SubmitButton')).not.toBeDisabled();
     });
+
   });
 });
-

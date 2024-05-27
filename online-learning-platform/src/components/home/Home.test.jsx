@@ -50,8 +50,8 @@ describe('MenubarCustom Component', () => {
     const buttonCreateCourse = screen.getByText('Create a new course');
     expect(buttonCreateCourse).toBeInTheDocument();
   
-    await act( async() => {
-      await userEvent.click(buttonCreateCourse);  })
+    await act( () => {
+       userEvent.click(buttonCreateCourse);  })
     });
 
     test('renders the student home page', async() => {
@@ -59,7 +59,7 @@ describe('MenubarCustom Component', () => {
       const buttonCreateCourse = screen.getByText('Explore courses');
       expect(buttonCreateCourse).toBeInTheDocument();
     
-      await act( async() => {
-        await userEvent.click(buttonCreateCourse);  })
+      await act( () => {
+         userEvent.click(buttonCreateCourse);  })
    });
 });

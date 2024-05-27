@@ -29,7 +29,6 @@ export const userPasswordReset = async (user, newPassword) => {
     await updatePassword(user, newPassword);
     return true;
   } catch (error) {
-    console.error("Error updating password:", error);
     return false;
   }
 };

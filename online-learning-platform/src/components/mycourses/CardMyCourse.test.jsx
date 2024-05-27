@@ -39,8 +39,8 @@ describe('CardMyCourse Component', () => {
     );
 
     
-    expect(screen.getByText(mockCourse.title)).toBeInTheDocument();
-    expect(screen.getByText(/This is a short description/i)).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText(mockCourse.title)).toBeInTheDocument());
+    await waitFor (() => expect(screen.getByText(/This is a short description/i)).toBeInTheDocument());
   });
 
   test('show more/less description', async () => {

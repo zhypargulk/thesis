@@ -201,7 +201,7 @@ const ManageGroup = () => {
       {data ? (
         <div className="containers">
           <h2 className="text-6xl text-white">Group details</h2>
-          <p className="m-2 bg-panel1">
+          <div className="m-2 bg-panel1">
             {" "}
             <div className="grid m-3">
               <div>
@@ -252,7 +252,7 @@ const ManageGroup = () => {
                 </div>
               </div>
             </div>
-          </p>
+          </div>
           <img src={img} width="100" alt="Raketa" className="mt-8" />
           <p className="project-question">
             If you are a leader, please distribute tasks among students.

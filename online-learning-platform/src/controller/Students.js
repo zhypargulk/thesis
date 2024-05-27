@@ -23,7 +23,6 @@ export const getAllEnrolledStudents = async (courseId) => {
 
     return enrolledStudents;
   } catch (error) {
-    console.error("Error fetching enrolled students:", error);
     return [];
   }
 };

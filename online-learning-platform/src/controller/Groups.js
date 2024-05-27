@@ -86,7 +86,6 @@ export const fetchStudentCoursesAndGroups = async (userId) => {
 
     return coursesAndGroups;
   } catch (error) {
-    console.error("Error fetching courses and groups for the student: ", error);
     return [];
   }
 };

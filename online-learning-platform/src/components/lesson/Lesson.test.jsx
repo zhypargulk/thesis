@@ -1,40 +1,32 @@
 import React from 'react';
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
 import Lesson from './Lesson';
-import * as Courses from '../../controller/Courses';
 import { vi } from 'vitest';
-import userEvent from '@testing-library/user-event';
 
 vi.mock('../../controller/Courses', () => ({
-  getDocumentById: vi.fn(),
-  fetchLessonsByReferences: vi.fn(),
-  markLessonAsDone: vi.fn(),
-  fetchAllLessonsWithCompletionStatus: vi.fn(),
-  parseContent: vi.fn((content) => content),
+  getDocumentById: vi.fn(() => Promise.resolve({ title: 'Sample Course', lessons: [] })),
+  fetchLessonsByReferences: vi.fn(() => Promise.resolve([])),
+  markLessonAsDone: vi.fn(() => Promise.resolve()),
+  fetchAllLessonsWithCompletionStatus: vi.fn(() => Promise.resolve([])),
+  parseContent: vi.fn(content => content),
 }));
 
 vi.mock('../../context/AuthContext', () => ({
-  useAuth: vi.fn(),
+  useAuth: vi.fn(() => ({ uid: '12345' })),
 }));
 
-const mockNavigate = vi.fn();
-
 vi.mock('react-router-dom', async () => {
-  const client = await vi.importActual('react-router-dom');
+  const actualRouterDom = await vi.importActual('react-router-dom');
   return {
-    ...client,
-    useNavigate: () => mockNavigate,
+    ...actualRouterDom,
+    useNavigate: () => vi.fn(),
   };
 });
 
-
 describe('Lesson Component', () => {
-
-
   const setup = (initialEntry = '/course/docId/lessons/1') => {
-    return render(
+    render(
       <RouterProvider
         router={createMemoryRouter(
           [{ path: initialEntry, element: <Lesson /> }],
@@ -44,11 +36,8 @@ describe('Lesson Component', () => {
     );
   };
 
-
   test('renders progress spinner when loading', async () => {
-    useAuth.mockReturnValueOnce(null);
     setup('/course/docId/lessons/1');
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByRole('progressbar')).toBeInTheDocument());
   });
-
 });

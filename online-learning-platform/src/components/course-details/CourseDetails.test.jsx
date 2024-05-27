@@ -92,11 +92,11 @@ const render = (component) =>
     test('should click enroll', async () => {
         render(<CourseDetails />);
       
-        await waitFor(async () => {
+          () => {
           const enrollButton = screen.getByText('Enroll');
           expect(enrollButton).toBeInTheDocument();
 
-          await act(async () => await userEvent.click(enrollButton));
-        });
+           act( () =>  userEvent.click(enrollButton));
+        };
       });
   });

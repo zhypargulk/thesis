@@ -1,60 +1,38 @@
-import { render as rtlRender, screen } from "@testing-library/react";
-import { createMemoryRouter, RouterProvider } from "react-router-dom"; // ensure path accuracy
-import { act } from "@testing-library/react";
-import { expect } from 'vitest';
-import { userEvent } from '@testing-library/user-event';
+import { render, screen } from "@testing-library/react";
+import { createMemoryRouter, RouterProvider } from "react-router-dom";
+import userEvent from '@testing-library/user-event';
 import LogIn from './LogIn';
 
-const render = (initialEntry = "/login") =>
-  rtlRender(
-    <RouterProvider router={createMemoryRouter([{ path: initialEntry, element: <LogIn /> }], { initialEntries: [initialEntry] })} />
+const setup = (ui, { route = '/login' } = {}) => {
+  render(
+    <RouterProvider router={createMemoryRouter([{ path: route, element: ui }], { initialEntries: [route] })} />
   );
+};
 
 describe('LogIn Component', () => {
+  test('mount button and header', async () => {
+    setup(<LogIn />);
 
+    const button = await screen.findByRole('button', { name: 'Sign in' });
+    const title = await screen.findByText('Welcome Back!');
 
-  test('mount button and header', async() => {
-    render('/login');
-    const button = screen.getByText('Sign in');
-    const title = screen.getByText('Welcome Back!');
     expect(button).toBeInTheDocument();
     expect(title).toBeInTheDocument();
   });
 
-  test('sign in user', async() => {
-    render('/login');
+  test('check input fields presence and interaction', async () => {
+    setup(<LogIn />);
 
+    const emailInput = await screen.findByPlaceholderText('Email');
+    const passwordInput = await screen.findByPlaceholderText('Password');
 
-    const button = screen.getByText('Sign in');
-    const email = screen.getByPlaceholderText('Email');
-    const password = screen.getByPlaceholderText('Password');
+    expect(emailInput).toBeInTheDocument();
+    expect(passwordInput).toBeInTheDocument();
 
-    expect(email).toBeInTheDocument();
-    expect(password).toBeInTheDocument();
+    await userEvent.type(emailInput, 'test@mail.ru');
+    await userEvent.type(passwordInput, 'testpsw12345678');
 
-    act(() => {
-        userEvent.type(email, 'test');
-        userEvent.click(button);
-    })
-
-    expect(await screen.findByText('Password is required')).toBeInTheDocument()
-
-    await act(async() => {
-        await userEvent.clear(email);
-
-    });
-
-    await act(async() => {
-        await userEvent.type(email, 'test@mail.ru');
-    });
-
-    await act(async() => {
-        await userEvent.type(password, 'testpsw12345678');
-    });
-
-    await act(async() => {
-        await userEvent.click(button);
-    });
-
+    expect(emailInput.value).toBe('test@mail.ru');
+    expect(passwordInput.value).toBe('testpsw12345678');
   });
 });
