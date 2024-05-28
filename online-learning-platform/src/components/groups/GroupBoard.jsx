@@ -5,7 +5,6 @@ import { getAllTasks } from "../../controller/Tasks";
 import { getCourseByGroupId } from "../../controller/Groups";
 import MenubarCustom from "../menu/Menubar";
 import ChatGroup from "./ChatGroup";
-import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import "./Kanban.css";
 
@@ -40,12 +39,7 @@ const GroupBoard = () => {
       <div className="flex flex-row mt-5 ml-5">
         <Kanban id={docId}></Kanban>
         <ChatGroup id={docId}/>
-        {/* <Button
-          label="Add task"
-          className="ml-5 h-2rem"
-          icon='pi pi-plus'
-          onClick={() => navigate(`/groups/${docId}`)}
-        /> */}
+
       </div>
   
     </>

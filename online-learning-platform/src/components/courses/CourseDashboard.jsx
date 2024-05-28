@@ -55,22 +55,20 @@ const CourseDashboard = () => {
           placeholder="Find the course"
         />
       </div>
-      <div className={`grid  ${isCentered ? 'flex justify-content-center ' : 'ml-3 mt-6'}`}>
-        <div className="grid">
-          {filteredCourses.map((course) => (
-            <div key={course.docId} className="col-12 col-md-4 w-30rem m-3">
-              <CardCourse
-                title={course.title}
-                imageUrl={course.imageUrl}
-                desc={course.description}
-                id={course.docId}
-              />
-            </div>
-          ))}
-        </div>
+      <div className="grid ml-3 mt-6">
+        {filteredCourses.map((course) => (
+          <div key={course.docId} className="col-12 col-md-4 w-30rem ml-5 mt-3">
+            <CardCourse
+              title={course.title}
+              imageUrl={course.imageUrl}
+              desc={course.description}
+              id={course.docId}
+            />
+          </div>
+        ))}
       </div>
       { filteredCourses.length === 0 &&  <div className="flex align-items-center justify-content-center mt-4">
-          <span className="text-sm course-color">You are not in any group</span>
+          <span className="text-sm course-color">There is no course</span>
         </div>}
     </>
   );

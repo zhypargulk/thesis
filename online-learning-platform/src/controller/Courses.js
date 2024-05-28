@@ -71,9 +71,9 @@ export const fetchCourses = async () => {
   }
 };
 
-export const fetchMyCourses = async () => {
+export const fetchMyCourses = async (uid) => {
   try {
-    const userRef = doc(db, "user", auth.currentUser.uid);
+    const userRef = doc(db, "user", uid);
     const courseCollectionRef = collection(db, "courses");
 
     const q = query(

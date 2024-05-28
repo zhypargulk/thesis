@@ -206,7 +206,7 @@ const ManageGroup = () => {
             <div className="grid m-3">
               <div>
                 <h3 className="ml-2">{data.title} course</h3>
-                <Image src={data.imageUrl} alt="Image" width="500" />
+                <Image src={data.imageUrl} alt="Image" width="400" />
               </div>
               <div className="mt-6 ml-8">
                 <h4>Members of the group:</h4>

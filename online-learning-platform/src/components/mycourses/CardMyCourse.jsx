@@ -34,6 +34,12 @@ const CardMyCourse = ({ title, imageUrl, desc, id, groupId }) => {
       : desc;
   };
 
+  const truncateTitle = (desc, length = 20) => {
+    return desc.length > length && !showFullDesc
+      ? `${desc.substring(0, length)}...`
+      : desc;
+  };
+
   const header = (
     <div className="flex align-items-center justify-content-center w-200px h-200px">
       <img alt="Card" src={imageUrl} className="w-200px h-200px" />
@@ -44,33 +50,27 @@ const CardMyCourse = ({ title, imageUrl, desc, id, groupId }) => {
     navigate(`/course/${id}/lessons/${lessonNumber}`);
   };
 
-  const footer = (
-    <div className="flex flex-wrap justify-content-end gap-2">
-      <Button
-        label="Continue lessons"
-        icon="pi pi-forward"
-        onClick={onClickBoard}
-      />
-    </div>
-  );
 
   return (
     <div className=" flex justify-content-center">
       <Card
-        title={<span className="black-text">{title}</span>}
+        title={<span className="black-text">{truncateTitle(title)}</span>}
         subTitle={<span className="black-text">Course Description</span>}
-        footer={footer}
         header={header}
-        className="md:w-30rem  green-border-card"
+        className="md:w-30rem green-border-card"
       >
-        <p className="m-0 black-text">{truncateDesc(desc)}</p>
-        {desc.length > 100 && (
+        <div className="card-content-container flex-grow-1 d-flex flex-column">
+          <div className="flex-grow-1">
+            <p className="m-0 black-text desc">{truncateDesc(desc)}</p>
+          </div>
           <Button
-            label={showFullDesc ? "Show Less" : "Show More"}
-            className="button-link-text"
-            onClick={() => setShowFullDesc(!showFullDesc)}
-          />
-        )}
+        label="Continue lessons"
+        icon="pi pi-forward"
+        className="w-16rem mt-4"
+        onClick={onClickBoard}
+      />
+        </div>
+
       </Card>
     </div>
   );

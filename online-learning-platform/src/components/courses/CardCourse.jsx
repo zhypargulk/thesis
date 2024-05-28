@@ -8,7 +8,13 @@ const CardCourse = ({ title, imageUrl, desc, id }) => {
   const navigate = useNavigate();
   const [showFullDesc, setShowFullDesc] = useState(false);
 
-  const truncateDesc = (desc, length = 100) => {
+  const truncateDesc = (desc, length = 80) => {
+    return desc.length > length && !showFullDesc
+      ? `${desc.substring(0, length)}...`
+      : desc;
+  };
+
+  const truncateTitle = (desc, length = 20) => {
     return desc.length > length && !showFullDesc
       ? `${desc.substring(0, length)}...`
       : desc;
@@ -27,13 +33,15 @@ const CardCourse = ({ title, imageUrl, desc, id }) => {
   return (
     <div className="ml-8 flex justify-content-center">
       <Card
-        title={<span className="black-text">{title}</span>}
+        title={<span className="black-text title-w">{truncateTitle(title)}</span>}
         subTitle={<span className="black-text">Course Description</span>}
         header={header}
         className="w-30rem h-40rem black-border-card card-content"
       >
         <div className="card-content-container flex-grow-1 d-flex flex-column">
-          <p className="m-0 black-text">{truncateDesc(desc)}</p>
+          <div className="flex-grow-1">
+            <p className="m-0 black-text desc">{truncateDesc(desc)}</p>
+          </div>
           <Button
             label="Details of the course"
             onClick={onClickBoard}

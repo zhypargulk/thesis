@@ -53,9 +53,9 @@ const GroupsComponent = () => {
             placeholder="Find the course"
           />
         </div>
-        <div className="grid m-3">
+        <div className="grid ml-3 mt-6">
           {filteredData.map((item) => (
-            <div key={item.groupId} className="col-12 col-md-4 w-30rem m-3">
+            <div key={item.groupId} className="col-12 col-md-4 w-30rem  ml-5 mt-3">
               <CardGroup
                 title={item.title}
                 imageUrl={item.imageUrl}

@@ -247,6 +247,7 @@ class KanbanItem extends React.Component {
     showDialog: false,
     codeText: "",
     codeSubmitted: false,
+    showMessage: false,
   };
 
   componentDidMount() {
@@ -302,8 +303,14 @@ class KanbanItem extends React.Component {
 
     try {
       const response = await uploadTheTask(id, codeText);
-      this.setState({ codeSubmitted: true });
-      this.setState({ codeText: response.code });
+
+      const updatedCode = codeText;
+
+      this.setState({ codeSubmitted: true, codeText: updatedCode });
+      this.setState({ showMessage: true });
+      setTimeout(() => {
+        this.setState({ showMessage: false });
+      }, 5000);
       this.toggleDialog();
     } catch (error) {
       console.error("Failed to upload code:", error);
@@ -311,7 +318,8 @@ class KanbanItem extends React.Component {
   };
 
   render() {
-    const { isHovered, showDialog, codeText, codeSubmitted } = this.state;
+    const { isHovered, showDialog, codeText, codeSubmitted, showMessage } =
+      this.state;
     const { title, userName, description, status } = this.props;
     const dialogFooter = (
       <div>
@@ -367,11 +375,13 @@ class KanbanItem extends React.Component {
               dialogFooter
             ) : (
               <>
-                <Message
-                  severity="success"
-                  text="Code submitted"
-                  className="mr-5"
-                />
+                {showMessage && (
+                  <Message
+                    severity="success"
+                    text="Code submitted"
+                    className="mr-5"
+                  />
+                )}
                 <Button className="" onClick={this.uploadCode}>
                   Resubmit the code
                 </Button>

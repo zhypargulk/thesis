@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import { vi } from 'vitest';
 import CardMyCourse from './CardMyCourse';
 import { useAuth } from "../../context/AuthContext";
@@ -39,7 +38,7 @@ describe('CardMyCourse Component', () => {
     );
 
     
-    await waitFor(() => expect(screen.getByText(mockCourse.title)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Introduction to Prog...')).toBeInTheDocument());
     await waitFor (() => expect(screen.getByText(/This is a short description/i)).toBeInTheDocument());
   });
 
@@ -58,13 +57,8 @@ describe('CardMyCourse Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(mockCourse.title)).toBeInTheDocument();
-    const showMoreButton = screen.getByText("Show More");
-    await userEvent.click(showMoreButton);
+    expect(screen.getByText('Introduction to Prog...')).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(screen.getByText("Show Less")).toBeInTheDocument();
-    });
 
     const continueButton = screen.getByText("Continue lessons");
     await userEvent.click(continueButton);

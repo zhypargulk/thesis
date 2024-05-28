@@ -24,33 +24,33 @@ const CreatedCourseCard = ({ title, imageUrl, desc, id, groupId }) => {
     navigate(`/edit/${id}`);
   };
 
-  const footer = (
-    <div className="flex flex-wrap justify-content-end gap-2">
-      <Button
-        label="Edit the course"
-        icon="pi pi-pencil"
-        onClick={() => onClickBoard()}
-      />
-    </div>
-  );
+
+  const truncateTitle = (desc, length = 20) => {
+    return desc.length > length && !showFullDesc
+      ? `${desc.substring(0, length)}...`
+      : desc;
+  };
 
   return (
     <div className=" flex justify-content-center">
       <Card
-        title={<span className="black-text">{title}</span>}
-        subTitle={<span className="black-text">Course Description</span>}
-        footer={footer}
+        title={<span className="black-text">{truncateTitle(title)}</span>}
+        subTitle={<span className="black-text desc">Course Description</span>}
+
         header={header}
-        className="md:w-30rem  green-border-card"
+        className="md:w-30rem  green-border-card card-fix"
       >
-        <p className="m-0 black-text">{truncateDesc(desc)}</p>
-        {desc.length > 100 && (
+        <div className="card-content-container flex-grow-1 d-flex flex-column">
+          <div className="flex-grow-1">
+            <p className="m-0 black-text desc">{truncateDesc(desc)}</p>
+          </div>
           <Button
-            label={showFullDesc ? "Show Less" : "Show More"}
-            className="button-link-text"
-            onClick={() => setShowFullDesc(!showFullDesc)}
-          />
-        )}
+        label="Edit the course"
+        icon="pi pi-pencil"
+        onClick={() => onClickBoard()}
+        className="w-15rem mt-5"
+      />
+        </div>
       </Card>
     </div>
   );

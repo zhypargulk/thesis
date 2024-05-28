@@ -65,9 +65,9 @@ const MyCreatedCourses = () => {
           <p className=" text-white">You haven't created any course</p>
         </div>
       )}
-       <div className={`grid  ${isCentered ? 'flex justify-content-center ml-4 mt-4' : 'ml-8 mt-6'}`}>
+       <div className="grid ml-4 mt-4">
         {filteredCourses.map((course) => (
-          <div key={course.docId} className="col-12 col-md-4 w-30rem m-3">
+          <div key={course.docId} className="col-12 col-md-4 w-30rem ml-5 mt-3">
             <CreatedCourseCard
               title={course.title}
               imageUrl={course.imageUrl}

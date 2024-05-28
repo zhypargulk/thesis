@@ -27,6 +27,12 @@ const CardGroup = ({ title, imageUrl, groupId }) => {
     navigate(groupId);
   };
 
+  const truncateTitle = (desc, length = 20) => {
+    return desc.length > length 
+      ? `${desc.substring(0, length)}...`
+      : desc;
+  };
+
   const fetchStudents = async () => {
     try {
       if (groupId) {
@@ -49,11 +55,12 @@ const CardGroup = ({ title, imageUrl, groupId }) => {
     <div className="flex flex-wrap justify-content-end gap-6">
       <Button
         label="Promote a leader"
-        icon="pi pi-check"
         onClick={onClickBoard}
+        className="mr-7"
       />
       <Button
         label="Open the Board"
+        className="mr-1"
         onClick={() => navigate(`/groups/${groupId}/board`)}
       />
     </div>
@@ -68,17 +75,17 @@ const CardGroup = ({ title, imageUrl, groupId }) => {
     <div className="ml-8 flex justify-content-center">
       {group && (
         <Card
-          title={`${title} group project`}
+          title={`${truncateTitle(title)} group project`}
           subTitle={
-            <span>
-              <b>All members of group: </b>
-              {students.join(", ")}
-              <br />
-              <p>
-                {" "}
-                <b>Leader:</b> {leader ? leader.name : "No leader"}
-              </p>
-            </span>
+            <span style={{ display: "block", width: "400px", height: "90px", padding: "10px", boxSizing: "border-box", overflow: "auto" }}>
+            <b>All members of group: </b>
+            {students.join(", ")}
+            <br />
+            <p style={{ margin: 0 }}>
+              <b>Leader:</b> {leader ? leader.name : "No leader"}
+            </p>
+          </span>
+          
           }
           footer={footer}
           header={header}
