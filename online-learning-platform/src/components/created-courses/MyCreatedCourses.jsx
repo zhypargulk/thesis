@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { fetchMyCreatedCourses } from "../../controller/Courses";
 import { InputText } from "primereact/inputtext";
-import { useNavigate } from "react-router-dom";
 import MenubarCustom from "../menu/Menubar";
 import img from "../courses/images/earth.png";
 import moon from "../courses/images/Planet=Moon.png";
 import CreatedCourseCard from "./CreatedCourseCard";
-import "../mycourses/EnrolledCourses.css";
-import { auth } from "../../config/firebase";
 import { useAuth } from "../../context/AuthContext";
 
 const MyCreatedCourses = () => {

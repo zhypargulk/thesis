@@ -28,6 +28,7 @@ const Lesson = () => {
   const navigate = useNavigate() ;
   const [length, setLength] = useState();
   const [course, setCourse] = useState();
+  // eslint-disable-next-line 
   const [loading, setLoading] = useState(true);
   const [refetchTrigger, setRefetchTrigger] = useState(false);
   const user = useAuth();
@@ -69,6 +70,7 @@ const Lesson = () => {
     if (user && user.uid) {
       fetchLessons();
     }
+    // eslint-disable-next-line 
   }, [docId, user, lessonNumber, refetchTrigger]);
 
   useEffect(() => {

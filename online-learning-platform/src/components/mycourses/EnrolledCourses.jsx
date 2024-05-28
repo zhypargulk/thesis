@@ -5,7 +5,6 @@ import MenubarCustom from "../menu/Menubar";
 import img from "../courses/images/earth.png";
 import moon from "../courses/images/Planet=Moon.png";
 import CardMyCourse from "./CardMyCourse";
-import "./EnrolledCourses.css";
 
 const EnrolledCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -22,6 +21,7 @@ const EnrolledCourses = () => {
     };
 
     fetchData();
+    // eslint-disable-next-line 
   }, []);
 
   const handleSearchChange = (event) => {

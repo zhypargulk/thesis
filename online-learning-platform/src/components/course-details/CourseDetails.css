@@ -6,12 +6,12 @@
 }
 
 .sidebar {
-  background: linear-gradient(to bottom, #ffff, #ffff); /* Gradient from light beige to darker beige */
-    color: #333; /* Dark grey text color for contrast */
-    padding: 20px; /* Padding for inner content */
-    width: 30%; /* Sidebar width, adjust as needed */
-    height: 100vh; /* Full viewport height */
-    overflow-y: auto; /* Allows scrolling if content exceeds the viewport height */
+  background: linear-gradient(to bottom, #ffff, #ffff); 
+    color: #333; 
+    padding: 20px;
+    width: 30%; 
+    height: 100vh;
+    overflow-y: auto;
     border-right: 1px solid #ccc;
 }
 

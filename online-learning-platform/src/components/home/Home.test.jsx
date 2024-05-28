@@ -1,6 +1,6 @@
 import { render , screen } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
-import { auth } from "../../config/firebase"; // ensure path accuracy
+import { auth } from "../../config/firebase";
 import { act } from "@testing-library/react";
 import { expect, vi } from 'vitest';
 import { userEvent } from '@testing-library/user-event';

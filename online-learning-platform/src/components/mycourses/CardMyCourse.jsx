@@ -25,6 +25,7 @@ const CardMyCourse = ({ title, imageUrl, desc, id, groupId }) => {
     };
 
     fetchData();
+    // eslint-disable-next-line 
   }, []);
 
   const truncateDesc = (desc, length = 100) => {

@@ -41,15 +41,15 @@ body {
   font-family: 'Poppins', sans-serif;
   font-size: 25px;
   font-weight: bold;
-  color: #ffffff !important; /* Ensuring brand text is white */
+  color: #ffffff !important; 
 }
 
 .menubar-custom .p-menuitem-link {
-  color: #ffffff !important; /* Ensuring link text is white */
+  color: #ffffff !important; 
 }
 
 .menubar-custom .p-menuitem-icon {
-  color: #ffffff !important; /* Ensuring icon color is white */
+  color: #ffffff !important;
   font-weight: bold;
 }
 
@@ -63,15 +63,14 @@ body {
 
 .menubar-custom .p-menubar .p-menuitem-link:hover p {
   text-decoration: underline;
-  color: #000 !important; /* Ensuring hover text is black */
+  color: #000 !important;
 }
 
-/* Ensure styles for mobile screens */
 @media (max-width: 768px) {
   .menubar-custom .p-menubar,
   .menubar-custom .p-menuitem-link,
   .menubar-custom .p-menuitem-icon {
-    background-color: #004D40 !important; /* Dark teal background */
-    color: #ffffff !important; /* White text and icons */
+    background-color: #000000 !important;
+    color: #ffffff !important; 
   }
 }

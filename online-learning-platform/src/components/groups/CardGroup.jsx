@@ -61,6 +61,7 @@ const CardGroup = ({ title, imageUrl, groupId }) => {
 
   useEffect(() => {
     fetchStudents();
+    // eslint-disable-next-line 
   }, []);
 
   return (
